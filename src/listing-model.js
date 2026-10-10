@@ -17,3 +17,5 @@ export function listingErrors(item){
  if(item.videoUrl){try{if(new URL(item.videoUrl).protocol!=='https:')throw Error();}catch{errors.push('Tour/video link must use HTTPS');}}
  return [...new Set(errors)];
 }
+
+export function listingSlug(value){return String(value).normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/['’]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,120).replace(/-$/,'');}

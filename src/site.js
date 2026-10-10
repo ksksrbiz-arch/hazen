@@ -51,7 +51,7 @@ if(property){
    }finally{share.disabled=false;}
   });
   const email=property.querySelector('[data-showing-email]');
-  if(email){const href=new URL(email.href);href.searchParams.set('body','I would like to ask about a showing for this property:\n'+title+'\n'+url+'\n\nMy preferred times:\nMy name:\nMy phone number:');email.href=href.href;}
+  if(email){const href=new URL(email.href);href.searchParams.set('body','I would like to ask about this property:\n'+title+'\n'+url+'\n\nMy preferred times:\nMy name:\nMy phone number:');email.href=href.href;}
  }
  const links=[...property.querySelectorAll('[data-gallery-photo]')];
  if(links.length&&typeof HTMLDialogElement!=='undefined'){

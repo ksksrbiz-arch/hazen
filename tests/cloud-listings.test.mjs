@@ -95,3 +95,11 @@ test('Private page previews use editor photo routes and omit sharing and authori
 test('Public property pages retain progressive photo links, sharing, printing and multiline descriptions',()=>{
  const html=detail(id,{...listing,description:'First line\nSecond line',images:[{file:filename,alt:'<Photo>'},{file:filename,alt:'Second photo'}]});assert.ok(html.includes('data-gallery-photo'));assert.ok(html.includes('View photo 2 / 2'));assert.ok(html.includes('View photo 1: &lt;Photo&gt;'));assert.ok(html.includes('data-share-property hidden'));assert.ok(html.includes('data-print-property hidden'));assert.ok(html.includes('property-print-contact'));assert.ok(html.includes('First line\nSecond line'));
 });
+
+
+test('Public availability and inquiry wording follow Active, Pending and Sold status',()=>{
+ const active=detail(id,listing);assert.ok(active.includes('Request a Showing by Email'));assert.ok(!active.includes('availability-note'));
+ const sold=detail(id,{...listing,status:'Sold'});assert.ok(sold.includes('This property is marked Sold'));assert.ok(sold.includes('Ask Brad About This Property'));assert.ok(!sold.includes('Request a Showing by Email'));assert.ok(sold.includes('href="#property-contact"'));
+ const pending=detail(id,{...listing,status:'Pending'});assert.ok(pending.includes('This property is marked Pending'));assert.ok(pending.includes('Ask Brad About This Property'));
+ const preview=detail(id,{...listing,status:'Sold'},{preview:true});assert.ok(!preview.includes('property-contact-panel'));assert.ok(!preview.includes('availability-note'));
+});

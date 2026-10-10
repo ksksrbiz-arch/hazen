@@ -88,3 +88,7 @@ Added searchable listing management, status/archived filters and counts, saved/u
 ## Property presentation pass — October 10, 2026
 
 Added a shared property-page layout for public listings and authenticated saved-draft previews. The visitor experience now includes an enlarged photo viewer with keyboard/touch navigation, native sharing with clipboard/manual fallbacks, contextual showing-email drafts and printable property sheets. Brad can review all saved photos and listing fields on the finished page before publishing; unsaved edits remain excluded and private previews cannot be shared publicly. MLS numbers entered manually are displayed when provided. This does not import or synchronize MLS data. Test coverage includes preview authentication, private media paths, exclusion of internal notes/social metadata, unsafe draft tour URLs and public gallery markup.
+
+## UI and UX pass — October 10, 2026
+
+Refined the authenticated studio with a clearer library/editor hierarchy, status cards, persistent primary actions, a separate secondary-actions menu, clickable publication requirements, safe address-to-URL suggestions, contextual field hints, photo cover badges/counts and visible request feedback outside the editable form. Mobile controls wrap and the library stays accessible above the editor. Public listing pages gained section navigation, status-aware inquiries and a direct contact panel. Automated checks cover slug normalization and status-dependent inquiry behavior alongside existing auth/storage/runtime checks.

@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {listingSlug} from '../src/listing-model.js';
 import assert from 'node:assert/strict';
 import {getCollections,propertyCards,propertyDetail,reviewCards} from '../scripts/collections.mjs';
 const listing=()=>({published:true,slug:'test-fixture',title:'Fixture <script>',address:'Test-only address',description:'Test-only description',attribution:'Test attribution',permissionNote:'Test-only authorization fixture',updatedAt:'2026-10-10',status:'Pending',price:100,beds:0,baths:1,squareFeet:100,images:[{file:'hero.webp',alt:'Fixture <image>'}]});
@@ -30,4 +31,9 @@ test('Review date cannot silently normalize an invalid calendar date',()=>{const
 test('Optional tour link must use HTTPS and is escaped in public output',()=>{
  const item=listing();item.videoUrl='javascript:alert(1)';assert.throws(()=>getCollections({properties:[item]}),/HTTPS/);
  item.videoUrl='https://example.com/tour?x=1&y=2';getCollections({properties:[item]});assert(propertyDetail(item).includes('https://example.com/tour?x=1&amp;y=2'));
+});
+
+
+test('Address suggestions produce safe bounded listing slugs from punctuation and accents',()=>{
+ assert.equal(listingSlug("123 Café’s Lane, Vancouver / WA #2"),'123-cafes-lane-vancouver-wa-2');assert.equal(listingSlug(' <script>alert(1)</script> '),'script-alert-1-script');assert.equal(listingSlug('///'),'');assert.ok(listingSlug('x '.repeat(200)).length<=120);assert.ok(!listingSlug('x '.repeat(200)).endsWith('-'));
 });
