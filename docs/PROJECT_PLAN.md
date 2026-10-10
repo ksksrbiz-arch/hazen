@@ -3,7 +3,7 @@
 ## Outcome and boundaries
 Create a single-agent marketing website that converts buyer/seller interest into conversations. Reference: https://www.realtypronw.net/. Recreate the reference layout closely, personalized for Brad. The revised preview uses sourced reference imagery; confirm asset permissions and replace where required before final launch. Use Brad-specific copy, never other agents’ testimonials or MLS inventory. No MLS feed, public accounts, saved searches, instant valuation, or custom CRM in Phase 1. Optional external brokerage search link requires Brad's approved URL.
 
-Working commercial estimate: $3,500 build, subject to final scope. Target 8–12 core pages plus up to five templated community guides; explicitly confirm the final page count in the proposal. Two design revision rounds. Client supplies draft text and licensed assets. Extensive copywriting, photography, subscriptions, ongoing SEO and maintenance are separate. CMS and real inquiry delivery are planned deliverables, not implemented features of this scaffold.
+Working commercial estimate: $3,500 build, subject to final scope. Target 8–12 core pages plus six templated community guides; explicitly confirm the final page count in the proposal. Two design revision rounds. Client supplies draft text and licensed assets. Extensive copywriting, photography, subscriptions, ongoing SEO and maintenance are separate. CMS and real inquiry delivery are planned deliverables, not implemented features of this scaffold.
 
 ## Sitemap and conversion paths
 Home → Buy / Sell → Contact; Sell → Home assessment → personal follow-up. Communities → local guide → Contact. Featured properties → property details → showing inquiry.
@@ -11,7 +11,7 @@ Home → Buy / Sell → Contact; Sell → Home assessment → personal follow-up
 Scaffold routes: /, /about/, /buy/, /sell/, /communities/, /properties/, /home-valuation/, /testimonials/, /contact/, /privacy/. Next iteration adds /communities/[slug]/ and /properties/[slug]/ only when verified content exists. Blog is optional and not included by default.
 
 ## Technical approach
-Initial scaffold: dependency-free Node static generation, semantic HTML, shared CSS, physical route directories, centralized JSON content. No runtime database required for public pages. Provisional production direction: static generation with an authenticated CMS or Git-based editing selected after Brad's editing needs are known. Hosting remains undecided; no deployment or GitHub Actions in this phase. Keep content separate from templates so an eventual Astro/CMS migration or IDX integration can reuse the same data and URLs.
+Initial scaffold: dependency-free Node static generation, semantic HTML, shared CSS, physical route directories, centralized JSON content. No runtime database required for public pages. Provisional production direction: static generation with an authenticated CMS or Git-based editing selected after Brad's editing needs are known. Cloudflare Pages hosts the design preview at https://hazen-ci5.pages.dev/ and deploys from main. No GitHub Actions. Keep content separate from templates so an eventual Astro/CMS migration or IDX integration can reuse the same data and URLs.
 
 Content models:
 - Agent: name, approved bio, photo, brokerage, license, verified phone/email, service areas, approved external search URL.
@@ -21,7 +21,7 @@ Content models:
 - Inquiry: type, name, email, optional phone, message, optional property/address, source page, notification status and created timestamp. Avoid collecting financing documents or unnecessary sensitive details.
 
 ## Lead delivery implementation
-Use a server-side endpoint or reputable form service after destination and hosting are confirmed. Validate type, lengths, email and allowed fields server-side; apply rate limits and honeypot, add a challenge if spam warrants it. Keep mail keys server-only. Send to Brad's verified inbox; show success only after confirmed acceptance. Preserve entered values on recoverable failures, disable duplicate submission during requests, offer a verified alternative contact path, and log delivery failures without exposing personal details. Separate inquiry handling from optional marketing consent. Define retention/deletion and backup notification behavior before launch. No live form or misleading success behavior in this scaffold.
+Use a server-side endpoint or reputable form service after destination and hosting are confirmed. Validate type, lengths, email and allowed fields server-side; apply rate limits and honeypot, add a challenge if spam warrants it. Keep mail keys server-only. Send to Brad's verified inbox; show success only after confirmed acceptance. Preserve entered values on recoverable failures, disable duplicate submission during requests, offer a verified alternative contact path, and log delivery failures without exposing personal details. Separate inquiry handling from optional marketing consent. Define retention/deletion and backup notification behavior before launch. Current forms validate input and prepare an email draft with a copyable fallback; they never claim delivery. Direct server delivery remains a launch requirement.
 
 ## Milestones
 1. Discovery: confirm brokerage, markets, assets, contact routing, domain ownership, editing needs and written scope.
@@ -36,7 +36,7 @@ Planning duration: 3–5 weeks after assets and approvals, not a guaranteed deli
 - Correct public name, brokerage affiliation, license details and approved required disclosures.
 - Domain/hosting preferences, verified phone/email and recipient for inquiries.
 - Headshot, logo/brand preferences, authorized photos and biography.
-- Five actual service communities and guidance on target buyers/sellers.
+- Confirm the six proposed service communities and guidance on target buyers/sellers.
 - Approved testimonials and authorized featured listings, if any.
 - Whether he needs self-service editing, an existing CRM connection, or an external brokerage search link.
 
@@ -61,3 +61,6 @@ Approved direction: close visual recreation of the reference. Implemented waterf
 
 ## Optimization pass
 Supporting image group reduced from 854,998 to 330,686 bytes (61% reduction). Added a 768px mobile hero variant, eager hero loading with reserved dimensions, and lazy decoding for lower-page images. Build fingerprints assets/CSS for immutable caching while HTML revalidates. Added active navigation, keyboard/outside-click menu closure, larger contact targets, draft buyer/seller/assessment content, and a 404 recovery page. `npm run check` verifies routes/assets, primary headings, preview noindex, working contact references, and image payload limits. CMS and online inquiry delivery still require implementation. Real-device/browser layout and performance have not been verified.
+
+## Inquiry and community pass
+Added contact, buyer, seller, and assessment inquiry forms with browser validation, email draft preparation, and copyable fallback. Added six drafted community guides based on official city/county resources. Refined Brad’s draft bio without publishing unconfirmed experience durations. Portrait, approved reviews, authorized listings, direct inquiry delivery, and CMS remain pending. All 17 generated HTML files pass the route, asset, heading, contact, and image checks.
