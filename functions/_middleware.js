@@ -27,7 +27,7 @@ export async function onRequest(context){
   response=await context.next();const featured=items.filter(({item})=>item.featured!==false&&item.status!=='Sold').slice(0,4);
   if(featured.length)rewriter.on('#featured-listings',{element(el){el.setInnerContent('<p class="eyebrow">Presented by Brad Hazen</p><h2>FEATURED LISTINGS</h2>'+cards(featured,'h3')+'<a class="button" href="/properties/">View All Properties</a>',{html:true});}});
  }else if(path==='/properties/'||path==='/properties'){
-  response=await context.next();if(items.length)rewriter.on('.inner-content',{element(el){el.setInnerContent(collection(items,url),{html:true});}});
+  response=await context.next();rewriter.on('.inner-content',{element(el){el.setInnerContent(collection(items,url),{html:true});}});
  }else{
   const slug=path.replace(/^\/properties\//,'').replace(/\/$/,'');const record=items.find(({item})=>item.slug===slug);
   if(!record)return new Response('Property not found. View current listings at /properties/.',{status:404,headers:{'Cache-Control':'no-store','X-Robots-Tag':'noindex'}});

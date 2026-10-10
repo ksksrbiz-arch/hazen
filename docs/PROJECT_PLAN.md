@@ -124,3 +124,7 @@ While Ylopo/provider discovery is pending, added a standalone seller checklist w
 ## Listing photography preparation — October 10, 2026
 
 Added a standalone photography guide with room/site shot planning, preparation, accurate-image guidance, and an organized handoff to Brad. Linked it from the listing approach and authenticated photo editor; the editor link opens separately to preserve the working draft. Includes a print layout and direct seller conversation/checklist links. No photos, client claims, paid services, or external integrations are added by this guide. Ylopo-dependent work remains pending.
+
+## Public collection refinements — October 10, 2026
+
+Expanded Brad’s own manually maintained property collection with optional whole-dollar price bounds and minimum bedrooms, applied-filter summaries, persistent clear controls, and clearer empty/no-match recovery. Bedroom filters exclude absent counts so land is retained only when no bedroom restriction is selected. Invalid or reversed price bounds are not applied and produce explicit feedback. Filters remain standard GET navigation and work without JavaScript; no accounts, saved searches, provider data, or MLS integration.

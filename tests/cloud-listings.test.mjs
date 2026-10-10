@@ -82,7 +82,7 @@ test('Public listing filters support status, address search and price ordering w
  const sorted=collection(items,new URL('https://qa.example/properties/?sort=price-low'));assert.ok(sorted.indexOf('Second property</h2>')<sorted.indexOf('First property</h2>'));
  const sold=collection(items,new URL('https://qa.example/properties/?status=Sold'));assert.ok(sold.includes('Second property</h2>'));assert.ok(!sold.includes('First property</h2>'));
  const none=collection(items,new URL('https://qa.example/properties/?q=%22%3E%3Cscript%3E'));assert.ok(none.includes('No listings match your filters'));assert.ok(!none.includes('<script>'));assert.ok(none.includes('&quot;&gt;&lt;script&gt;'));
- const found=collection(items,new URL('https://qa.example/properties/?q=QA'));assert.ok(found.includes('2 properties shown'));
+ const found=collection(items,new URL('https://qa.example/properties/?q=QA'));assert.ok(found.includes('2 of 2 properties shown'));
 });
 
 
@@ -102,4 +102,19 @@ test('Public availability and inquiry wording follow Active, Pending and Sold st
  const sold=detail(id,{...listing,status:'Sold'});assert.ok(sold.includes('This property is marked Sold'));assert.ok(sold.includes('Ask Brad About This Property'));assert.ok(!sold.includes('Request a Showing by Email'));assert.ok(sold.includes('href="#property-contact"'));
  const pending=detail(id,{...listing,status:'Pending'});assert.ok(pending.includes('This property is marked Pending'));assert.ok(pending.includes('Ask Brad About This Property'));
  const preview=detail(id,{...listing,status:'Sold'},{preview:true});assert.ok(!preview.includes('property-contact-panel'));assert.ok(!preview.includes('availability-note'));
+});
+
+test('Collection price and bedroom bounds include endpoints and exclude unspecified bedrooms',()=>{
+ const items=[{id,item:{...listing,title:'House result',price:300,beds:3}},{id:id+'2',item:{...listing,title:'Land result',price:200,beds:null}}];
+ const both=collection(items,new URL('https://qa.example/properties/?min=200&max=300'));assert.ok(both.includes('House result</h2>'));assert.ok(both.includes('Land result</h2>'));
+ const homes=collection(items,new URL('https://qa.example/properties/?min=200&max=300&beds=3'));assert.ok(homes.includes('House result</h2>'));assert.ok(!homes.includes('Land result</h2>'));assert.ok(homes.includes('1 of 2 properties shown'));assert.ok(homes.includes('3+ bedrooms'));
+ const none=collection(items,new URL('https://qa.example/properties/?max=199'));assert.ok(none.includes('No listings match your filters'));
+ const before=items.map(x=>x.item.title);collection(items,new URL('https://qa.example/properties/?sort=price-low'));assert.deepEqual(items.map(x=>x.item.title),before);
+});
+test('Invalid price ranges explain ignored bounds and never leak query markup',()=>{
+ const items=[{id,item:{...listing,price:300}}];
+ for(const range of ['min=301&max=200','min=-1','max=Infinity','min=1.5','min=%22%3E%3Cscript%3E','max=10000000001']){
+  const html=collection(items,new URL('https://qa.example/properties/?'+range));assert.ok(html.includes('The price range was not applied'));assert.ok(html.includes('1 of 1 property shown'));assert.ok(!html.includes('<script>'));
+ }
+ const empty=collection([],new URL('https://qa.example/properties/'));assert.ok(empty.includes('New listings will appear here.'));assert.ok(!empty.includes('No listings match your filters'));assert.ok(empty.includes('0 of 0 properties shown'));
 });
