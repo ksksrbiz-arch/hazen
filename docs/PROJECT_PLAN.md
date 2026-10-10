@@ -116,3 +116,7 @@ Added a public listing-marketing page explaining the property presentation, pric
 ## Guided seller inquiry — October 10, 2026
 
 Sell and listing-marketing pages now offer Pricing guidance, Preparing to list, and Marketing my property conversation choices. Selecting one focuses the inquiry and prefills an optional conversation focus. Shared inquiries include an optional property-detail disclosure for selling/assessment topics: focus, property type, and features/updates. These prompts add no required fields. Switching to a buyer or other topic hides/disables them and excludes prior seller details from the email draft. Topic/goal/field changes invalidate an earlier draft. The browser bundle uses a shared, tested draft formatter with an explicit field allowlist; no form data is uploaded or stored and email opening/sending remains an explicit visitor action.
+
+## Printable seller worksheet — October 10, 2026
+
+While Ylopo/provider discovery is pending, added a standalone seller checklist with 18 review prompts, optional questions, an on-screen progress count, reset controls and a dedicated print layout. Entries remain in the current page; no account, persistent site storage, backend submission or external service is involved. The existing blank text download is retained. Sell and listing-marketing pages now link to the worksheet. Printed notes use a text-only mirror so long questions are not clipped by textarea print rendering. MLS search, visitor account/alert infrastructure and CRM overlap remain pending Brad’s response.

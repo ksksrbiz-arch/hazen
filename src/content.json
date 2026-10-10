@@ -200,6 +200,12 @@
           "Authorized editors sign in using Cloudflare email verification. Cloudflare stores listing drafts and uploaded photos. Listing change history records the editor’s sign-in email. Drafts and internal permission notes are private. Publishing makes approved listing details and photos public. Archived drafts and their history remain stored so authorized editors can restore them. Contact Brad about listing information or a data request."
         ]
       ]
+    },
+    {
+      "slug": "seller-checklist",
+      "title": "Your seller conversation checklist",
+      "intro": "Organize your property details and the questions you want to discuss with Brad. Review it on screen or bring a printed copy.",
+      "sections": []
     }
   ],
   "agentDetails": {

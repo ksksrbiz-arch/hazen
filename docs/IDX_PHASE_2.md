@@ -13,3 +13,7 @@ Email alerts first. SMS, push notifications, custom CRM automation, social login
 Next discovery: MLS name; existing IDX/search provider and plan; approved agent search URL if any; broker approval contact; public domain; verified lead recipient; alert capabilities; service fees and account ownership. Use provider-supported developer access or a secure sign-in flow if needed.
 
 Acceptance: live listing access authorized, registration/recovery work, saved items persist across sessions/devices through provider accounts, searches can be changed/deleted, alert preferences work, Brad can access leads, mobile journeys work, required attribution/privacy reflect the integration. No claim of instantaneous MLS updates.
+
+## Waiting for brokerage/provider discovery — October 10, 2026
+
+Keith directed us to wait for Brad’s answer about Ylopo. Do not enable MLS search, visitor accounts/favorites/alerts, or overlapping provider/CRM integrations while this is pending. Continue independent seller content, public UX, preparation resources and the existing listing presentation. Confirm brokerage-provided agent search, routing and plan before selecting a custom or external implementation.

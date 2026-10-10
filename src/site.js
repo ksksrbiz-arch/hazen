@@ -93,3 +93,14 @@ if(property){
   image.addEventListener('pointercancel',()=>{touch=null;});
  }
 }
+
+// A page-only worksheet: no account, storage, or network submission.
+const worksheet=document.querySelector('[data-seller-worksheet]');
+if(worksheet){
+ worksheet.classList.add('worksheet-enhanced');
+ const checks=[...worksheet.querySelectorAll('input[type="checkbox"]')],notes=worksheet.querySelector('#worksheet-notes'),printNotes=worksheet.querySelector('[data-worksheet-print-notes]'),progress=worksheet.querySelector('[data-worksheet-progress]');
+ const updateWorksheet=()=>{const reviewed=checks.filter(check=>check.checked).length;progress.textContent=reviewed+' of '+checks.length+' prompts reviewed'+(reviewed===checks.length?' · Bring your questions to the conversation.':'.');printNotes.textContent=notes.value.trim()||'Questions / notes: __________________________________________________________';};
+ worksheet.addEventListener('input',updateWorksheet);worksheet.addEventListener('change',updateWorksheet);window.addEventListener('pageshow',updateWorksheet);window.addEventListener('beforeprint',updateWorksheet);
+ const printButton=worksheet.querySelector('[data-print-worksheet]'),resetButton=worksheet.querySelector('[data-reset-worksheet]');printButton.hidden=resetButton.hidden=progress.hidden=false;
+ printButton.addEventListener('click',()=>{updateWorksheet();window.print();});resetButton.addEventListener('click',()=>{if((checks.some(check=>check.checked)||notes.value)&&!confirm('Clear this page’s checks and notes?'))return;checks.forEach(check=>check.checked=false);notes.value='';updateWorksheet();checks[0]?.focus();});updateWorksheet();
+}
