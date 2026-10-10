@@ -26,8 +26,16 @@
       "intro": "Meet Brad Hazen, Real Estate Broker with Realty Pro, Inc. Start with a conversation about your property and your next move.",
       "sections": [
         [
-          "Clark County background",
-          "His business card lists over 22 years as a Clark County review engineer, over 22 years of land survey experience in Clark County, and over 22 years as a licensed Realtor. Confirm current wording and dates before publication."
+          "Experience with a local foundation",
+          "Brad\u2019s business card describes a background in Clark County review engineering and land surveying alongside his real estate work. Bring your questions about a property, your priorities, and your plans to the first conversation."
+        ],
+        [
+          "Your goals come first",
+          "Whether you are preparing to buy or considering a sale, begin by sharing your timing, the communities you are considering, and the questions you need answered."
+        ],
+        [
+          "Connect directly",
+          "Reach Brad at (360) 921-9484 or b.hazen@hotmail.com to discuss your next move."
         ]
       ]
     },
@@ -71,8 +79,8 @@
     },
     {
       "slug": "communities",
-      "title": "Find your place",
-      "intro": "Community guides will introduce the areas Brad serves. Locations are awaiting confirmation.",
+      "title": "Explore Clark County communities",
+      "intro": "Get a feel for six local communities, explore official resources, and build a list of places to visit.",
       "sections": []
     },
     {
@@ -91,28 +99,37 @@
           "Have your property address, major improvements, approximate condition, and selling timeline ready for your conversation."
         ],
         [
-          "How to request an assessment",
-          "Call or email Brad using the contact details below. This site does not provide an instant automated valuation."
+          "A personal starting point",
+          "Share your address, improvements, and timing using the inquiry below. This is a request for a conversation, not an instant automated valuation."
         ]
       ]
     },
     {
       "slug": "testimonials",
       "title": "Client experiences",
-      "intro": "Client-approved testimonials will be added before launch.",
+      "intro": "Client stories will appear here once Brad provides approved reviews. For now, get to know his background and start a conversation.",
       "sections": []
     },
     {
       "slug": "contact",
       "title": "Let\u2019s talk about your next move",
-      "intro": "Call or email Brad to discuss your next move. Online inquiry delivery will be added before launch.",
+      "intro": "Tell Brad what you have in mind. Use the form to prepare an email, or call him directly.",
       "sections": []
     },
     {
       "slug": "privacy",
       "title": "Privacy information",
-      "intro": "A privacy notice matching the final hosting, forms, analytics, and retention practices is required before launch.",
-      "sections": []
+      "intro": "This preview has no visitor accounts, MLS search, or website inquiry storage. Inquiry forms prepare a message in your email application; you choose whether to send it.",
+      "sections": [
+        [
+          "Email inquiries",
+          "Form details stay in your browser until you choose to open an email draft. Sending the draft shares those details with Brad through your email provider. Avoid including sensitive financial information."
+        ],
+        [
+          "Hosting",
+          "Cloudflare hosts this preview and may process request information to operate and secure the website. A final privacy notice will reflect any future inquiry delivery, analytics, or listing integrations."
+        ]
+      ]
     }
   ],
   "agentDetails": {
@@ -123,5 +140,163 @@
     "email": "b.hazen@hotmail.com",
     "brokerage": "Realty Pro, Inc.",
     "source": "Business card supplied by user on 2026-10-10; current affiliation and experience wording to confirm before launch."
-  }
+  },
+  "communities": [
+    {
+      "slug": "communities/vancouver",
+      "title": "Vancouver",
+      "intro": "Explore the Columbia River waterfront and a network of neighborhood parks. Start your visit downtown, then compare the locations that fit your daily routine.",
+      "image": "area-0.webp",
+      "sections": [
+        [
+          "Places to explore",
+          "Vancouver Waterfront Park connects visitors with the Columbia River. The city also maintains a broader collection of parks, trails, and natural areas."
+        ],
+        [
+          "Before choosing a property",
+          "Compare your commute, access to services, and the features that matter to your household. Verify school assignments, utilities, and property-specific details with the responsible agencies."
+        ],
+        [
+          "Plan your visit with Brad",
+          "Share what interests you about Vancouver, your preferred home features, and your timeline. Ask Brad about current opportunities and his service coverage."
+        ]
+      ],
+      "sources": [
+        [
+          "Vancouver Waterfront Park",
+          "https://www.cityofvancouver.us/parks_trails/vancouver-waterfront-park/"
+        ]
+      ]
+    },
+    {
+      "slug": "communities/ridgefield",
+      "title": "Ridgefield",
+      "intro": "Start with historic downtown and the nearby Ridgefield National Wildlife Refuge. Use a visit to compare the places and routes that matter to you.",
+      "image": "area-1.webp",
+      "sections": [
+        [
+          "Places to explore",
+          "The city describes a downtown with shops, restaurants, and refuge views. The John Hudson Trail connects downtown with the north entrance of the wildlife refuge."
+        ],
+        [
+          "Before choosing a property",
+          "Compare your commute, access to services, and the features that matter to your household. Verify school assignments, utilities, and property-specific details with the responsible agencies."
+        ],
+        [
+          "Plan your visit with Brad",
+          "Share what interests you about Ridgefield, your preferred home features, and your timeline. Ask Brad about current opportunities and his service coverage."
+        ]
+      ],
+      "sources": [
+        [
+          "Ridgefield trails",
+          "https://ridgefieldwa.us/218/Find-a-Trail"
+        ]
+      ]
+    },
+    {
+      "slug": "communities/camas",
+      "title": "Camas",
+      "intro": "Explore local parks and trails around the Lacamas area, then consider how different neighborhoods fit your plans.",
+      "image": "area-2.webp",
+      "sections": [
+        [
+          "Places to explore",
+          "The city lists paved and unpaved routes in Lacamas Park and Lacamas Creek Park. Its parks directory is a useful starting point for planning a visit."
+        ],
+        [
+          "Before choosing a property",
+          "Compare your commute, access to services, and the features that matter to your household. Verify school assignments, utilities, and property-specific details with the responsible agencies."
+        ],
+        [
+          "Plan your visit with Brad",
+          "Share what interests you about Camas, your preferred home features, and your timeline. Ask Brad about current opportunities and his service coverage."
+        ]
+      ],
+      "sources": [
+        [
+          "Camas trails and open space",
+          "https://www.cityofcamas.us/parksrec/page/trails-and-open-space"
+        ]
+      ]
+    },
+    {
+      "slug": "communities/battle-ground",
+      "title": "Battle Ground",
+      "intro": "Compare the places you would use every day, from neighborhood parks to community recreation facilities.",
+      "image": "area-3.webp",
+      "sections": [
+        [
+          "Places to explore",
+          "Battle Ground\u2019s parks network includes neighborhood parks, trails, and community facilities. Fairgrounds Park is home to the Battle Ground Community Center."
+        ],
+        [
+          "Before choosing a property",
+          "Compare your commute, access to services, and the features that matter to your household. Verify school assignments, utilities, and property-specific details with the responsible agencies."
+        ],
+        [
+          "Plan your visit with Brad",
+          "Share what interests you about Battle Ground, your preferred home features, and your timeline. Ask Brad about current opportunities and his service coverage."
+        ]
+      ],
+      "sources": [
+        [
+          "Battle Ground parks",
+          "https://www.cityofbg.org/204/Parks"
+        ]
+      ]
+    },
+    {
+      "slug": "communities/brush-prairie",
+      "title": "Brush Prairie",
+      "intro": "Explore the Brush Prairie area with attention to each property\u2019s location and the services available at its address.",
+      "image": "area-4.webp",
+      "sections": [
+        [
+          "Places to explore",
+          "Clark County lists Hockinson Meadows Community Park in Brush Prairie, with recreation facilities and an off-leash area. County resources can help you learn more about nearby parks."
+        ],
+        [
+          "Before choosing a property",
+          "Compare your commute, access to services, and the features that matter to your household. Verify school assignments, utilities, and property-specific details with the responsible agencies."
+        ],
+        [
+          "Plan your visit with Brad",
+          "Share what interests you about Brush Prairie, your preferred home features, and your timeline. Ask Brad about current opportunities and his service coverage."
+        ]
+      ],
+      "sources": [
+        [
+          "Hockinson Meadows Community Park",
+          "https://clark.wa.gov/public-works/hockinson-meadows-community-park"
+        ]
+      ]
+    },
+    {
+      "slug": "communities/washougal",
+      "title": "Washougal",
+      "intro": "Explore the waterfront and local trail connections as you build a picture of the area.",
+      "image": "area-5.webp",
+      "sections": [
+        [
+          "Places to explore",
+          "Washougal Waterfront Park and Trail offers Columbia River views. The city\u2019s parks and recreation resources provide more places to explore on a visit."
+        ],
+        [
+          "Before choosing a property",
+          "Compare your commute, access to services, and the features that matter to your household. Verify school assignments, utilities, and property-specific details with the responsible agencies."
+        ],
+        [
+          "Plan your visit with Brad",
+          "Share what interests you about Washougal, your preferred home features, and your timeline. Ask Brad about current opportunities and his service coverage."
+        ]
+      ],
+      "sources": [
+        [
+          "Washougal Waterfront Park and Trail",
+          "https://www.cityofwashougal.us/facilities/facility/details/Washougal-Waterfront-Park-Trail-21"
+        ]
+      ]
+    }
+  ]
 }
