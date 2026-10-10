@@ -7,8 +7,11 @@ if(menu){
 
 // Draft only: no inquiry data is uploaded or stored by the website.
 document.querySelectorAll('[data-inquiry]').forEach(form=>{
+ form.querySelector('button[type="submit"]').disabled=false;
+ form.querySelectorAll('[required]').forEach(field=>field.addEventListener('input',()=>field.setCustomValidity('')));
  form.addEventListener('submit',event=>{
   event.preventDefault();
+  form.querySelectorAll('[required]').forEach(field=>field.setCustomValidity(field.value.trim()?'':'Please complete this field.'));
   if(!form.reportValidity())return;
   const data=new FormData(form);
   const value=key=>String(data.get(key)||'').trim();

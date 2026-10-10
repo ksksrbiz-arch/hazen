@@ -64,3 +64,6 @@ Supporting image group reduced from 854,998 to 330,686 bytes (61% reduction). Ad
 
 ## Inquiry and community pass
 Added contact, buyer, seller, and assessment inquiry forms with browser validation, email draft preparation, and copyable fallback. Added six drafted community guides based on official city/county resources. Refined Brad’s draft bio without publishing unconfirmed experience durations. Portrait, approved reviews, authorized listings, direct inquiry delivery, and CMS remain pending. All 17 generated HTML files pass the route, asset, heading, contact, and image checks.
+
+## Navigation and usability pass
+Added Properties to the shared navigation, mobile quick contact with safe-area spacing, inner-page breadcrumbs, inquiry jump links, community cross-links, buyer/seller/assessment FAQs, and fuller About/empty-state layouts. Removed the duplicate contact-page banner. Added initials favicon and social preview metadata, and fingerprinted JavaScript to prevent stale form code. Draft-form submit buttons stay disabled until JavaScript loads; no-JavaScript visitors get direct contact links instead of a form GET that could expose their entered details in the URL. Required fields reject whitespace-only entries. Portrait, reviews, MLS, CMS, and server email delivery still require real assets or separate configuration.

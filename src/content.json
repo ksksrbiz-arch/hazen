@@ -56,6 +56,20 @@
           "Make your next move",
           "When you find a property of interest, talk with Brad about the offer process, inspections, and the steps toward closing."
         ]
+      ],
+      "faqs": [
+        [
+          "How do I start?",
+          "Share your preferred communities, home features, and timing. If you plan to finance the purchase, speak with your lender about your budget and preparation before making an offer."
+        ],
+        [
+          "Can I search live listings here?",
+          "This website does not currently include a live MLS search. Contact Brad to discuss homes you are considering and ask about available search options."
+        ],
+        [
+          "What should I bring to our first conversation?",
+          "A list of must-have features, areas you want to explore, your moving timeline, and any questions about the buying process."
+        ]
       ]
     },
     {
@@ -74,6 +88,20 @@
         [
           "Plan the next steps",
           "Review a proposed approach to pricing, marketing, and communication before deciding how to move forward."
+        ]
+      ],
+      "faqs": [
+        [
+          "What information helps with a selling plan?",
+          "Your property address, major updates, approximate condition, and preferred timing give Brad a useful starting point."
+        ],
+        [
+          "Do I need to make improvements first?",
+          "Discuss your property and goals with Brad before committing to preparation work. Ask which items should be reviewed as part of your proposed sale plan."
+        ],
+        [
+          "How do I request a home assessment?",
+          "Visit the home assessment page and prepare an inquiry with your address and property details. Brad can explain the next steps for a personal market assessment."
         ]
       ]
     },
@@ -101,6 +129,20 @@
         [
           "A personal starting point",
           "Share your address, improvements, and timing using the inquiry below. This is a request for a conversation, not an instant automated valuation."
+        ]
+      ],
+      "faqs": [
+        [
+          "Will I get an instant price?",
+          "No. This request starts a conversation about your property; it does not generate an automated value."
+        ],
+        [
+          "What details should I include?",
+          "Include your address, recent improvements, any important condition details, and when you might sell. Avoid sending financial documents or sensitive personal information."
+        ],
+        [
+          "How is my inquiry sent?",
+          "The form prepares a message in your email application. Review the draft and send it to Brad. If it does not open, copy the prepared message into an email."
         ]
       ]
     },
