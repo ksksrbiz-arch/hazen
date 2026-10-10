@@ -11,7 +11,7 @@ export function cleanDraft(input){
  return item;
 }
 export function publicListing(item){const {permissionNote,...publicItem}=item;return {...publicItem,published:true};}
-export function rowRecord(row){return {id:row.id,revision:row.revision,listing:JSON.parse(row.draft_json),published:row.published_json!==null,publicSlug:row.published_json?JSON.parse(row.published_json).slug:null,savedAt:row.updated_at};}
+export function rowRecord(row){return {id:row.id,revision:row.revision,listing:JSON.parse(row.draft_json),published:row.published_json!==null,publicSlug:row.published_json?JSON.parse(row.published_json).slug:null,savedAt:row.updated_at,archived:Boolean(row.archived),hasUnpublishedChanges:row.published_json!==null&&JSON.stringify(publicListing(JSON.parse(row.draft_json)))!==row.published_json};}
 export async function publishErrors(item,id,env){
  const errors=listingErrors(item);
  for(const image of item.images){const key=id+'/'+image.file;const row=await env.DB.prepare('SELECT key FROM photos WHERE key = ? AND listing_id = ?').bind(key,id).first();if(!row||!await env.PHOTOS.head(key))errors.push('Save all listing photos before publishing');}
@@ -19,7 +19,8 @@ export async function publishErrors(item,id,env){
 }
 export async function change(env,id,revision,actor,action,listing){
  const now=new Date().toISOString();let statement;
- if(action==='save')statement=env.DB.prepare('UPDATE listings SET draft_json=?,revision=revision+1,updated_at=?,updated_by=? WHERE id=? AND revision=? AND archived=0').bind(JSON.stringify(listing),now,actor,id,revision);
+ if(action==='restore')statement=env.DB.prepare('UPDATE listings SET archived=0,published_json=NULL,revision=revision+1,updated_at=?,updated_by=? WHERE id=? AND revision=? AND archived=1').bind(now,actor,id,revision);
+ else if(action==='save')statement=env.DB.prepare('UPDATE listings SET draft_json=?,revision=revision+1,updated_at=?,updated_by=? WHERE id=? AND revision=? AND archived=0').bind(JSON.stringify(listing),now,actor,id,revision);
  else if(action==='publish')statement=env.DB.prepare('UPDATE listings SET published_json=?,revision=revision+1,updated_at=?,updated_by=? WHERE id=? AND revision=? AND archived=0').bind(JSON.stringify(publicListing(listing)),now,actor,id,revision);
  else statement=env.DB.prepare(`UPDATE listings SET published_json=NULL,archived=${action==='archive'?1:0},revision=revision+1,updated_at=?,updated_by=? WHERE id=? AND revision=? AND archived=0`).bind(now,actor,id,revision);
  // D1 batch is transactional. changes() records an event only if the revision matched.

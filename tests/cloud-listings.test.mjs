@@ -4,8 +4,8 @@ import {DatabaseSync} from 'node:sqlite';
 import {readFileSync} from 'node:fs';
 import {generateKeyPair,SignJWT,createLocalJWKSet,exportJWK} from 'jose';
 import {editor,mutationAllowed} from '../server/auth.js';
-import {cleanDraft,publicListing,change,imageType,publishErrors} from '../server/listings.js';
-import {detail,cards} from '../server/public.js';
+import {cleanDraft,publicListing,change,imageType,publishErrors,rowRecord} from '../server/listings.js';
+import {detail,cards,collection} from '../server/public.js';
 import {onRequest} from '../functions/api/admin/[[path]].js';
 import {onRequest as media} from '../functions/media/[[path]].js';
 function db(){const sqlite=new DatabaseSync(':memory:');sqlite.exec(readFileSync('database/cloudflare/001_listings.sql','utf8'));const prepare=sql=>{let params=[];const stmt={bind(...args){params=args;return stmt;},async first(){return sqlite.prepare(sql).get(...params)||null;},async all(){return {results:sqlite.prepare(sql).all(...params)};},async run(){return {meta:sqlite.prepare(sql).run(...params)};}};return stmt;};return {prepare,async batch(statements){sqlite.exec('BEGIN');try{const results=[];for(const s of statements)results.push(await s.run());sqlite.exec('COMMIT');return results;}catch(e){sqlite.exec('ROLLBACK');throw e;}}};}
@@ -59,5 +59,28 @@ test('Authenticated API round trip: create, upload, save, publish, conflict and 
   assert.equal((await call(base,'POST',{revision:2,listing})).status,409);
   saved=await (await call(base+'/unpublish','POST',{revision:3})).json();assert.equal(saved.published,false);
   assert.equal((await (await call('listings')).json()).listings.length,1);
+  assert.equal((await call(base+'/archive','POST',{revision:4})).status,200);
+  const archived=await (await call('listings?archived=1')).json();assert.equal(archived.listings.length,1);assert.equal(archived.counts.archived,1);assert.equal(archived.listings[0].archived,true);
+  assert.equal((await call(base,'POST',{revision:5,listing})).status,409);
+  assert.equal((await call(base+'/restore','POST',{revision:4})).status,409);
+  saved=await (await call(base+'/restore','POST',{revision:5})).json();assert.equal(saved.archived,false);assert.equal(saved.published,false);assert.equal(saved.revision,6);
+  assert.equal((await call(base+'/restore','POST',{revision:6})).status,409);
+  const history=await (await call(base+'/history')).json();assert.equal(history.events[0].action,'restore');assert.equal(history.events[0].revision,6);assert.equal(history.events[1].action,'archive');
+  assert.equal((await (await call('listings?archived=1')).json()).listings.length,0);
  }finally{globalThis.fetch=originalFetch;}
+});
+
+test('Unpublished-change indicator ignores internal notes but detects public changes',async()=>{
+ const DB=db();await seed(DB);await change({DB},id,1,'editor','publish',listing);
+ let row=await DB.prepare('SELECT * FROM listings WHERE id=?').bind(id).first();assert.equal(rowRecord(row).hasUnpublishedChanges,false);
+ await change({DB},id,2,'editor','save',{...listing,permissionNote:'Updated internal note'});row=await DB.prepare('SELECT * FROM listings WHERE id=?').bind(id).first();assert.equal(rowRecord(row).hasUnpublishedChanges,false);
+ await change({DB},id,3,'editor','save',{...listing,price:200});row=await DB.prepare('SELECT * FROM listings WHERE id=?').bind(id).first();assert.equal(rowRecord(row).hasUnpublishedChanges,true);
+});
+
+test('Public listing filters support status, address search and price ordering without leaking query markup',()=>{
+ const items=[{id,item:{...listing,title:'First property',price:300}},{id:id+'2',item:{...listing,title:'Second property',status:'Sold',price:100}}];
+ const sorted=collection(items,new URL('https://qa.example/properties/?sort=price-low'));assert.ok(sorted.indexOf('Second property</h2>')<sorted.indexOf('First property</h2>'));
+ const sold=collection(items,new URL('https://qa.example/properties/?status=Sold'));assert.ok(sold.includes('Second property</h2>'));assert.ok(!sold.includes('First property</h2>'));
+ const none=collection(items,new URL('https://qa.example/properties/?q=%22%3E%3Cscript%3E'));assert.ok(none.includes('No listings match your filters'));assert.ok(!none.includes('<script>'));assert.ok(none.includes('&quot;&gt;&lt;script&gt;'));
+ const found=collection(items,new URL('https://qa.example/properties/?q=QA'));assert.ok(found.includes('2 properties shown'));
 });

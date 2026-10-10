@@ -27,7 +27,7 @@
       "sections": [
         [
           "Experience with a local foundation",
-          "Brad\u2019s business card describes a background in Clark County review engineering and land surveying alongside his real estate work. Bring your questions about a property, your priorities, and your plans to the first conversation."
+          "Brad’s business card describes a background in Clark County review engineering and land surveying alongside his real estate work. Bring your questions about a property, your priorities, and your plans to the first conversation."
         ],
         [
           "Your goals come first",
@@ -83,7 +83,7 @@
         ],
         [
           "Prepare your property",
-          "Identify the information, photos, and preparation needed to present your property. Brad\u2019s specific marketing services will be confirmed in your listing discussion."
+          "Identify the information, photos, and preparation needed to present your property. Brad’s specific marketing services will be confirmed in your listing discussion."
         ],
         [
           "Plan the next steps",
@@ -114,7 +114,7 @@
     {
       "slug": "properties",
       "title": "Featured properties",
-      "intro": "No properties are published here yet. Contact Brad to discuss the homes you\u2019re interested in or request information about his current listings.",
+      "intro": "No properties are published here yet. Contact Brad to discuss the homes you’re interested in or request information about his current listings.",
       "sections": []
     },
     {
@@ -154,7 +154,7 @@
     },
     {
       "slug": "contact",
-      "title": "Let\u2019s talk about your next move",
+      "title": "Let’s talk about your next move",
       "intro": "Tell Brad what you have in mind. Use the form to prepare an email, or call him directly.",
       "sections": []
     },
@@ -170,6 +170,10 @@
         [
           "Hosting",
           "Cloudflare hosts this preview and may process request information to operate and secure the website. A final privacy notice will reflect any future inquiry delivery, analytics, or listing integrations."
+        ],
+        [
+          "Private listing workspace",
+          "Authorized editors sign in using Cloudflare email verification. Cloudflare stores listing drafts and uploaded photos. Listing change history records the editor’s sign-in email. Drafts and internal permission notes are private. Publishing makes approved listing details and photos public. Archived drafts and their history remain stored so authorized editors can restore them. Contact Brad about listing information or a data request."
         ]
       ]
     }
@@ -270,7 +274,7 @@
       "sections": [
         [
           "Places to explore",
-          "Battle Ground\u2019s parks network includes neighborhood parks, trails, and community facilities. Fairgrounds Park is home to the Battle Ground Community Center."
+          "Battle Ground’s parks network includes neighborhood parks, trails, and community facilities. Fairgrounds Park is home to the Battle Ground Community Center."
         ],
         [
           "Before choosing a property",
@@ -291,7 +295,7 @@
     {
       "slug": "communities/brush-prairie",
       "title": "Brush Prairie",
-      "intro": "Explore the Brush Prairie area with attention to each property\u2019s location and the services available at its address.",
+      "intro": "Explore the Brush Prairie area with attention to each property’s location and the services available at its address.",
       "image": "area-4.webp",
       "sections": [
         [
@@ -322,7 +326,7 @@
       "sections": [
         [
           "Places to explore",
-          "Washougal Waterfront Park and Trail offers Columbia River views. The city\u2019s parks and recreation resources provide more places to explore on a visit."
+          "Washougal Waterfront Park and Trail offers Columbia River views. The city’s parks and recreation resources provide more places to explore on a visit."
         ],
         [
           "Before choosing a property",
