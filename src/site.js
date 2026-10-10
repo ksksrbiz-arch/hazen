@@ -3,12 +3,26 @@ if(menu){
  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&menu.open){menu.open=false;menu.querySelector('summary').focus();}});
  document.addEventListener('click',event=>{if(menu.open&&!menu.contains(event.target))menu.open=false;});
  menu.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{menu.open=false;}));
+ menu.addEventListener('focusout',()=>queueMicrotask(()=>{if(!menu.contains(document.activeElement))menu.open=false;}));
+ window.matchMedia('(min-width: 1151px)').addEventListener('change',event=>{if(event.matches)menu.open=false;});
 }
 
 // Draft only: no inquiry data is uploaded or stored by the website.
 document.querySelectorAll('[data-inquiry]').forEach(form=>{
+ const backup=form.querySelector('.email-backup'),status=form.querySelector('.form-status');
+ const interest=form.elements.interest,location=form.elements.location;
+ const updateTopic=()=>{
+  const assessment=interest.value==='A home assessment',address=assessment||['Selling a home','Request a showing','A property inquiry'].includes(interest.value);
+  location.required=assessment;location.setCustomValidity('');
+  form.querySelector('[data-location-label]').textContent=address?'Property address'+(assessment?' *':' (optional)'):'Preferred communities (optional)';
+  form.querySelector('#location-hint').textContent=address?'Include the city, if you know it.':'Share the places you are considering.';
+ };
+ interest.addEventListener('change',updateTopic);updateTopic();
  form.querySelector('button[type="submit"]').disabled=false;
- form.querySelectorAll('[required]').forEach(field=>field.addEventListener('input',()=>field.setCustomValidity('')));
+ form.addEventListener('input',event=>{
+  if(event.target.matches('input,select,textarea'))event.target.setCustomValidity('');
+  if(!backup.hidden){backup.hidden=true;backup.querySelector('[data-open-email]').removeAttribute('href');status.textContent='Your details changed. Review your draft again before opening an email.';}
+ });
  form.addEventListener('submit',event=>{
   event.preventDefault();
   form.querySelectorAll('[required]').forEach(field=>field.setCustomValidity(field.value.trim()?'':'Please complete this field.'));
@@ -17,17 +31,19 @@ document.querySelectorAll('[data-inquiry]').forEach(form=>{
   const value=key=>String(data.get(key)||'').trim();
   const body=[`Name: ${value('name')}`,`Email: ${value('email')}`,`Phone: ${value('phone')||'Not supplied'}`,`Interest: ${value('interest')}`,`Location / property: ${value('location')||'Not supplied'}`,`Timing: ${value('timing')}`,'',value('message')].join('\n');
   const href='mailto:b.hazen@hotmail.com?subject='+encodeURIComponent('Website inquiry: '+value('interest'))+'&body='+encodeURIComponent(body);
-  const backup=form.querySelector('.email-backup');
   backup.hidden=false;backup.querySelector('textarea').value=body;
-  backup.querySelector('a').href=href;
-  form.querySelector('.form-status').textContent='Your draft is ready. Send it from your email application to complete your inquiry. If it doesn’t open, use the message below.';
-  window.location.href=href;
+  backup.querySelector('[data-open-email]').href=href;
+  backup.querySelector('[data-email-subject]').textContent='Subject: Website inquiry: '+value('interest');
+  status.textContent='Your draft is ready to review. Nothing has been sent.';
+  backup.querySelector('h3').focus();
  });
+ form.querySelector('.edit-inquiry').addEventListener('click',()=>{backup.hidden=true;backup.querySelector('[data-open-email]').removeAttribute('href');status.textContent='Update your details, then review the draft again.';form.elements.name.focus();});
  form.querySelector('.copy-message').addEventListener('click',async()=>{
   const field=form.querySelector('.email-backup textarea');
   try{await navigator.clipboard.writeText(field.value);form.querySelector('.form-status').textContent='Message copied. Paste it into an email to b.hazen@hotmail.com and send it.';}
   catch{field.focus();field.select();form.querySelector('.form-status').textContent='Select and copy the prepared message, then paste it into your email.';}
  });
+ form.inert=false;
 });
 
 // Property tools enhance ordinary image links; the page remains usable without JavaScript.
