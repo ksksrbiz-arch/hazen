@@ -10,18 +10,23 @@ if(menu){
 // Draft only: no inquiry data is uploaded or stored by the website.
 document.querySelectorAll('[data-inquiry]').forEach(form=>{
  const backup=form.querySelector('.email-backup'),status=form.querySelector('.form-status');
- const interest=form.elements.interest,location=form.elements.location;
+ const interest=form.elements.interest,location=form.elements.location,sellerContext=form.querySelector('.seller-context');
+ const goalLinks=[...document.querySelectorAll('[data-seller-goal]')];
+ const syncGoal=()=>goalLinks.forEach(link=>{if(interest.value==='Selling a home'&&link.dataset.sellerGoal===form.elements.sellerGoal.value)link.setAttribute('aria-current','true');else link.removeAttribute('aria-current');});
+ const invalidateDraft=()=>{if(!backup.hidden){backup.hidden=true;backup.querySelector('[data-open-email]').removeAttribute('href');status.textContent='Your details changed. Review your draft again before opening an email.';}};
  const updateTopic=()=>{
+  const sellerRelated=['Selling a home','A home assessment'].includes(interest.value);sellerContext.hidden=!sellerRelated;sellerContext.querySelectorAll('input,select,textarea').forEach(control=>control.disabled=!sellerRelated);syncGoal();
   const assessment=interest.value==='A home assessment',address=assessment||['Selling a home','Request a showing','A property inquiry'].includes(interest.value);
   location.required=assessment;location.setCustomValidity('');
   form.querySelector('[data-location-label]').textContent=address?'Property address'+(assessment?' *':' (optional)'):interest.value==='Buying a home'?'Preferred communities (optional)':'Property or community (optional)';
   form.querySelector('#location-hint').textContent=address?'Include the city, if you know it.':interest.value==='Buying a home'?'Share the places you are considering.':'Add a place or property, if relevant.';
  };
- interest.addEventListener('change',updateTopic);updateTopic();
+ interest.addEventListener('change',()=>{invalidateDraft();updateTopic();});updateTopic();
+ goalLinks.forEach(link=>link.addEventListener('click',()=>{if(!sellerGoals.includes(link.dataset.sellerGoal))return;interest.value='Selling a home';form.elements.sellerGoal.value=link.dataset.sellerGoal;updateTopic();invalidateDraft();sellerContext.open=true;form.elements.name.focus({preventScroll:true});}));
  form.querySelector('button[type="submit"]').disabled=false;
  form.addEventListener('input',event=>{
   if(event.target.matches('input,select,textarea'))event.target.setCustomValidity('');
-  if(!backup.hidden){backup.hidden=true;backup.querySelector('[data-open-email]').removeAttribute('href');status.textContent='Your details changed. Review your draft again before opening an email.';}
+  invalidateDraft();syncGoal();
  });
  form.addEventListener('submit',event=>{
   event.preventDefault();
@@ -29,7 +34,7 @@ document.querySelectorAll('[data-inquiry]').forEach(form=>{
   if(!form.reportValidity())return;
   const data=new FormData(form);
   const value=key=>String(data.get(key)||'').trim();
-  const body=[`Name: ${value('name')}`,`Email: ${value('email')}`,`Phone: ${value('phone')||'Not supplied'}`,`Interest: ${value('interest')}`,`Location / property: ${value('location')||'Not supplied'}`,`Timing: ${value('timing')}`,'',value('message')].join('\n');
+  const body=inquiryDraftBody(data);
   const href='mailto:b.hazen@hotmail.com?subject='+encodeURIComponent('Website inquiry: '+value('interest'))+'&body='+encodeURIComponent(body);
   backup.hidden=false;backup.querySelector('textarea').value=body;
   backup.querySelector('[data-open-email]').href=href;
