@@ -23,7 +23,7 @@
     {
       "slug": "about",
       "title": "Meet Brad Hazen",
-      "intro": "Brad Hazen is a real estate broker. His business card identifies his brokerage as Realty Pro, Inc.",
+      "intro": "Meet Brad Hazen, Real Estate Broker with Realty Pro, Inc. Start with a conversation about your property and your next move.",
       "sections": [
         [
           "Clark County background",
@@ -34,22 +34,38 @@
     {
       "slug": "buy",
       "title": "Plan your home purchase",
-      "intro": "Discuss your priorities, budget, timeline, and preferred neighborhoods with Brad.",
+      "intro": "Begin with what matters to you: the home, the location, and the timing.",
       "sections": [
         [
-          "Your buying journey",
-          "Approved content will cover preparation, tours, offers, inspections, and closing."
+          "Define your priorities",
+          "Share the features you need, your preferred communities, and your ideal moving date. Brad can help you organize a focused starting point."
+        ],
+        [
+          "Prepare for the search",
+          "Discuss your buying timeline and the questions you want answered before touring properties. If you need financing, coordinate with your chosen lender."
+        ],
+        [
+          "Make your next move",
+          "When you find a property of interest, talk with Brad about the offer process, inspections, and the steps toward closing."
         ]
       ]
     },
     {
       "slug": "sell",
-      "title": "Prepare for your next chapter",
-      "intro": "Start with a conversation about your property and your goals.",
+      "title": "A thoughtful start to your home sale",
+      "intro": "Every property and timeline is different. Start with a conversation about yours.",
       "sections": [
         [
-          "A plan for your property",
-          "Approved content will explain Brad\u2019s pricing, preparation, and marketing process."
+          "Discuss your goals",
+          "Tell Brad about your property, when you hope to move, and what a successful sale would look like for you."
+        ],
+        [
+          "Prepare your property",
+          "Identify the information, photos, and preparation needed to present your property. Brad\u2019s specific marketing services will be confirmed in your listing discussion."
+        ],
+        [
+          "Plan the next steps",
+          "Review a proposed approach to pricing, marketing, and communication before deciding how to move forward."
         ]
       ]
     },
@@ -62,14 +78,23 @@
     {
       "slug": "properties",
       "title": "Featured properties",
-      "intro": "Brad\u2019s authorized listings can be added here manually. No properties are published in this scaffold.",
+      "intro": "No properties are published here yet. Contact Brad to discuss the homes you\u2019re interested in or request information about his current listings.",
       "sections": []
     },
     {
       "slug": "home-valuation",
-      "title": "Request a home assessment",
-      "intro": "The completed site will let you request a personal assessment from Brad. This is not an instant automated valuation.",
-      "sections": []
+      "title": "What could your home be worth?",
+      "intro": "Request a conversation about your property. Brad can explain the next steps for a personal market assessment.",
+      "sections": [
+        [
+          "What to have ready",
+          "Have your property address, major improvements, approximate condition, and selling timeline ready for your conversation."
+        ],
+        [
+          "How to request an assessment",
+          "Call or email Brad using the contact details below. This site does not provide an instant automated valuation."
+        ]
+      ]
     },
     {
       "slug": "testimonials",
