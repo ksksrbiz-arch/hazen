@@ -15,3 +15,5 @@ for(const page of content.pages){
 }
 await writeFile(path.join(root,'dist/robots.txt'),'User-agent: *\nDisallow: /\n');
 console.log(`Built ${content.pages.length} routes. Preview only: indexing disabled.`);
+
+await writeFile(path.join(root,'dist/_headers'), '/*\n  X-Robots-Tag: noindex, nofollow\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n');
