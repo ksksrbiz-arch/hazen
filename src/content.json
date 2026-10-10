@@ -1,0 +1,15 @@
+{
+  "agent": "Brad Hazen",
+  "pages": [
+    {"slug":"", "title":"A clear path to your next home", "intro":"Buying or selling starts with a conversation. Explore how Brad can help you plan your next move.", "sections":[["Buying a home","A dedicated page will explain the buying process and invite visitors to discuss their goals."],["Selling your home","A dedicated page will explain preparation, pricing, marketing, and next steps."],["Local insight","Five community guides will be added once Brad confirms his service areas."]]},
+    {"slug":"about", "title":"Meet Brad Hazen", "intro":"Brad’s approved biography, portrait, brokerage affiliation, and credentials will appear here.","sections":[]},
+    {"slug":"buy", "title":"Plan your home purchase", "intro":"Discuss your priorities, budget, timeline, and preferred neighborhoods with Brad.","sections":[["Your buying journey","Approved content will cover preparation, tours, offers, inspections, and closing."]]},
+    {"slug":"sell", "title":"Prepare for your next chapter", "intro":"Start with a conversation about your property and your goals.","sections":[["A plan for your property","Approved content will explain Brad’s pricing, preparation, and marketing process."]]},
+    {"slug":"communities", "title":"Find your place", "intro":"Community guides will introduce the areas Brad serves. Locations are awaiting confirmation.","sections":[]},
+    {"slug":"properties", "title":"Featured properties", "intro":"Brad’s authorized listings can be added here manually. No properties are published in this scaffold.","sections":[]},
+    {"slug":"home-valuation", "title":"Request a home assessment", "intro":"The completed site will let you request a personal assessment from Brad. This is not an instant automated valuation.","sections":[]},
+    {"slug":"testimonials", "title":"Client experiences", "intro":"Client-approved testimonials will be added before launch.","sections":[]},
+    {"slug":"contact", "title":"Let’s talk about your next move", "intro":"Brad’s verified phone, email, and inquiry form will be connected before launch. This preview does not collect inquiries.","sections":[]},
+    {"slug":"privacy", "title":"Privacy information", "intro":"A privacy notice matching the final hosting, forms, analytics, and retention practices is required before launch.","sections":[]}
+  ]
+}
