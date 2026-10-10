@@ -128,3 +128,7 @@ Added a standalone photography guide with room/site shot planning, preparation, 
 ## Public collection refinements — October 10, 2026
 
 Expanded Brad’s own manually maintained property collection with optional whole-dollar price bounds and minimum bedrooms, applied-filter summaries, persistent clear controls, and clearer empty/no-match recovery. Bedroom filters exclude absent counts so land is retained only when no bedroom restriction is selected. Invalid or reversed price bounds are not applied and produce explicit feedback. Filters remain standard GET navigation and work without JavaScript; no accounts, saved searches, provider data, or MLS integration.
+
+## Visitor flow simplification — October 10, 2026
+
+Hide collection filters when no listings are published; show distinct buying and selling next steps instead. Filters remain available once Brad publishes properties. Email inquiry review now temporarily hides the editable fields and submit controls, bringing the draft and send/copy/edit choices forward. Edit restores the fields; changes invalidate the prior draft. The site still prepares drafts only and sends nothing automatically.

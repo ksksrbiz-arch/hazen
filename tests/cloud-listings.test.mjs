@@ -116,5 +116,5 @@ test('Invalid price ranges explain ignored bounds and never leak query markup',(
  for(const range of ['min=301&max=200','min=-1','max=Infinity','min=1.5','min=%22%3E%3Cscript%3E','max=10000000001']){
   const html=collection(items,new URL('https://qa.example/properties/?'+range));assert.ok(html.includes('The price range was not applied'));assert.ok(html.includes('1 of 1 property shown'));assert.ok(!html.includes('<script>'));
  }
- const empty=collection([],new URL('https://qa.example/properties/'));assert.ok(empty.includes('New listings will appear here.'));assert.ok(!empty.includes('No listings match your filters'));assert.ok(empty.includes('0 of 0 properties shown'));
+ const empty=collection([],new URL('https://qa.example/properties/'));assert.ok(empty.includes('Your next property conversation starts here.'));assert.ok(!empty.includes('No listings match your filters'));assert.ok(empty.includes('No listings published yet'));
 });

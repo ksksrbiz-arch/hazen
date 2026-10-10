@@ -35,7 +35,7 @@ try{
  await DB.prepare('UPDATE listings SET published_json=NULL WHERE id=?').bind(id).run();
  assert.equal((await mf.dispatchFetch(mediaURL)).status,404);
  assert.equal((await mf.dispatchFetch('https://qa.example/properties/isolated-runtime-qa/')).status,404);
- const emptyCollection=await (await mf.dispatchFetch('https://qa.example/properties/')).text();assert.ok(emptyCollection.includes('New listings will appear here.'));assert.ok(emptyCollection.includes('0 of 0 properties shown'));
+ const emptyCollection=await (await mf.dispatchFetch('https://qa.example/properties/')).text();assert.ok(emptyCollection.includes('Your next property conversation starts here.'));assert.ok(emptyCollection.includes('No listings published yet'));
  const homepage=await (await mf.dispatchFetch('https://qa.example/')).text();assert.ok(!homepage.includes('QA house'));
  console.log('Compiled runtime verified: featured cards, collection/detail pages, private notes, auth rejection, media, unpublication and authenticated saved-draft previews.');
 }finally{await mf.dispose();}

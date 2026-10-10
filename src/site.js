@@ -13,7 +13,7 @@ document.querySelectorAll('[data-inquiry]').forEach(form=>{
  const interest=form.elements.interest,location=form.elements.location,sellerContext=form.querySelector('.seller-context');
  const goalLinks=[...document.querySelectorAll('[data-seller-goal]')];
  const syncGoal=()=>goalLinks.forEach(link=>{if(interest.value==='Selling a home'&&link.dataset.sellerGoal===form.elements.sellerGoal.value)link.setAttribute('aria-current','true');else link.removeAttribute('aria-current');});
- const invalidateDraft=()=>{if(!backup.hidden){backup.hidden=true;backup.querySelector('[data-open-email]').removeAttribute('href');status.textContent='Your details changed. Review your draft again before opening an email.';}};
+ const invalidateDraft=()=>{if(!backup.hidden){backup.hidden=true;form.classList.remove('reviewing-draft');backup.querySelector('[data-open-email]').removeAttribute('href');status.textContent='Your details changed. Review your draft again before opening an email.';}};
  const updateTopic=()=>{
   const sellerRelated=['Selling a home','A home assessment'].includes(interest.value);sellerContext.hidden=!sellerRelated;sellerContext.querySelectorAll('input,select,textarea').forEach(control=>control.disabled=!sellerRelated);syncGoal();
   const assessment=interest.value==='A home assessment',address=assessment||['Selling a home','Request a showing','A property inquiry'].includes(interest.value);
@@ -36,13 +36,13 @@ document.querySelectorAll('[data-inquiry]').forEach(form=>{
   const value=key=>String(data.get(key)||'').trim();
   const body=inquiryDraftBody(data);
   const href='mailto:b.hazen@hotmail.com?subject='+encodeURIComponent('Website inquiry: '+value('interest'))+'&body='+encodeURIComponent(body);
-  backup.hidden=false;backup.querySelector('textarea').value=body;
+  backup.hidden=false;form.classList.add('reviewing-draft');backup.querySelector('textarea').value=body;
   backup.querySelector('[data-open-email]').href=href;
   backup.querySelector('[data-email-subject]').textContent='Subject: Website inquiry: '+value('interest');
   status.textContent='Your draft is ready to review. Nothing has been sent.';
-  backup.querySelector('h3').focus();
+  backup.querySelector('h3').focus({preventScroll:true});backup.scrollIntoView({block:'start',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
  });
- form.querySelector('.edit-inquiry').addEventListener('click',()=>{backup.hidden=true;backup.querySelector('[data-open-email]').removeAttribute('href');status.textContent='Update your details, then review the draft again.';form.elements.name.focus();});
+ form.querySelector('.edit-inquiry').addEventListener('click',()=>{backup.hidden=true;form.classList.remove('reviewing-draft');backup.querySelector('[data-open-email]').removeAttribute('href');status.textContent='Update your details, then review the draft again.';form.elements.name.focus();});
  form.querySelector('.copy-message').addEventListener('click',async()=>{
   const field=form.querySelector('.email-backup textarea');
   try{await navigator.clipboard.writeText(field.value);form.querySelector('.form-status').textContent='Message copied. Paste it into an email to b.hazen@hotmail.com and send it.';}
