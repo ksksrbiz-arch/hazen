@@ -192,7 +192,7 @@
       "slug": "communities/vancouver",
       "title": "Vancouver",
       "intro": "Explore the Columbia River waterfront and a network of neighborhood parks. Start your visit downtown, then compare the locations that fit your daily routine.",
-      "image": "area-0.webp",
+      "image": "guide-waterfront.webp",
       "sections": [
         [
           "Places to explore",
@@ -218,7 +218,7 @@
       "slug": "communities/ridgefield",
       "title": "Ridgefield",
       "intro": "Start with historic downtown and the nearby Ridgefield National Wildlife Refuge. Use a visit to compare the places and routes that matter to you.",
-      "image": "area-1.webp",
+      "image": "guide-neighborhood.webp",
       "sections": [
         [
           "Places to explore",
@@ -244,7 +244,7 @@
       "slug": "communities/camas",
       "title": "Camas",
       "intro": "Explore local parks and trails around the Lacamas area, then consider how different neighborhoods fit your plans.",
-      "image": "area-2.webp",
+      "image": "guide-trail.webp",
       "sections": [
         [
           "Places to explore",
@@ -270,7 +270,7 @@
       "slug": "communities/battle-ground",
       "title": "Battle Ground",
       "intro": "Compare the places you would use every day, from neighborhood parks to community recreation facilities.",
-      "image": "area-3.webp",
+      "image": "guide-home.webp",
       "sections": [
         [
           "Places to explore",
@@ -296,7 +296,7 @@
       "slug": "communities/brush-prairie",
       "title": "Brush Prairie",
       "intro": "Explore the Brush Prairie area with attention to each property’s location and the services available at its address.",
-      "image": "area-4.webp",
+      "image": "guide-prairie.webp",
       "sections": [
         [
           "Places to explore",
@@ -322,7 +322,7 @@
       "slug": "communities/washougal",
       "title": "Washougal",
       "intro": "Explore the waterfront and local trail connections as you build a picture of the area.",
-      "image": "area-5.webp",
+      "image": "guide-riverwalk.webp",
       "sections": [
         [
           "Places to explore",

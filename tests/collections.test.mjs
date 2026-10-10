@@ -2,7 +2,7 @@ import test from 'node:test';
 import {listingSlug} from '../src/listing-model.js';
 import assert from 'node:assert/strict';
 import {getCollections,propertyCards,propertyDetail,reviewCards} from '../scripts/collections.mjs';
-const listing=()=>({published:true,slug:'test-fixture',title:'Fixture <script>',address:'Test-only address',description:'Test-only description',attribution:'Test attribution',permissionNote:'Test-only authorization fixture',updatedAt:'2026-10-10',status:'Pending',price:100,beds:0,baths:1,squareFeet:100,images:[{file:'hero.webp',alt:'Fixture <image>'}]});
+const listing=()=>({published:true,slug:'test-fixture',title:'Fixture <script>',address:'Test-only address',description:'Test-only description',attribution:'Test attribution',permissionNote:'Test-only authorization fixture',updatedAt:'2026-10-10',status:'Pending',price:100,beds:0,baths:1,squareFeet:100,images:[{file:'river-hero.webp',alt:'Fixture <image>'}]});
 test('Unpublished drafts are omitted even when incomplete',()=>assert.deepEqual(getCollections({properties:[{published:false}],testimonials:[{}]}),{properties:[],testimonials:[]}));
 test('Published entries require authorization and valid local asset paths',()=>{
  const item=listing();delete item.permissionNote;assert.throws(()=>getCollections({properties:[item]}),/permissionNote/);

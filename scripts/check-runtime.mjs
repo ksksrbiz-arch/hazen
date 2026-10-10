@@ -16,7 +16,7 @@ try{
  const id='8caa1a53-05bd-4212-9c9c-a487cc334550',file='listing-8caa1a53-05bd-4212-9c9c-a487cc334551.webp';
  const draft={slug:'isolated-runtime-qa',title:'QA house <test>',address:'Test data only',price:100,status:'Active',description:'Test description',attribution:'QA',permissionNote:'INTERNAL_QA_NOTE',updatedAt:'2026-10-10',images:[{file,alt:'Test photo'}],featured:true,published:false};
  await DB.prepare('INSERT INTO listings(id,draft_json,published_json,updated_at,updated_by) VALUES(?,?,?,?,?)').bind(id,JSON.stringify(draft),JSON.stringify(publicListing(draft)),'now','QA').run();
- const PHOTOS=await mf.getR2Bucket('PHOTOS');await PHOTOS.put(id+'/'+file,readFileSync(path.join(root,'src/assets/hero-mobile.webp')),{httpMetadata:{contentType:'image/webp'}});
+ const PHOTOS=await mf.getR2Bucket('PHOTOS');await PHOTOS.put(id+'/'+file,readFileSync(path.join(root,'src/assets/river-hero-mobile.webp')),{httpMetadata:{contentType:'image/webp'}});
  for(const route of ['/','/properties/','/properties/isolated-runtime-qa/']){
   const response=await mf.dispatchFetch('https://qa.example'+route),html=await response.text();assert.equal(response.status,200);assert.ok(html.includes('QA house &lt;test&gt;'));assert.ok(!html.includes('INTERNAL_QA_NOTE'));assert.equal(response.headers.get('cache-control'),'no-store');
  }
