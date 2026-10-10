@@ -9,3 +9,5 @@ Start with [the project plan](docs/PROJECT_PLAN.md). Contact details and brokera
 Repository: https://github.com/ksksrbiz-arch/hazen (private). Client ownership remains to be agreed. No GitHub Actions.
 
 Client intake: [what to ask Brad](docs/BRAD_ONBOARDING.md). Assets and CSS are content-versioned at build time; changes receive new filenames to prevent stale image/style caches. The Pages output remains `dist`.
+
+Planning: [IDX Phase 2](docs/IDX_PHASE_2.md). Manually maintained properties and testimonials are supported through the collections in `src/content.json`; see [content editing](docs/CONTENT_EDITING.md). Empty collections render useful contact paths without fictional listings or reviews.
