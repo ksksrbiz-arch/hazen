@@ -1,7 +1,9 @@
 import {blankListing,listingErrors,listingSlug} from './listing-model.js';
 import {preparePhoto,photoSize,photoLimits} from './photo-preparation.js';
+import {listingPromotion} from './listing-promotion.js';
 const form=document.querySelector('#listing-editor');
 const status=document.querySelector('#editor-status');
+let promotionKit=null;
 let currentId=null,photos=[],revision=0,published=false,busy=false,objectUrls=[],dirty=false,archived=false,publicSlug=null,listingsCache=[],photoImport=null;
 form.addEventListener('input',()=>{document.querySelector('#validation-errors').replaceChildren();setDirty(true);});
 window.addEventListener('beforeunload',event=>{if(dirty){event.preventDefault();event.returnValue='';}});
@@ -15,9 +17,9 @@ function record(){
  for(const name of ['price','beds','baths','squareFeet']){const value=field(name).value.trim();if(value)result[name]=Number(value);else if(name==='price')result.price=null;}
  result.featured=field('featured').checked;result.images=photos.map(({file,alt})=>({file,alt}));return result;
 }
-function fill(item){for(const element of form.elements){if(!element.name)continue;if(element.type==='checkbox')element.checked=Boolean(item[element.name]);else element.value=item[element.name]??'';}document.querySelector('#listing-preview').hidden=true;renderPhotos();}
+function fill(item){clearPromotion();for(const element of form.elements){if(!element.name)continue;if(element.type==='checkbox')element.checked=Boolean(item[element.name]);else element.value=item[element.name]??'';}document.querySelector('#listing-preview').hidden=true;renderPhotos();}
 async function api(path='',options={}){const response=await fetch('/api/admin/'+path,{...options,credentials:'same-origin',headers:{'Content-Type':'application/json',...options.headers}});let data;try{data=await response.json();}catch{throw Error('Your session expired. Sign in again, then reload your saved draft.');}if(!response.ok)throw Error(data.error||'Cloud operation failed');return data;}
-function setDirty(value){dirty=value;updateOverview();}
+function setDirty(value){if(value)clearPromotion();dirty=value;updateOverview();}
 function updateOverview(){
  const saveState=document.querySelector('#save-state'),saveText=dirty?'Unsaved changes':currentId?'Saved online · Revision '+revision:'New draft';if(saveState.textContent!==saveText)saveState.textContent=saveText;
  const saved=listingsCache.find(item=>item.id===currentId);
@@ -50,7 +52,7 @@ async function refresh(){
 document.querySelector('#listing-search').addEventListener('input',renderDrafts);
 document.querySelector('#listing-filter').addEventListener('change',()=>{if(busy)return;run(refresh);});
 document.querySelector('#restore-draft').addEventListener('click',()=>run(async()=>{const saved=await api('listings/'+currentId+'/restore',{method:'POST',body:JSON.stringify({revision})});revision=saved.revision;archived=false;published=false;publicSlug=null;document.querySelector('#listing-filter').value='all';await refresh();renderHistory((await api('listings/'+currentId+'/history')).events);say('Restored as a private draft. Review it before publishing again.');}));
-async function run(action,progress='Working…'){if(busy)return;busy=true;say(progress,'busy');document.querySelector('.studio-editor-column').setAttribute('aria-busy','true');const buttons=[...document.querySelectorAll('#listing-editor input,#listing-editor select,#listing-editor textarea,#listing-editor button,#new-draft,#listing-search,#listing-filter,#restore-draft')];const previousDisabled=buttons.map(b=>b.disabled);form.inert=true;buttons.forEach(b=>b.disabled=true);try{await action();}catch(error){say(error.message,'error');}finally{busy=false;document.querySelector('.studio-editor-column').setAttribute('aria-busy','false');form.inert=archived;buttons.forEach((b,i)=>b.disabled=previousDisabled[i]);document.querySelector('#unpublish-draft').disabled=!published||archived;updateOverview();if(status.dataset.kind==='busy')say('Listing workspace updated.');}}
+async function run(action,progress='Working…'){if(busy)return;clearPromotion();busy=true;say(progress,'busy');document.querySelector('.studio-editor-column').setAttribute('aria-busy','true');const buttons=[...document.querySelectorAll('#listing-editor input,#listing-editor select,#listing-editor textarea,#listing-editor button,#new-draft,#listing-search,#listing-filter,#restore-draft')];const previousDisabled=buttons.map(b=>b.disabled);form.inert=true;buttons.forEach(b=>b.disabled=true);try{await action();}catch(error){say(error.message,'error');}finally{busy=false;document.querySelector('.studio-editor-column').setAttribute('aria-busy','false');form.inert=archived;buttons.forEach((b,i)=>b.disabled=previousDisabled[i]);document.querySelector('#unpublish-draft').disabled=!published||archived;updateOverview();if(status.dataset.kind==='busy')say('Listing workspace updated.');}}
 async function save(){
  const listing=record();let saved;
  if(!currentId){saved=await api('listings',{method:'POST',body:JSON.stringify({listing})});currentId=saved.id;revision=saved.revision;}
@@ -104,3 +106,17 @@ document.querySelector('#preview-draft').addEventListener('click',()=>{const ite
 const moreActions=document.querySelector('.listing-more');document.addEventListener('click',event=>{if(moreActions.open&&!moreActions.contains(event.target))moreActions.open=false;});document.addEventListener('keydown',event=>{if(event.key==='Escape'&&moreActions.open){moreActions.open=false;moreActions.querySelector('summary').focus();}});moreActions.querySelectorAll('button').forEach(button=>button.addEventListener('click',()=>{moreActions.open=false;}));
 fill(blankListing());
 await run(async()=>{const session=await api('session');document.querySelector('#storage-status').textContent='Signed in as '+session.email+'. Drafts and photos are stored in Cloudflare.';await refresh();say('Cloud editor ready. Save a draft, review it, then publish when approved.');});
+
+function clearPromotion(){promotionKit=null;document.querySelector('#promotion-kit').hidden=true;document.querySelector('#promotion-copy').value='';}
+function showPromotionFormat(){if(!promotionKit)return;document.querySelector('#promotion-copy').value=promotionKit[document.querySelector('#promotion-format').value];document.querySelector('#promotion-feedback').textContent='Review this copy, then copy or download. Nothing is sent automatically.';}
+document.querySelector('#prepare-promotion').addEventListener('click',()=>{
+ if(busy||archived)return;const item=record(),saved=listingsCache.find(listing=>listing.id===currentId);
+ promotionKit=listingPromotion(item,{origin:location.origin,published,dirty,hasUnpublishedChanges:saved?.hasUnpublishedChanges??true,publicSlug});
+ document.querySelector('#promotion-source').textContent=promotionKit.publicUrl?'The entered details match the saved published version. Its public page link is included.':'Working draft copy. No public page link is included. Save, review, and publish the listing before promoting it as live.';
+ document.querySelector('#promotion-missing').textContent=promotionKit.missing.length?'Add before sharing: '+promotionKit.missing.join(', ')+'.':'';
+ document.querySelector('#promotion-format').value='social';showPromotionFormat();document.querySelector('#promotion-kit').hidden=false;document.querySelector('#promotion-heading').focus();document.querySelector('#promotion-kit').scrollIntoView({block:'start',behavior:'smooth'});
+});
+document.querySelector('#promotion-format').addEventListener('change',showPromotionFormat);
+document.querySelector('#close-promotion').addEventListener('click',()=>{clearPromotion();document.querySelector('.listing-more').open=true;document.querySelector('#prepare-promotion').focus();});
+document.querySelector('#copy-promotion').addEventListener('click',async()=>{if(!promotionKit||busy)return;const copy=document.querySelector('#promotion-copy');try{await navigator.clipboard.writeText(copy.value);if(promotionKit)document.querySelector('#promotion-feedback').textContent='Text copied. Review it in your chosen app before sharing.';}catch{if(promotionKit){copy.focus();copy.select();document.querySelector('#promotion-feedback').textContent='Automatic copying is unavailable. The text is selected; use your device’s Copy command.';}}});
+document.querySelector('#download-promotion').addEventListener('click',()=>{if(!promotionKit||busy)return;const content=['REVIEW COPY — verify facts and permissions before sharing',document.querySelector('#promotion-source').textContent,document.querySelector('#promotion-missing').textContent,'SOCIAL POST',promotionKit.social,'BUYER EMAIL',promotionKit.email,'PROPERTY HANDOFF',promotionKit.summary].filter(Boolean).join('\n\n');const blob=new Blob([content+'\n'],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),link=node('a');link.href=url;link.download=(listingSlug(field('title').value)||'listing')+'-promotion-kit.txt';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);document.querySelector('#promotion-feedback').textContent='Templates downloaded for review. Nothing was sent or published.';});
