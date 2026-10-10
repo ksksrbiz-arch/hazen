@@ -84,3 +84,7 @@ Connected dedicated Hazen D1/R2 resources and Access email sign-in. Cloud editor
 ## Listing management pass — October 10, 2026
 
 Added searchable listing management, status/archived filters and counts, saved/unsaved and unpublished-change indicators, publication readiness, live-page links, recent change history, photo ordering and safe restoration of archived listings as private drafts. Public listing browsing adds address/title, status and price filters; property share metadata now reflects each listing. Privacy copy covers the authenticated workspace and retained archives. Automated inquiry delivery, MLS approval, approved content and final domain/indexing remain launch work.
+
+## Property presentation pass — October 10, 2026
+
+Added a shared property-page layout for public listings and authenticated saved-draft previews. The visitor experience now includes an enlarged photo viewer with keyboard/touch navigation, native sharing with clipboard/manual fallbacks, contextual showing-email drafts and printable property sheets. Brad can review all saved photos and listing fields on the finished page before publishing; unsaved edits remain excluded and private previews cannot be shared publicly. MLS numbers entered manually are displayed when provided. This does not import or synchronize MLS data. Test coverage includes preview authentication, private media paths, exclusion of internal notes/social metadata, unsafe draft tour URLs and public gallery markup.

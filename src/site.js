@@ -29,3 +29,46 @@ document.querySelectorAll('[data-inquiry]').forEach(form=>{
   catch{field.focus();field.select();form.querySelector('.form-status').textContent='Select and copy the prepared message, then paste it into your email.';}
  });
 });
+
+// Property tools enhance ordinary image links; the page remains usable without JavaScript.
+const property=document.querySelector('[data-property]');
+if(property){
+ const print=property.querySelector('[data-print-property]');print.hidden=false;print.addEventListener('click',()=>window.print());
+ if(property.dataset.preview!=='true'){
+  const share=property.querySelector('[data-share-property]'),message=property.querySelector('[data-share-status]'),fallback=property.querySelector('[data-share-fallback]');
+  const url=window.location.origin+window.location.pathname,title=document.querySelector('h1').textContent;
+  share.hidden=false;
+  share.addEventListener('click',async()=>{
+   share.disabled=true;fallback.hidden=true;
+   try{
+    if(navigator.share){await navigator.share({title,url});message.textContent='Listing shared.';}
+    else{await navigator.clipboard.writeText(url);message.textContent='Listing link copied.';}
+   }catch(error){
+    if(error.name!=='AbortError'){
+     try{await navigator.clipboard.writeText(url);message.textContent='Listing link copied.';}
+     catch{fallback.hidden=false;const input=fallback.querySelector('input');input.value=url;input.focus();input.select();message.textContent='Copy the listing link below to share it.';}
+    }
+   }finally{share.disabled=false;}
+  });
+  const email=property.querySelector('[data-showing-email]');
+  if(email){const href=new URL(email.href);href.searchParams.set('body','I would like to ask about a showing for this property:\n'+title+'\n'+url+'\n\nMy preferred times:\nMy name:\nMy phone number:');email.href=href.href;}
+ }
+ const links=[...property.querySelectorAll('[data-gallery-photo]')];
+ if(links.length&&typeof HTMLDialogElement!=='undefined'){
+  const dialog=document.createElement('dialog');dialog.className='photo-viewer';dialog.setAttribute('aria-label','Property photo viewer');
+  dialog.innerHTML='<div class="viewer-toolbar"><p class="viewer-count" role="status" aria-live="polite"></p><button type="button" class="viewer-close" autofocus>Close Photos</button></div><figure><img alt=""><figcaption></figcaption></figure><p class="viewer-error" role="status"></p><div class="viewer-navigation"><button type="button" class="viewer-prev" aria-label="Previous photo">← Previous</button><p>Use arrow keys to browse</p><button type="button" class="viewer-next" aria-label="Next photo">Next →</button></div>';
+  document.body.append(dialog);
+  const image=dialog.querySelector('img'),caption=dialog.querySelector('figcaption'),count=dialog.querySelector('.viewer-count'),error=dialog.querySelector('.viewer-error');let index=0,opener=null,touch=null;
+  const show=next=>{index=(next+links.length)%links.length;const original=links[index].querySelector('img');error.textContent='';image.alt=original.alt;image.src=links[index].href;caption.textContent=original.alt;count.textContent='Photo '+(index+1)+' of '+links.length;};
+  image.addEventListener('error',()=>{error.textContent='This photo could not load. Try another photo or close the viewer.';});
+  dialog.querySelector('.viewer-close').addEventListener('click',()=>dialog.close());
+  for(const [selector,step] of [['.viewer-prev',-1],['.viewer-next',1]]){const button=dialog.querySelector(selector);button.disabled=links.length<2;button.addEventListener('click',()=>show(index+step));}
+  links.forEach((link,i)=>link.addEventListener('click',event=>{if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey||event.button!==0)return;event.preventDefault();opener=link;show(i);dialog.showModal();document.body.classList.add('gallery-open');}));
+  dialog.addEventListener('close',()=>{document.body.classList.remove('gallery-open');opener?.focus();});
+  dialog.addEventListener('click',event=>{if(event.target!==dialog)return;const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();});
+  dialog.addEventListener('keydown',event=>{const next=event.key==='ArrowRight'?index+1:event.key==='ArrowLeft'?index-1:event.key==='Home'?0:event.key==='End'?links.length-1:null;if(next!==null){event.preventDefault();show(next);}});
+  image.addEventListener('pointerdown',event=>{if(event.pointerType==='touch')touch={x:event.clientX,y:event.clientY,id:event.pointerId};});
+  image.addEventListener('pointerup',event=>{if(!touch||touch.id!==event.pointerId)return;const dx=event.clientX-touch.x,dy=event.clientY-touch.y;touch=null;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5)show(index+(dx<0?1:-1));});
+  image.addEventListener('pointercancel',()=>{touch=null;});
+ }
+}

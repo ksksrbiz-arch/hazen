@@ -84,3 +84,14 @@ test('Public listing filters support status, address search and price ordering w
  const none=collection(items,new URL('https://qa.example/properties/?q=%22%3E%3Cscript%3E'));assert.ok(none.includes('No listings match your filters'));assert.ok(!none.includes('<script>'));assert.ok(none.includes('&quot;&gt;&lt;script&gt;'));
  const found=collection(items,new URL('https://qa.example/properties/?q=QA'));assert.ok(found.includes('2 properties shown'));
 });
+
+
+test('Private page previews use editor photo routes and omit sharing and authorization notes',()=>{
+ const html=detail(id,{...listing,mlsId:'RMLS <number>'},{preview:true});assert.ok(html.includes('Private saved-draft preview'));assert.ok(html.includes('/api/admin/listings/'+id+'/photos/'));assert.ok(!html.includes('/media/'));assert.ok(!html.includes('data-share-property'));assert.ok(!html.includes(listing.permissionNote));assert.ok(html.includes('RMLS &lt;number&gt;'));
+ const empty=detail(id,{images:[]},{preview:true});assert.ok(empty.includes('Untitled listing'));assert.ok(empty.includes('Listing photos have not been added yet.'));assert.ok(!empty.includes('$0'));
+ assert.ok(!detail(id,{...listing,videoUrl:'javascript:alert(1)'},{preview:true}).includes('javascript:'));
+ assert.ok(!detail(id,{...listing,videoUrl:'httpsx://fake'},{preview:true}).includes('property-tour')); 
+});
+test('Public property pages retain progressive photo links, sharing, printing and multiline descriptions',()=>{
+ const html=detail(id,{...listing,description:'First line\nSecond line',images:[{file:filename,alt:'<Photo>'},{file:filename,alt:'Second photo'}]});assert.ok(html.includes('data-gallery-photo'));assert.ok(html.includes('View photo 2 / 2'));assert.ok(html.includes('View photo 1: &lt;Photo&gt;'));assert.ok(html.includes('data-share-property hidden'));assert.ok(html.includes('data-print-property hidden'));assert.ok(html.includes('property-print-contact'));assert.ok(html.includes('First line\nSecond line'));
+});

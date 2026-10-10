@@ -22,6 +22,7 @@ function updateOverview(){
  const saved=listingsCache.find(item=>item.id===currentId);
  document.querySelector('#listing-summary').textContent=archived?'Archived · restore this draft to edit it':published?(dirty||saved?.hasUnpublishedChanges?'Published · working draft has unpublished changes':'Published · saved draft matches the website'):'Private draft · not on the website';
  const errors=listingErrors(record());document.querySelector('#readiness-status').textContent=errors.length?errors.length+' '+(errors.length===1?'item':'items')+' to complete before publishing':'Ready for publication review';
+ const previewLink=document.querySelector('#saved-preview-link');previewLink.hidden=!currentId;if(currentId)previewLink.href='/studio/preview/'+currentId+'/';else previewLink.removeAttribute('href');
  const link=document.querySelector('#published-link');link.hidden=!published;if(published)link.href='/properties/'+publicSlug+'/';else link.removeAttribute('href');
  document.querySelector('#restore-draft').hidden=!archived;form.inert=archived||busy;
 }

@@ -13,3 +13,5 @@ Client intake: [what to ask Brad](docs/BRAD_ONBOARDING.md). Assets and CSS are c
 Planning: [IDX Phase 2](docs/IDX_PHASE_2.md). Manually maintained properties and testimonials are supported through the collections in `src/content.json`; see [content editing](docs/CONTENT_EDITING.md). Empty collections render useful contact paths without fictional listings or reviews.
 
 Listing workspace: `/studio/` is protected by Cloudflare Access email sign-in. It saves drafts to D1 and photos to a private R2 bucket. Publish updates dynamic property pages and homepage features immediately; later draft edits stay private. See [workspace operations](docs/LISTING_WORKSPACE.md). MLS import and automated inquiry delivery remain pending.
+
+Property presentation: published listings support an enlarged photo viewer, link sharing and printable property sheets. Saved full-page previews remain private to enrolled editors at `/studio/preview/[id]/`. Run `npm test` and `npm run check:runtime` to verify storage, authentication, rendering and publication behavior in isolated fixtures.
