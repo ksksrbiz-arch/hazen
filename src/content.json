@@ -1,15 +1,102 @@
 {
   "agent": "Brad Hazen",
   "pages": [
-    {"slug":"", "title":"A clear path to your next home", "intro":"Buying or selling starts with a conversation. Explore how Brad can help you plan your next move.", "sections":[["Buying a home","A dedicated page will explain the buying process and invite visitors to discuss their goals."],["Selling your home","A dedicated page will explain preparation, pricing, marketing, and next steps."],["Local insight","Five community guides will be added once Brad confirms his service areas."]]},
-    {"slug":"about", "title":"Meet Brad Hazen", "intro":"Brad’s approved biography, portrait, brokerage affiliation, and credentials will appear here.","sections":[]},
-    {"slug":"buy", "title":"Plan your home purchase", "intro":"Discuss your priorities, budget, timeline, and preferred neighborhoods with Brad.","sections":[["Your buying journey","Approved content will cover preparation, tours, offers, inspections, and closing."]]},
-    {"slug":"sell", "title":"Prepare for your next chapter", "intro":"Start with a conversation about your property and your goals.","sections":[["A plan for your property","Approved content will explain Brad’s pricing, preparation, and marketing process."]]},
-    {"slug":"communities", "title":"Find your place", "intro":"Community guides will introduce the areas Brad serves. Locations are awaiting confirmation.","sections":[]},
-    {"slug":"properties", "title":"Featured properties", "intro":"Brad’s authorized listings can be added here manually. No properties are published in this scaffold.","sections":[]},
-    {"slug":"home-valuation", "title":"Request a home assessment", "intro":"The completed site will let you request a personal assessment from Brad. This is not an instant automated valuation.","sections":[]},
-    {"slug":"testimonials", "title":"Client experiences", "intro":"Client-approved testimonials will be added before launch.","sections":[]},
-    {"slug":"contact", "title":"Let’s talk about your next move", "intro":"Brad’s verified phone, email, and inquiry form will be connected before launch. This preview does not collect inquiries.","sections":[]},
-    {"slug":"privacy", "title":"Privacy information", "intro":"A privacy notice matching the final hosting, forms, analytics, and retention practices is required before launch.","sections":[]}
-  ]
+    {
+      "slug": "",
+      "title": "A clear path to your next home",
+      "intro": "Buying or selling starts with a conversation. Explore how Brad can help you plan your next move.",
+      "sections": [
+        [
+          "Buying a home",
+          "A dedicated page will explain the buying process and invite visitors to discuss their goals."
+        ],
+        [
+          "Selling your home",
+          "A dedicated page will explain preparation, pricing, marketing, and next steps."
+        ],
+        [
+          "Local insight",
+          "Five community guides will be added once Brad confirms his service areas."
+        ]
+      ]
+    },
+    {
+      "slug": "about",
+      "title": "Meet Brad Hazen",
+      "intro": "Brad Hazen is a real estate broker. His business card identifies his brokerage as Realty Pro, Inc.",
+      "sections": [
+        [
+          "Clark County background",
+          "His business card lists over 22 years as a Clark County review engineer, over 22 years of land survey experience in Clark County, and over 22 years as a licensed Realtor. Confirm current wording and dates before publication."
+        ]
+      ]
+    },
+    {
+      "slug": "buy",
+      "title": "Plan your home purchase",
+      "intro": "Discuss your priorities, budget, timeline, and preferred neighborhoods with Brad.",
+      "sections": [
+        [
+          "Your buying journey",
+          "Approved content will cover preparation, tours, offers, inspections, and closing."
+        ]
+      ]
+    },
+    {
+      "slug": "sell",
+      "title": "Prepare for your next chapter",
+      "intro": "Start with a conversation about your property and your goals.",
+      "sections": [
+        [
+          "A plan for your property",
+          "Approved content will explain Brad\u2019s pricing, preparation, and marketing process."
+        ]
+      ]
+    },
+    {
+      "slug": "communities",
+      "title": "Find your place",
+      "intro": "Community guides will introduce the areas Brad serves. Locations are awaiting confirmation.",
+      "sections": []
+    },
+    {
+      "slug": "properties",
+      "title": "Featured properties",
+      "intro": "Brad\u2019s authorized listings can be added here manually. No properties are published in this scaffold.",
+      "sections": []
+    },
+    {
+      "slug": "home-valuation",
+      "title": "Request a home assessment",
+      "intro": "The completed site will let you request a personal assessment from Brad. This is not an instant automated valuation.",
+      "sections": []
+    },
+    {
+      "slug": "testimonials",
+      "title": "Client experiences",
+      "intro": "Client-approved testimonials will be added before launch.",
+      "sections": []
+    },
+    {
+      "slug": "contact",
+      "title": "Let\u2019s talk about your next move",
+      "intro": "Call or email Brad to discuss your next move. Online inquiry delivery will be added before launch.",
+      "sections": []
+    },
+    {
+      "slug": "privacy",
+      "title": "Privacy information",
+      "intro": "A privacy notice matching the final hosting, forms, analytics, and retention practices is required before launch.",
+      "sections": []
+    }
+  ],
+  "agentDetails": {
+    "name": "Brad Hazen",
+    "role": "Real Estate Broker",
+    "phone": "(360) 921-9484",
+    "phoneHref": "tel:+13609219484",
+    "email": "b.hazen@hotmail.com",
+    "brokerage": "Realty Pro, Inc.",
+    "source": "Business card supplied by user on 2026-10-10; current affiliation and experience wording to confirm before launch."
+  }
 }
