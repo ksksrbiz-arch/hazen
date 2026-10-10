@@ -132,3 +132,7 @@ Expanded Brad’s own manually maintained property collection with optional whol
 ## Visitor flow simplification — October 10, 2026
 
 Hide collection filters when no listings are published; show distinct buying and selling next steps instead. Filters remain available once Brad publishes properties. Email inquiry review now temporarily hides the editable fields and submit controls, bringing the draft and send/copy/edit choices forward. Edit restores the fields; changes invalidate the prior draft. The site still prepares drafts only and sends nothing automatically.
+
+## Cloudflare delivery and response hardening — October 10, 2026
+
+Confirmed production D1/R2 bindings, no preview data bindings, and disabled public R2 development domain. Enabled Pages build caching through the project API. Static pages and all Functions responses now share restrictive script/style/source, frame, and browser-permission headers; private preview referrer policy remains intact. Published media uses browser-only revalidation and R2 ETags, with publication checked before every conditional request; unchanged GET responses return 304 and HEAD uses metadata only. Unpublished/archived photos remain unavailable even with a previously valid ETag. Missing storage or transient failures return a non-cacheable 503. No edge media cache, external analytics, or new services were enabled.

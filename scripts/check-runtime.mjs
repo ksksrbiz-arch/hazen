@@ -18,7 +18,7 @@ try{
  await DB.prepare('INSERT INTO listings(id,draft_json,published_json,updated_at,updated_by) VALUES(?,?,?,?,?)').bind(id,JSON.stringify(draft),JSON.stringify(publicListing(draft)),'now','QA').run();
  const PHOTOS=await mf.getR2Bucket('PHOTOS');await PHOTOS.put(id+'/'+file,readFileSync(path.join(root,'src/assets/river-hero-mobile.webp')),{httpMetadata:{contentType:'image/webp'}});
  for(const route of ['/','/properties/','/properties/isolated-runtime-qa/']){
-  const response=await mf.dispatchFetch('https://qa.example'+route),html=await response.text();assert.equal(response.status,200);assert.ok(html.includes('QA house &lt;test&gt;'));assert.ok(!html.includes('INTERNAL_QA_NOTE'));assert.equal(response.headers.get('cache-control'),'no-store');
+  const response=await mf.dispatchFetch('https://qa.example'+route),html=await response.text();assert.equal(response.status,200);assert.ok(html.includes('QA house &lt;test&gt;'));assert.ok(!html.includes('INTERNAL_QA_NOTE'));assert.equal(response.headers.get('cache-control'),'no-store');assert.equal(response.headers.get('x-frame-options'),'DENY');assert.ok(response.headers.get('content-security-policy').includes("script-src 'self'"));
  }
  const filtered=await (await mf.dispatchFetch('https://qa.example/properties/?min=100&max=100&beds=3')).text();assert.ok(filtered.includes('QA house &lt;test&gt;'));assert.ok(filtered.includes('1 of 1 property shown'));assert.ok(filtered.includes('3+ bedrooms'));
  const unmatched=await (await mf.dispatchFetch('https://qa.example/properties/?max=99')).text();assert.ok(!unmatched.includes('QA house &lt;test&gt;'));assert.ok(unmatched.includes('No listings match your filters'));
@@ -31,9 +31,12 @@ try{
  assert.equal((await mf.dispatchFetch(previewURL,{headers:{'cf-access-jwt-assertion':nonEditor}})).status,401);
  const privatePhoto=await mf.dispatchFetch('https://qa.example/api/admin/listings/'+id+'/photos/'+file,{headers:{'cf-access-jwt-assertion':token}});assert.equal(privatePhoto.status,200);
  const mediaURL='https://qa.example/media/'+id+'/'+file;
- assert.equal((await mf.dispatchFetch(mediaURL)).status,200);
+ const media=await mf.dispatchFetch(mediaURL);assert.equal(media.status,200);const etag=media.headers.get('etag');assert.ok(etag);assert.ok(media.headers.get('cache-control').includes('private, no-cache'));assert.equal(media.headers.get('x-frame-options'),'DENY');
+ const head=await mf.dispatchFetch(mediaURL,{method:'HEAD'});assert.equal(head.status,200);assert.equal(await head.text(),'');assert.equal(head.headers.get('etag'),etag);assert.ok(Number(head.headers.get('content-length'))>0);
+ const unchanged=await mf.dispatchFetch(mediaURL,{headers:{'If-None-Match':etag}});assert.equal(unchanged.status,304);assert.equal(await unchanged.text(),'');assert.equal(unchanged.headers.get('etag'),etag);
+
  await DB.prepare('UPDATE listings SET published_json=NULL WHERE id=?').bind(id).run();
- assert.equal((await mf.dispatchFetch(mediaURL)).status,404);
+ assert.equal((await mf.dispatchFetch(mediaURL)).status,404);assert.equal((await mf.dispatchFetch(mediaURL,{headers:{'If-None-Match':etag}})).status,404);
  assert.equal((await mf.dispatchFetch('https://qa.example/properties/isolated-runtime-qa/')).status,404);
  const emptyCollection=await (await mf.dispatchFetch('https://qa.example/properties/')).text();assert.ok(emptyCollection.includes('Your next property conversation starts here.'));assert.ok(emptyCollection.includes('No listings published yet'));
  const homepage=await (await mf.dispatchFetch('https://qa.example/')).text();assert.ok(!homepage.includes('QA house'));

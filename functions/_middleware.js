@@ -1,7 +1,9 @@
 import {editor} from '../server/auth.js';
 import {cards,detail,published,collection} from '../server/public.js';
 import {idPattern} from '../server/listings.js';
-export async function onRequest(context){
+import {secureResponse} from '../server/response-security.js';
+export async function onRequest(context){return secureResponse(await handleRequest(context));}
+async function handleRequest(context){
  const {request,env}=context,url=new URL(request.url),path=url.pathname;
  if(path==='/studio'||path.startsWith('/studio/')){
   try{await editor(request,env);}catch{return new Response('Sign in to the private listing studio.',{status:401,headers:{'Cache-Control':'no-store','X-Robots-Tag':'noindex'}});}

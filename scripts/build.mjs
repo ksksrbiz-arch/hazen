@@ -1,3 +1,4 @@
+import {securityHeaders} from '../server/response-security.js';
 import {readFile, mkdir, writeFile, rm, readdir} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
@@ -60,7 +61,7 @@ for(const page of pages){
 }
 await mkdir(path.join(root,'dist/resources'),{recursive:true});
 await writeFile(path.join(root,'dist/resources/seller-conversation-checklist.txt'),sellerChecklistText);
-await writeFile(path.join(root,'dist/robots.txt'),'User-agent: *\nDisallow: /\n');await writeFile(path.join(root,'dist/_headers'),'/*\n  X-Robots-Tag: noindex, nofollow\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Cache-Control: public, max-age=0, must-revalidate\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n/styles.*.css\n  Cache-Control: public, max-age=31536000, immutable\n/site.*.js\n  Cache-Control: public, max-age=31536000, immutable\n');console.log(`Built ${pages.length} public routes and a draft listing studio.`);
+await writeFile(path.join(root,'dist/robots.txt'),'User-agent: *\nDisallow: /\n');await writeFile(path.join(root,'dist/_headers'),'/*\n'+Object.entries(securityHeaders).map(([name,value])=>'  '+name+': '+value+'\n').join('')+'  X-Robots-Tag: noindex, nofollow\n  Referrer-Policy: strict-origin-when-cross-origin\n  Cache-Control: public, max-age=0, must-revalidate\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n/styles.*.css\n  Cache-Control: public, max-age=31536000, immutable\n/site.*.js\n  Cache-Control: public, max-age=31536000, immutable\n');console.log(`Built ${pages.length} public routes and a draft listing studio.`);
 
 await writeFile(path.join(root,'dist/404.html'),`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Page not found | Brad Hazen</title><link rel="stylesheet" href="/${cssName}"></head><body><main class="section"><h1>Let’s get you back on track.</h1><p>This page couldn’t be found.</p>${button('/','Return Home')} ${button('/contact/','Contact Brad')}</main></body></html>`);
 
