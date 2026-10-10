@@ -44,3 +44,4 @@
 @media(max-width:520px){.studio-body fieldset{scroll-margin-top:145px}}
 
 .studio-fields .field-control{display:flex;flex-direction:column;gap:.5rem;min-width:0}.studio-fields .field-control .field-hint{font-size:10px;font-weight:400;color:#627080;line-height:1.6}.studio-fields .field-control label{margin:0}
+@media(max-width:850px){.studio-body input,.studio-body select,.studio-body textarea{font-size:16px}}@media(max-width:600px){.inquiry-form input,.inquiry-form select,.inquiry-form textarea,.property-filters input,.property-filters select{font-size:16px}}@media(max-width:520px){.studio-actions button,.listing-more summary,.editor-sections a{font-size:12px}.studio-fields .field-control .field-hint{font-size:11px}}
