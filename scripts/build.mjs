@@ -64,3 +64,5 @@ await mkdir(path.join(root,'dist/studio'),{recursive:true});
 await writeFile(path.join(root,'dist/studio',modelName),model);
 await writeFile(path.join(root,'dist/studio',studioName),studio);
 await writeFile(path.join(root,'dist/studio/index.html'),studioPage(cssName).replace('/studio/studio.js','/studio/'+studioName));
+// Restrict Function invocation to dynamic routes; marketing assets remain static.
+await writeFile(path.join(root,'dist/_routes.json'),JSON.stringify({version:1,include:['/','/properties','/properties/*','/studio','/studio/*','/api/admin/*','/media/*'],exclude:[]}));

@@ -26,8 +26,8 @@ for(const slug of ['contact','buy','sell','home-valuation']){
  assert(html.includes('<noscript>'),`${slug}: direct contact fallback required`);
 }
 const studio=await readFile(path.join(root,'studio/index.html'),'utf8');
-assert(studio.includes('Draft prototype.')&&studio.includes('no login or website publishing access'));
-assert(!studio.includes('type="submit">Publish'));
+assert(studio.includes('Private listing workspace.')&&studio.includes('Save Draft Online'));
+assert(studio.includes('id="publish-draft"')&&studio.includes('id="unpublish-draft"'));
 const contact=await readFile(path.join(root,'contact/index.html'),'utf8');assert(contact.includes('tel:+13609219484'));assert(contact.includes('mailto:b.hazen@hotmail.com'));assert(contact.includes('aria-current="page"'));
 for(const image of all.filter(x=>/\.(webp|png|jpg)$/.test(x)))assert((await stat(image)).size<400000,`Oversized image: ${image}`);
 console.log(`Checked ${pages} pages: routes, assets, headings, preview restrictions, contact links, and image budget.`);

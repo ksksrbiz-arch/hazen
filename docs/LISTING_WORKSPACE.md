@@ -1,40 +1,40 @@
-# Brad’s listing workspace scaffold
+# Brad’s Cloudflare listing workspace
 
-## Current build
+## Connected on October 10, 2026
 
-- Listings-first homepage: feature published listings except Sold, with a seller-oriented fallback until Brad supplies listings.
-- Property pages: authorized photo galleries, price/status/facts, public attribution/review date, optional HTTPS video/tour link, showing inquiries.
-- `/studio/`: public draft prototype, not a secured admin area. It has no credentials, backend publishing, MLS access, or inbound lead storage.
-- Create/edit drafts; add up to 20 photos under 400 KB each; describe photos and select a cover; preview; save to this browser’s IndexedDB; export unpublished JSON and download the photos.
-- Reloading the same browser can recover saved drafts. Clearing browser storage, using another device/profile/origin, or private browsing may lose access. Unsaved work is not backed up. Export files for handoff.
-- Exported `published:false` JSON uses the same validation/model as the public build. A developer checks it, places authorized photos in `src/assets/`, imports approved content, and sets `published:true` before deployment. The studio never commits to GitHub or calls the MLS.
+The website stays on Cloudflare Pages (`hazen`, `hazen-ci5.pages.dev`). Production uses a dedicated D1 database `hazen-listings` and private R2 bucket `hazen-listing-photos`. No unrelated projects or buckets are used.
 
-## Intended production architecture — proposed, not provisioned
+Cloudflare Access application **Hazen Listing Studio** protects `/studio` and `/api/admin`. Existing email one-time-pin identity provider is used. Initially only `skdev@1commercesolutions.com` is enrolled. Confirm Brad’s preferred sign-in email, then add it both to the Access allow policy and the production `EDITOR_EMAILS` environment variable. No password or MLS credentials belong in the repository or browser code.
 
-Keep Cloudflare Pages for the website. Use an isolated Supabase project for Brad’s admin identity, private drafts, and private photo storage. The proposed migration is `database/migrations/001_listing_workspace.sql`; it is not applied automatically and has not been tested against a live database. Confirm the project/ownership before connecting it. Create/invite Brad through a secure account flow, then add his user ID to `listing_editors` through an administrator. Set membership `enabled=false` to revoke editing access. Public visitor accounts remain the separate IDX phase.
+Functions verify Access JWT signatures, issuer, audience, expiration, subject and editor email. Alternate deployment URLs remain protected by origin verification, even where an Access gateway is absent. Preview builds have no production database, storage or authentication bindings and cannot change production listings. Production and preview fail closed.
 
-Row-level policies isolate drafts/photos to enrolled editor identities. Anonymous visitors cannot read drafts, permission notes, or publication jobs. Ordinary authenticated users cannot enroll themselves as editors. Provider/service-role keys never go in browser code. Private storage uses short-lived signed URLs for preview; approved images are copied to the public deployment only during publication.
+## Brad’s workflow
 
-Official implementation references:
-- https://supabase.com/docs/guides/database/postgres/row-level-security
-- https://supabase.com/docs/guides/storage/security/access-control
+1. Sign in at `/studio/` with an enrolled email address.
+2. Choose New Listing Draft; enter listing details and authorized photos.
+3. Save Draft Online. Incomplete drafts are allowed.
+4. Add photo descriptions, review the property preview, and record the internal authorization note.
+5. Publish Listing. The server checks required fields, date, price, status, HTTPS tour link and registered photos. Duplicate public page slugs are rejected.
+6. The public property page, Properties collection and homepage features update without a GitHub commit or new deployment.
+7. Edit and save privately, then publish again when ready. Pending and Sold are supported; Sold properties leave the homepage feature section.
+8. Unpublish removes the public page and public photo access while retaining the draft. Archive additionally removes the listing from the editor list while retaining data/history.
 
-## Production operations to connect
+JSON export and photo downloads remain available as manual backups. Old browser-only drafts are not automatically uploaded or migrated; they remain in the old browser’s IndexedDB.
 
-| Operation | Behavior |
-| --- | --- |
-| List/create/edit drafts | Verify signed-in editor; owner-scoped records; server validation; incomplete drafts allowed |
-| Upload/reorder photos | Private per-editor/per-draft paths; MIME and actual decoded-image validation; 400 KB limit; alt text and cover order |
-| Save | Send expected revision; reject stale updates with 409 and retain local edits |
-| Preview | Show the saved/working draft to its owner without creating a public route |
-| Publish/unpublish | Authorized server endpoint only; validate ready record and permissions, create immutable snapshot/job, return job ID |
-| Deployment | Whitelist public content; exclude permission notes/owner IDs; update git via server-held credentials; trigger one bundled Pages build |
-| Publication status | Distinguish queued/building/live/failed; mark live only after deployment and route checks; draft saving does not publish |
-| Showing request | Validated public endpoint, bot protection, verified email service; success after provider acceptance; retention and recipient confirmed |
-| MLS import | Separate provider adapter; unavailable until approved IDX/API access confirmed; supported IDs only; never scrape or use credentials in client code |
+## Storage and publication
 
-The migration only scaffolds storage, identity restrictions, and job records. Publication API, job processor, git adapter, deployment verification, sign-in UI, secure preview, conflict handling, inbound email, backups, and database policy tests still need implementation. Do not replace the draft prototype’s labels with “Publish” until this path is connected and verified.
+`database/cloudflare/001_listings.sql` is the applied SQLite schema. Each listing has an independent working draft and published JSON snapshot. Permission notes are excluded from public snapshots. Photos use immutable UUID filenames scoped to a listing. A public media Function serves only images referenced by the current published snapshot. The bucket has no public R2 URL. Removed photos are retained privately as history; automated cleanup is not implemented. Limits: 20 photos per draft, each under 400 KB; 200 historical uploads per listing; editor list shows the 200 latest unarchived records.
 
-## Production acceptance
+Browser checks decode selected images. The server independently checks byte limits, permitted image signatures and content type. No SVG or arbitrary filename uploads. Mutations require a verified editor and same-origin Origin header. Draft save, publish, unpublish and archive use expected revisions; stale sessions receive 409. D1 transactional batches record successful changes in `listing_events`. Authorization notes and actor identifiers are never rendered in public HTML. Responses with private data use no-store caching. Unpublished media is also not cached publicly. Previously downloaded public photos cannot be recalled.
 
-Test anonymous access, non-editor access, cross-editor isolation, expired sessions, revoked membership, stale edits, invalid assets, interrupted uploads, duplicate publish clicks, build failures, rollback, unpublishing, and keyboard/mobile editing. Verify published routes contain no internal notes. Test showing emails with an approved test recipient before routing live inquiries to Brad. Keep MLS feeds and website-only marketing enhancements separate to avoid overwriting Brad’s copy during feed updates.
+Cloudflare Access controls entry, with a second editor allowlist at the origin. Editors share Brad’s single-agent workspace; there is no separate multi-agent or client tenancy. There is no account enrollment endpoint.
+
+## Verification and pending work
+
+`npm test` checks signed token validation, expired/wrong-audience/non-editor rejection, API create/upload/save/publish/unpublish, draft isolation, conflicting edits, transactional history, duplicate slugs, private photo access, HTML escaping and published snapshot stability. Tests use local SQLite and simulated R2/JWKS, not live Cloudflare credentials. `npm run check` validates the generated routes/assets. Wrangler compiles Pages Functions.
+
+The first authenticated live editor session still needs verification with the enrolled account’s email code. No test property has been published to production. Before client launch, verify upload, reload, publication and unpublication with Brad’s first approved listing. Confirm backup/retention requirements, domain ownership, authorized assets and client content. No automated backup export/restore UI is provided yet; archived listings can be restored by an administrator through D1.
+
+Automated showing/contact delivery is not connected: visitors use their own email application or call Brad. Add a verified sender/provider, approved recipient, bot protection, server validation and a truthful delivery result separately. MLS import and visitor accounts/alerts remain the separately planned IDX phase; an MLS login alone is not website API authorization.
+
+The earlier Supabase migration in `database/migrations/001_listing_workspace.sql` is an unused alternative design. It has not been applied and is superseded by this Cloudflare implementation.

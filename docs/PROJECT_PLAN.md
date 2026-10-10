@@ -76,3 +76,7 @@ Added centralized property/testimonial models, publish controls, property card a
 
 ## Listings-first scaffold — October 10, 2026
 Brad’s primary goal is winning and promoting his own listings. Homepage seller calls to action and featured listings take priority over buyer account features. The public draft studio supports local preparation, photos, preview, and export. See [listing workspace architecture](LISTING_WORKSPACE.md) for current boundaries and proposed authenticated publishing. Supabase schema/policies are scaffolded only; no database or credentials have been provisioned. Visitor accounts/MLS alerts remain planned, not enabled.
+
+## October 10, 2026 — Cloudflare listing backend
+
+Connected dedicated Hazen D1/R2 resources and Access email sign-in. Cloud editor replaces the local draft prototype: save, private preview, photo uploads, publish/unpublish/archive, public snapshot isolation, conflict detection and change history. Dynamic publication updates the website without a git deployment. Brad’s editor email enrollment and first authenticated live session remain to be verified. Visitor accounts/saved homes/searches/alerts and MLS approval remain in IDX_PHASE_2.md. Automated inquiry delivery is still pending verified sender configuration.
