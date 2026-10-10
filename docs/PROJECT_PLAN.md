@@ -1,7 +1,7 @@
 # Brad Hazen — Phase 1 plan
 
 ## Outcome and boundaries
-Create a single-agent marketing website that converts buyer/seller interest into conversations. Reference: https://www.realtypronw.net/. Use original design and approved assets, not copied branding or content. No MLS feed, public accounts, saved searches, instant valuation, or custom CRM in Phase 1. Optional external brokerage search link requires Brad's approved URL.
+Create a single-agent marketing website that converts buyer/seller interest into conversations. Reference: https://www.realtypronw.net/. Recreate the reference layout closely, personalized for Brad. The revised preview uses sourced reference imagery; confirm asset permissions and replace where required before final launch. Use Brad-specific copy, never other agents’ testimonials or MLS inventory. No MLS feed, public accounts, saved searches, instant valuation, or custom CRM in Phase 1. Optional external brokerage search link requires Brad's approved URL.
 
 Working commercial estimate: $3,500 build, subject to final scope. Target 8–12 core pages plus up to five templated community guides; explicitly confirm the final page count in the proposal. Two design revision rounds. Client supplies draft text and licensed assets. Extensive copywriting, photography, subscriptions, ongoing SEO and maintenance are separate. CMS and real inquiry delivery are planned deliverables, not implemented features of this scaffold.
 
@@ -55,3 +55,6 @@ Do not infer Brad's identity, location, accomplishments, or brokerage from a nam
 
 ## Future IDX expansion
 Confirm MLS membership and provider permissions, then select a compatible IDX service. Add approved search links/widgets or an integration behind a provider boundary. Keep website content and inquiry handling independent. Quote accounts, alerts, recurring vendor charges and valuation services separately. Never scrape MLS inventory.
+
+## Reference recreation revision
+Approved direction: close visual recreation of the reference. Implemented waterfront hero, gold (#bf902e) introduction band and buttons, Montserrat typography, three photo-backed buyer/seller cards, community photo tiles, Brad profile section and contact banner. Six community examples are included for design review, not a confirmed service-area list. Brad portrait remains pending; no fake headshot or testimonials. Accounts and live MLS search remain excluded. Total preview routes: 16. Browser preview of localhost is unavailable in this session; build and internal path checks pass.
