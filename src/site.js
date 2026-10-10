@@ -14,8 +14,8 @@ document.querySelectorAll('[data-inquiry]').forEach(form=>{
  const updateTopic=()=>{
   const assessment=interest.value==='A home assessment',address=assessment||['Selling a home','Request a showing','A property inquiry'].includes(interest.value);
   location.required=assessment;location.setCustomValidity('');
-  form.querySelector('[data-location-label]').textContent=address?'Property address'+(assessment?' *':' (optional)'):'Preferred communities (optional)';
-  form.querySelector('#location-hint').textContent=address?'Include the city, if you know it.':'Share the places you are considering.';
+  form.querySelector('[data-location-label]').textContent=address?'Property address'+(assessment?' *':' (optional)'):interest.value==='Buying a home'?'Preferred communities (optional)':'Property or community (optional)';
+  form.querySelector('#location-hint').textContent=address?'Include the city, if you know it.':interest.value==='Buying a home'?'Share the places you are considering.':'Add a place or property, if relevant.';
  };
  interest.addEventListener('change',updateTopic);updateTopic();
  form.querySelector('button[type="submit"]').disabled=false;
