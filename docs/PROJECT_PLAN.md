@@ -100,3 +100,7 @@ Simplified contact-page hierarchy by placing direct contact inside the inquiry p
 ## Original imagery replacement — October 10, 2026
 
 Keith instructed that Realty Pro’s exact imagery must not be used. Replaced the copied raster assets with six original AI-generated Pacific Northwest scenes and optimized WebP variants for the hero, background sections, community cards/headers and three circular feature images. The copied branding raster is also removed; brokerage affiliation remains text. Public imagery captions identify the scenes as illustrative, not actual listings or photos of specific communities. See IMAGE_ASSETS.md for the complete prompts, paths and byte sizes. Actual listing photos and Brad’s headshot must come from approved client assets.
+
+## Listing photo preparation — October 10, 2026
+
+Replaced the manual under-400-KB upload prerequisite with browser-side preparation of larger JPG/PNG/WebP sources. The studio now resizes/re-encodes website copies, shows batch progress and per-file failures, supports stopping, reports dimensions/sizes, and links preparation results to each photo description. No original is changed or uploaded, and preparation does not save or publish. The existing authenticated storage, ownership checks, photo limits and private/published snapshot isolation are unchanged. HEIC conversion, approved client photos, verified inquiry delivery, MLS permissions and final launch content remain pending.

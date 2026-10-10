@@ -61,10 +61,13 @@ await writeFile(path.join(root,'dist/404.html'),`<!doctype html><html lang="en">
 // Isolated prototype: no data from local drafts is included in the public build.
 const model=await readFile(path.join(root,'src/listing-model.js'),'utf8');
 const modelName='listing-model.'+createHash('sha256').update(model).digest('hex').slice(0,12)+'.js';
-const studio=(await readFile(path.join(root,'src/studio.js'),'utf8')).replace('./listing-model.js','./'+modelName);
+const photoPreparation=await readFile(path.join(root,'src/photo-preparation.js'),'utf8');
+const photoPreparationName='photo-preparation.'+createHash('sha256').update(photoPreparation).digest('hex').slice(0,12)+'.js';
+const studio=(await readFile(path.join(root,'src/studio.js'),'utf8')).replace('./listing-model.js','./'+modelName).replace('./photo-preparation.js','./'+photoPreparationName);
 const studioName='studio.'+createHash('sha256').update(studio).digest('hex').slice(0,12)+'.js';
 await mkdir(path.join(root,'dist/studio'),{recursive:true});
 await writeFile(path.join(root,'dist/studio',modelName),model);
+await writeFile(path.join(root,'dist/studio',photoPreparationName),photoPreparation);
 await writeFile(path.join(root,'dist/studio',studioName),studio);
 await writeFile(path.join(root,'dist/studio/index.html'),studioPage(cssName).replace('/studio/studio.js','/studio/'+studioName));
 // Restrict Function invocation to dynamic routes; marketing assets remain static.
