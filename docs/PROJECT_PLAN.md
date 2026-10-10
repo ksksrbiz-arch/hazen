@@ -120,3 +120,7 @@ Sell and listing-marketing pages now offer Pricing guidance, Preparing to list, 
 ## Printable seller worksheet — October 10, 2026
 
 While Ylopo/provider discovery is pending, added a standalone seller checklist with 18 review prompts, optional questions, an on-screen progress count, reset controls and a dedicated print layout. Entries remain in the current page; no account, persistent site storage, backend submission or external service is involved. The existing blank text download is retained. Sell and listing-marketing pages now link to the worksheet. Printed notes use a text-only mirror so long questions are not clipped by textarea print rendering. MLS search, visitor account/alert infrastructure and CRM overlap remain pending Brad’s response.
+
+## Listing photography preparation — October 10, 2026
+
+Added a standalone photography guide with room/site shot planning, preparation, accurate-image guidance, and an organized handoff to Brad. Linked it from the listing approach and authenticated photo editor; the editor link opens separately to preserve the working draft. Includes a print layout and direct seller conversation/checklist links. No photos, client claims, paid services, or external integrations are added by this guide. Ylopo-dependent work remains pending.

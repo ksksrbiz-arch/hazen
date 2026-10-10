@@ -104,3 +104,6 @@ if(worksheet){
  const printButton=worksheet.querySelector('[data-print-worksheet]'),resetButton=worksheet.querySelector('[data-reset-worksheet]');printButton.hidden=resetButton.hidden=progress.hidden=false;
  printButton.addEventListener('click',()=>{updateWorksheet();window.print();});resetButton.addEventListener('click',()=>{if((checks.some(check=>check.checked)||notes.value)&&!confirm('Clear this page’s checks and notes?'))return;checks.forEach(check=>check.checked=false);notes.value='';updateWorksheet();checks[0]?.focus();});updateWorksheet();
 }
+
+const photoGuidePrint=document.querySelector('[data-print-guide]');
+if(photoGuidePrint){photoGuidePrint.hidden=false;photoGuidePrint.addEventListener('click',()=>window.print());}

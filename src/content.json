@@ -206,6 +206,12 @@
       "title": "Your seller conversation checklist",
       "intro": "Organize your property details and the questions you want to discuss with Brad. Review it on screen or bring a printed copy.",
       "sections": []
+    },
+    {
+      "slug": "listing-photos",
+      "title": "Prepare your listing photos",
+      "intro": "Plan a clear, accurate image set that helps buyers understand your property. Bring this guide to your conversation with Brad or your photographer.",
+      "sections": []
     }
   ],
   "agentDetails": {
