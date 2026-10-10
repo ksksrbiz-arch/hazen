@@ -74,8 +74,8 @@
     },
     {
       "slug": "sell",
-      "title": "A thoughtful start to your home sale",
-      "intro": "Every property and timeline is different. Start with a conversation about yours.",
+      "title": "Sell your property with a clear plan",
+      "intro": "Start with your goals, bring the property details, and discuss a listing approach with Brad Hazen.",
       "sections": [
         [
           "Discuss your goals",
@@ -102,6 +102,30 @@
         [
           "How do I request a home assessment?",
           "Visit the home assessment page and prepare an inquiry with your address and property details. Brad can explain the next steps for a personal market assessment."
+        ],
+        [
+          "How will my property be marketed?",
+          "Explore the listing approach to see how a dedicated property page can support your presentation. Confirm the photography, outreach channels, included services, budget, and communication plan with Brad for your property."
+        ]
+      ]
+    },
+    {
+      "slug": "listing-marketing",
+      "title": "A listing approach built around your property",
+      "intro": "Explore how your property can be presented, shared, and discussed with prospective buyers. Start by planning the details with Brad.",
+      "sections": [],
+      "faqs": [
+        [
+          "Does a property page include MLS exposure?",
+          "A website property page is separate from MLS distribution. Ask Brad which brokerage and MLS services are included in your listing plan."
+        ],
+        [
+          "Are advertising and photography included?",
+          "Confirm the proposed services, responsibilities, fees, and any separate advertising budget with Brad before approving the plan."
+        ],
+        [
+          "Can I start if I am only considering a sale?",
+          "Yes. Bring your property details and questions to an initial conversation. The seller checklist can help you organize them."
         ]
       ]
     },

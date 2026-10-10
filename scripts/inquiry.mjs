@@ -5,7 +5,7 @@ export function inquiry(kind,property=null){
  const interest=kind==='buy'?'Buying a home':kind==='sell'?'Selling a home':kind==='assessment'?'A home assessment':kind==='property'?(property?.status==='Active'?'Request a showing':'A property inquiry'):'';
  const address=['sell','assessment','property'].includes(kind);
  return `<section id="inquiry" class="inquiry-panel" aria-labelledby="inquiry-heading">
- <div class="inquiry-intro"><p class="eyebrow">Connect with Brad</p><h2 id="inquiry-heading" tabindex="-1">${kind==='assessment'?'Request a home assessment':kind==='property'?'Ask about this property':'Tell Brad about your plans'}</h2>
+ <div class="inquiry-intro"><p class="eyebrow">Connect with Brad</p><h2 id="inquiry-heading" tabindex="-1">${kind==='assessment'?'Request a home assessment':kind==='property'?'Ask about this property':kind==='sell'?'Tell Brad about your property':'Tell Brad about your plans'}</h2>
  <p>A few details give Brad a useful starting point for your conversation.</p>
  <ol class="inquiry-steps"><li>Tell Brad what you have in mind.</li><li>Review your prepared message.</li><li>Open your email application and send it.</li></ol>
  <div class="inquiry-direct"><span>Prefer to connect directly?</span><a href="tel:+13609219484">Call (360) 921-9484</a><a href="mailto:b.hazen@hotmail.com">b.hazen@hotmail.com</a></div><noscript><p>Use the call or email links above to contact Brad. Preparing an email draft with the form requires JavaScript.</p></noscript></div>
