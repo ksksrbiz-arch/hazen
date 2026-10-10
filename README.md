@@ -11,3 +11,5 @@ Repository: https://github.com/ksksrbiz-arch/hazen (private). Client ownership r
 Client intake: [what to ask Brad](docs/BRAD_ONBOARDING.md). Assets and CSS are content-versioned at build time; changes receive new filenames to prevent stale image/style caches. The Pages output remains `dist`.
 
 Planning: [IDX Phase 2](docs/IDX_PHASE_2.md). Manually maintained properties and testimonials are supported through the collections in `src/content.json`; see [content editing](docs/CONTENT_EDITING.md). Empty collections render useful contact paths without fictional listings or reviews.
+
+Listing workspace: `/studio/` is a clearly labeled local draft prototype. See [its boundaries and production connection plan](docs/LISTING_WORKSPACE.md). It cannot publish, access the MLS, or receive showing inquiries. The homepage is now listings-first; featured entries come from approved published content.

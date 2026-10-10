@@ -26,3 +26,8 @@ test('Bad prices, statuses and review authorization fail the build',()=>{
 });
 
 test('Review date cannot silently normalize an invalid calendar date',()=>{const item=listing();item.updatedAt='2026-02-31';assert.throws(()=>getCollections({properties:[item]}),/update date/);});
+
+test('Optional tour link must use HTTPS and is escaped in public output',()=>{
+ const item=listing();item.videoUrl='javascript:alert(1)';assert.throws(()=>getCollections({properties:[item]}),/HTTPS/);
+ item.videoUrl='https://example.com/tour?x=1&y=2';getCollections({properties:[item]});assert(propertyDetail(item).includes('https://example.com/tour?x=1&amp;y=2'));
+});

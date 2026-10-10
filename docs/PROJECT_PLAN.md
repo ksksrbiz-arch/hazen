@@ -73,3 +73,6 @@ Keith authorized planning visitor accounts, saved homes/searches, and email aler
 
 ## Listings and testimonials foundation
 Added centralized property/testimonial models, publish controls, property card and detail templates, authorized photo galleries, listing attribution/update dates, contextual inquiry forms, and client-story layouts. The actual collections remain empty until Brad supplies approved content. These are manually maintained marketing listings, separate from future IDX inventory. Mobile contact bar hides while inquiry fields have focus to give the form more space. Content is edited in JSON and deployed through git; a client CMS is still pending.
+
+## Listings-first scaffold — October 10, 2026
+Brad’s primary goal is winning and promoting his own listings. Homepage seller calls to action and featured listings take priority over buyer account features. The public draft studio supports local preparation, photos, preview, and export. See [listing workspace architecture](LISTING_WORKSPACE.md) for current boundaries and proposed authenticated publishing. Supabase schema/policies are scaffolded only; no database or credentials have been provisioned. Visitor accounts/MLS alerts remain planned, not enabled.
