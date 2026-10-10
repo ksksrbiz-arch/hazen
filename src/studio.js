@@ -21,7 +21,7 @@ function updateOverview(){
  document.querySelector('#save-state').textContent=dirty?'Unsaved changes':currentId?'Saved online · Revision '+revision:'New draft';
  const saved=listingsCache.find(item=>item.id===currentId);
  document.querySelector('#listing-summary').textContent=archived?'Archived · restore this draft to edit it':published?(dirty||saved?.hasUnpublishedChanges?'Published · working draft has unpublished changes':'Published · saved draft matches the website'):'Private draft · not on the website';
- const errors=listingErrors(record());document.querySelector('#readiness-status').textContent=errors.length?errors.length+' items to complete before publishing':'Ready for publication review';
+ const errors=listingErrors(record());document.querySelector('#readiness-status').textContent=errors.length?errors.length+' '+(errors.length===1?'item':'items')+' to complete before publishing':'Ready for publication review';
  const link=document.querySelector('#published-link');link.hidden=!published;if(published)link.href='/properties/'+publicSlug+'/';else link.removeAttribute('href');
  document.querySelector('#restore-draft').hidden=!archived;form.inert=archived||busy;
 }
@@ -38,7 +38,7 @@ async function loadDraft(id){if(busy||!discard())return;await run(async()=>{
 function renderHistory(events){const list=document.querySelector('#listing-history');list.replaceChildren();for(const event of events)list.append(node('li',event.action+' · revision '+event.revision+' · '+new Date(event.happened_at).toLocaleString()+' · '+event.actor));if(!events.length)list.append(node('li','No recorded changes yet.'));}
 async function refresh(){
  const filter=document.querySelector('#listing-filter').value;const data=await api('listings'+(filter==='archived'?'?archived=1':''));listingsCache=data.listings;
- document.querySelector('#listing-counts').textContent=data.counts.drafts+' drafts · '+data.counts.published+' published · '+data.counts.archived+' archived';renderDrafts();updateOverview();document.querySelector('#unpublish-draft').disabled=!published||archived;
+ document.querySelector('#listing-counts').textContent=data.counts.drafts+' '+(data.counts.drafts===1?'draft':'drafts')+' · '+data.counts.published+' published · '+data.counts.archived+' archived';renderDrafts();updateOverview();document.querySelector('#unpublish-draft').disabled=!published||archived;
 }
 document.querySelector('#listing-search').addEventListener('input',renderDrafts);
 document.querySelector('#listing-filter').addEventListener('change',()=>{if(busy)return;run(refresh);});
