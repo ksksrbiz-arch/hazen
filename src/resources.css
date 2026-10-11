@@ -1,0 +1,25 @@
+/* Public preparation resources and contextual inquiry handoff. */
+.resource-group{margin:3rem 0 4rem;text-align:left;scroll-margin-top:110px}
+.resource-group>h2{font-size:clamp(25px,3vw,34px);line-height:1.4;color:#182b40;margin:.4rem 0 .75rem}
+.resource-group>.eyebrow{font-size:11px;letter-spacing:1.3px;color:#75551b}
+.resource-group>p:not(.eyebrow){font-size:14px;max-width:700px;color:#59646d}
+.resource-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.2rem;margin-top:1.5rem}
+.resource-card{display:flex;flex-direction:column;text-decoration:none;min-width:0;padding:1.7rem;border:1px solid #dce1e5;border-top:3px solid #ba9b54;background:#fff;color:#182b40}
+.resource-card:hover{background:#fbf7ee;border-color:#ba9b54}
+.resource-type{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#75551b}
+.resource-card h3{font-size:21px;line-height:1.5;margin:.75rem 0}
+.resource-card p{font-size:13px;line-height:1.9;margin:0 0 1.1rem;color:#59646d}
+.resource-action{margin-top:auto;font-size:12px;font-weight:600}
+.resource-help{display:flex;text-align:left;align-items:center;justify-content:space-between;gap:2rem;padding:1.7rem;background:#f5f3ed;border-left:3px solid #ba9b54;margin:2rem 0}
+.resource-help h2{font-size:23px;line-height:1.4;margin:0 0 .5rem;color:#182b40}
+.resource-help p{font-size:13px;margin:0;max-width:650px}
+.resource-help .button{flex-shrink:0}
+.resource-next{margin:3rem 0;text-align:left;border-block:1px solid #dce1e5;padding:1.25rem 0}
+.resource-next .eyebrow{font-size:10px;letter-spacing:1px;color:#75551b}
+.resource-next h2{font-size:21px;line-height:1.5;margin:.4rem 0 1rem;color:#182b40}
+.resource-next nav{display:flex;flex-wrap:wrap;gap:.7rem}
+.resource-next a{min-height:44px;display:inline-flex;align-items:center;gap:.5rem;border:1px solid #dce1e5;padding:.7rem 1rem;text-decoration:none;font-size:12px;line-height:1.5;color:#182b40}
+.resource-next a:hover{background:#fbf7ee;border-color:#ba9b54}
+.inquiry-intro .inquiry-context{font-size:12px;line-height:1.8;border-left:3px solid #ba9b54;padding:.75rem 1rem;background:#fbf7ee;color:#182b40}
+.inquiry-context[hidden]{display:none}
+@media(max-width:650px){.resource-grid{grid-template-columns:1fr}.resource-card{padding:1.25rem}.resource-card h3{font-size:20px}.resource-group{margin:2rem 0 3rem}.resource-help{flex-direction:column;align-items:stretch;padding:1.25rem;gap:1.25rem}.resource-help .button{width:100%}.resource-next nav{display:grid;grid-template-columns:1fr}.resource-next a{justify-content:space-between}}

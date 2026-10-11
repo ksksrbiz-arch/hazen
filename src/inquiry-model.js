@@ -1,6 +1,13 @@
 export const sellerGoals=['Pricing guidance','Preparing to list','Marketing my property'];
 export const sellerPropertyTypes=['House','Condo or townhome','Land or acreage','Other or not sure'];
 
+// Only known public community slugs can seed the general inquiry form.
+export function communityInquiryContext(search,communities){
+ const params=new URLSearchParams(search),values=params.getAll('community');
+ if(values.length!==1||!Object.hasOwn(communities,values[0]))return null;
+ return {interest:'Buying a home',location:communities[values[0]]};
+}
+
 export function inquiryDraftBody(data){
  const value=key=>String(data.get(key)||'').trim();
  const lines=[`Name: ${value('name')}`,`Email: ${value('email')}`,`Phone: ${value('phone')||'Not supplied'}`,`Interest: ${value('interest')}`,`Location / property: ${value('location')||'Not supplied'}`,`Timing: ${value('timing')||'Just exploring'}`];

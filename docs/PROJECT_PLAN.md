@@ -148,3 +148,7 @@ Expanded the promotion kit with a campaign launch brief, status-aware agent outr
 ## Itemized billing draft — October 11, 2026 (UTC)
 
 Started an editable scope ledger covering 24 completed deliverable bundles through the marketing-sheet release. Iterative revisions are grouped by deliverable, not charged as separate tasks or guessed hours. Fees are unassigned and the build subtotal remains blank until every bundle is priced. The earlier $3,500 working estimate remains provisional. Pending MLS/Ylopo, visitor accounts/alerts, direct inquiry delivery, approved assets and final launch work are excluded. Campaign planning and follow-up are a subsequent addition to the promotion-tools bundle.
+
+## Public resource discovery and community handoff — October 10, 2026 (Pacific)
+
+Added a public guides/tools hub grouping existing seller preparation, photography, listing approach, assessment, buying, community and property resources. Linked it from the mobile menu/footer and added contextual resource links to Buy, Sell, About and assessment pages. Cards and link rows adapt to small screens without adding imagery or external services. Community guide inquiries now carry only a known public community slug into the general contact form, preselect buying and show an editable starting-point notice. Unknown/duplicate values and other query data cannot prefill inquiry details. No inquiry is stored or sent automatically; Cloudflare delivery remains separate work. The route checker now resolves query-bearing internal links by pathname and verifies their anchors.
