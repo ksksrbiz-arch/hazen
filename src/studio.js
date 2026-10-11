@@ -3,7 +3,7 @@ import {preparePhoto,photoSize,photoLimits} from './photo-preparation.js';
 import {listingPromotion} from './listing-promotion.js';
 const form=document.querySelector('#listing-editor');
 const status=document.querySelector('#editor-status');
-let promotionKit=null;
+let promotionKit=null,marketingSheetUrl=null;
 let currentId=null,photos=[],revision=0,published=false,busy=false,objectUrls=[],dirty=false,archived=false,publicSlug=null,listingsCache=[],photoImport=null;
 form.addEventListener('input',()=>{document.querySelector('#validation-errors').replaceChildren();setDirty(true);});
 window.addEventListener('beforeunload',event=>{if(dirty){event.preventDefault();event.returnValue='';}});
@@ -107,16 +107,36 @@ const moreActions=document.querySelector('.listing-more');document.addEventListe
 fill(blankListing());
 await run(async()=>{const session=await api('session');document.querySelector('#storage-status').textContent='Signed in as '+session.email+'. Drafts and photos are stored in Cloudflare.';await refresh();say('Cloud editor ready. Save a draft, review it, then publish when approved.');});
 
-function clearPromotion(){promotionKit=null;document.querySelector('#promotion-kit').hidden=true;document.querySelector('#promotion-copy').value='';}
+function clearPromotion(){promotionKit=null;document.body.classList.remove('printing-marketing-sheet');document.querySelector('#marketing-sheet-review').hidden=true;document.querySelector('#marketing-sheet').replaceChildren();if(marketingSheetUrl){URL.revokeObjectURL(marketingSheetUrl);marketingSheetUrl=null;}document.querySelector('#promotion-kit').hidden=true;document.querySelector('#promotion-copy').value='';}
 function showPromotionFormat(){if(!promotionKit)return;document.querySelector('#promotion-copy').value=promotionKit[document.querySelector('#promotion-format').value];document.querySelector('#promotion-feedback').textContent='Review this copy, then copy or download. Nothing is sent automatically.';}
 document.querySelector('#prepare-promotion').addEventListener('click',()=>{
  if(busy||archived)return;const item=record(),saved=listingsCache.find(listing=>listing.id===currentId);
  promotionKit=listingPromotion(item,{origin:location.origin,published,dirty,hasUnpublishedChanges:saved?.hasUnpublishedChanges??true,publicSlug});
  document.querySelector('#promotion-source').textContent=promotionKit.publicUrl?'The entered details match the saved published version. Its public page link is included.':'Working draft copy. No public page link is included. Save, review, and publish the listing before promoting it as live.';
  document.querySelector('#promotion-missing').textContent=promotionKit.missing.length?'Add before sharing: '+promotionKit.missing.join(', ')+'.':'';
- document.querySelector('#promotion-format').value='social';showPromotionFormat();document.querySelector('#promotion-kit').hidden=false;document.querySelector('#promotion-heading').focus();document.querySelector('#promotion-kit').scrollIntoView({block:'start',behavior:'smooth'});
+ document.querySelector('#promotion-format').value='caption';showPromotionFormat();document.querySelector('#promotion-kit').hidden=false;document.querySelector('#promotion-heading').focus();document.querySelector('#promotion-kit').scrollIntoView({block:'start',behavior:'smooth'});
 });
 document.querySelector('#promotion-format').addEventListener('change',showPromotionFormat);
 document.querySelector('#close-promotion').addEventListener('click',()=>{clearPromotion();field('title').focus();field('title').scrollIntoView({block:'center'});});
 document.querySelector('#copy-promotion').addEventListener('click',async()=>{if(!promotionKit||busy)return;const copy=document.querySelector('#promotion-copy');try{await navigator.clipboard.writeText(copy.value);if(promotionKit)document.querySelector('#promotion-feedback').textContent='Text copied. Review it in your chosen app before sharing.';}catch{if(promotionKit){copy.focus();copy.select();document.querySelector('#promotion-feedback').textContent='Automatic copying is unavailable. The text is selected; use your device’s Copy command.';}}});
-document.querySelector('#download-promotion').addEventListener('click',()=>{if(!promotionKit||busy)return;const content=['REVIEW COPY — verify facts and permissions before sharing',document.querySelector('#promotion-source').textContent,document.querySelector('#promotion-missing').textContent,'SOCIAL POST',promotionKit.social,'BUYER EMAIL',promotionKit.email,'PROPERTY HANDOFF',promotionKit.summary].filter(Boolean).join('\n\n');const blob=new Blob([content+'\n'],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),link=node('a');link.href=url;link.download=(listingSlug(field('title').value)||'listing')+'-promotion-kit.txt';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);document.querySelector('#promotion-feedback').textContent='Templates downloaded for review. Nothing was sent or published.';});
+document.querySelector('#download-promotion').addEventListener('click',()=>{if(!promotionKit||busy)return;const content=['REVIEW COPY — verify facts and permissions before sharing',document.querySelector('#promotion-source').textContent,document.querySelector('#promotion-missing').textContent,'SHORT PROPERTY CAPTION',promotionKit.caption,'FULL PROPERTY POST',promotionKit.social,'BUYER EMAIL',promotionKit.email,'PROPERTY HANDOFF',promotionKit.summary].filter(Boolean).join('\n\n');const blob=new Blob([content+'\n'],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),link=node('a');link.href=url;link.download=(listingSlug(field('title').value)||'listing')+'-promotion-kit.txt';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);document.querySelector('#promotion-feedback').textContent='Templates downloaded for review. Nothing was sent or published.';});
+
+// Same-page sheet preview: whitelisted public facts and an authorized working photo.
+document.querySelector('#prepare-marketing-sheet').addEventListener('click',()=>{
+ if(!promotionKit||busy)return;
+ const sheet=promotionKit.sheet,container=document.querySelector('#marketing-sheet');container.replaceChildren();
+ if(marketingSheetUrl){URL.revokeObjectURL(marketingSheetUrl);marketingSheetUrl=null;}
+ const branding=node('div',null,'marketing-sheet-brand');branding.append(node('strong','BRAD HAZEN'),node('span','Real Estate Broker · Realty Pro, Inc.'));container.append(branding);
+ container.append(node('p',promotionKit.publicUrl?'Published property details · verify current availability':'WORKING DRAFT · review before sharing · not a published listing','marketing-sheet-label'));
+ if(photos[0]){marketingSheetUrl=URL.createObjectURL(photos[0].blob);const image=node('img');image.src=marketingSheetUrl;image.alt=photos[0].alt||'Working cover photo';image.className='marketing-sheet-cover';container.append(image);}else container.append(node('p','Cover photo has not been added.','marketing-sheet-no-photo'));
+ container.append(node('p',sheet.status,'marketing-sheet-status'),node('h3',sheet.title),node('p',sheet.address||'Address to be confirmed','marketing-sheet-address'),node('p',sheet.priceLabel,'marketing-sheet-price'));
+ if(sheet.facts)container.append(node('p',sheet.facts,'marketing-sheet-facts'));
+ if(sheet.description)container.append(node('p',sheet.description,'marketing-sheet-description'));else container.append(node('p','Property description to be added.'));
+ if(sheet.publicUrl){const link=node('a',sheet.publicUrl);link.href=sheet.publicUrl;link.className='marketing-sheet-link';container.append(link);}
+ if(sheet.tourUrl){const link=node('a','Tour: '+sheet.tourUrl);link.href=sheet.tourUrl;container.append(link);}
+ const footer=node('div',null,'marketing-sheet-footer');footer.append(node('p',sheet.action),node('p',sheet.contact));if(sheet.reviewed)footer.append(node('p',sheet.reviewed));if(sheet.attribution)footer.append(node('p','Listing attribution: '+sheet.attribution));container.append(footer);
+ document.querySelector('#marketing-sheet-review').hidden=false;document.querySelector('#marketing-sheet-heading').focus({preventScroll:true});document.querySelector('#marketing-sheet-review').scrollIntoView({block:'start',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+});
+document.querySelector('#close-marketing-sheet').addEventListener('click',()=>{document.querySelector('#marketing-sheet-review').hidden=true;document.querySelector('#prepare-marketing-sheet').focus();});
+document.querySelector('#print-marketing-sheet').addEventListener('click',()=>{if(!promotionKit||busy||document.querySelector('#marketing-sheet-review').hidden)return;document.body.classList.add('printing-marketing-sheet');try{window.print();}catch{document.body.classList.remove('printing-marketing-sheet');document.querySelector('#promotion-feedback').textContent='Printing is unavailable here. Use your browser’s Print command from the sheet preview.';}});
+window.addEventListener('afterprint',()=>document.body.classList.remove('printing-marketing-sheet'));

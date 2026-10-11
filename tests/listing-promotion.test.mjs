@@ -8,7 +8,7 @@ test('Promotion copies public facts while excluding private fields and media pat
  assert.match(kit.social,/\$1,200,000/);assert.match(kit.social,/3 bedrooms · 2.5 bathrooms · 2,500 sq ft/);
  assert.match(kit.summary,/MLS reference: EXAMPLE/);assert.match(kit.email,/^Subject: Country home — Active/);
  assert.match(kit.social,/Entered description\.\nSecond paragraph\./);
- for(const copy of [kit.social,kit.email,kit.summary]){assert.doesNotMatch(copy,/PRIVATE CLIENT NOTE|private-photo|studio\/preview/);}
+ for(const copy of [kit.caption,kit.social,kit.email,kit.summary,JSON.stringify(kit.sheet)]){assert.doesNotMatch(copy,/PRIVATE CLIENT NOTE|private-photo|studio\/preview/);}
  assert.deepEqual(kit.missing,[]);
 });
 test('Only a matching published snapshot can produce a public page link',()=>{
@@ -28,4 +28,11 @@ test('Missing details remain missing; zero facts are retained; unsafe tours are 
  assert.doesNotMatch(listingPromotion({...item,videoUrl:'https://user:secret@example.com'}).social,/Tour:/);
  assert.match(listingPromotion({...item,videoUrl:'https://example.com/tour'}).social,/Tour: https:\/\/example.com\/tour/);
  assert.match(listingPromotion({...item,title:'Home\nBcc: unexpected@example.com'}).email,/^Subject: Home Bcc: unexpected@example.com — Active\n/);
+});
+
+test('Short captions and printable sheets retain attribution and only verified public links',()=>{
+ const kit=listingPromotion(item,state);assert.match(kit.caption,/Explore this property: https:\/\/example.com\/properties\/country-home\//);assert.doesNotMatch(kit.caption,/Entered description/);assert.equal(kit.sheet.description,item.description);assert.equal(kit.sheet.publicUrl,kit.publicUrl);assert.equal(kit.sheet.attribution,item.attribution);assert.equal(kit.sheet.contact,'Brad Hazen · Realty Pro, Inc.\n(360) 921-9484 · b.hazen@hotmail.com');
+ const draft=listingPromotion(item,{...state,dirty:true});assert.equal(draft.sheet.publicUrl,'');assert.doesNotMatch(draft.caption,/Explore this property:/);
+ const sold=listingPromotion({...item,status:'Sold'},state);assert.equal(sold.sheet.priceLabel,'Listed price: $1,200,000');assert.doesNotMatch(sold.caption,/viewing arrangements/);
+ assert.equal(listingPromotion({}).sheet.priceLabel,'Price to be confirmed');
 });

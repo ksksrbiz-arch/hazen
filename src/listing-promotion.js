@@ -18,5 +18,6 @@ export function listingPromotion(item,{origin='',published=false,dirty=true,hasU
  const attribution=text(item.attribution),description=text(item.description),details=[heading,description,links,action,contact,attribution&&attribution!=='Brad Hazen · Realty Pro, Inc.'?'Listing attribution: '+attribution:''].filter(Boolean).join('\n\n');
  const reviewed=/^\d{4}-\d{2}-\d{2}$/.test(item.updatedAt||'')?'Details reviewed: '+item.updatedAt:'';
  const summary=[heading,oneLine(item.mlsId)?'MLS reference: '+oneLine(item.mlsId):'',description,links,reviewed,contact,attribution?'Listing attribution: '+attribution:''].filter(Boolean).join('\n\n');
- return {social:details,email:'Subject: '+title+' — '+status+'\n\n'+details,summary,publicUrl,missing:[!text(item.title)&&'listing title',!address&&'address',!price&&'price',!description&&'description'].filter(Boolean)};
+ const caption=[heading,publicUrl?'Explore this property: '+publicUrl:'',action,contact,attribution&&attribution!=='Brad Hazen · Realty Pro, Inc.'?'Listing attribution: '+attribution:''].filter(Boolean).join('\n\n');
+ return {caption,sheet:{title,address,status,priceLabel:price?`${status==='Sold'?'Listed price':'Price'}: ${price}`:'Price to be confirmed',facts:facts.join(' · '),description,attribution,reviewed,contact,action,publicUrl,tourUrl},social:details,email:'Subject: '+title+' — '+status+'\n\n'+details,summary,publicUrl,missing:[!text(item.title)&&'listing title',!address&&'address',!price&&'price',!description&&'description'].filter(Boolean)};
 }

@@ -136,3 +136,7 @@ Hide collection filters when no listings are published; show distinct buying and
 ## Cloudflare delivery and response hardening — October 10, 2026
 
 Confirmed production D1/R2 bindings, no preview data bindings, and disabled public R2 development domain. Enabled Pages build caching through the project API. Static pages and all Functions responses now share restrictive script/style/source, frame, and browser-permission headers; private preview referrer policy remains intact. Published media uses browser-only revalidation and R2 ETags, with publication checked before every conditional request; unchanged GET responses return 304 and HEAD uses metadata only. Unpublished/archived photos remain unavailable even with a previously valid ETag. Missing storage or transient failures return a non-cacheable 503. No edge media cache, external analytics, or new services were enabled.
+
+## Marketing sheet and short caption — October 10, 2026
+
+Expanded the authenticated promotion kit with a concise property caption and same-page printable marketing sheet. The sheet uses whitelisted entered public facts and the current prepared cover photo; internal notes and private photo routes are excluded. Unpublished/changed drafts carry an explicit working-draft label and no public URL. Editing or cloud operations invalidate the kit and sheet; preview never saves, publishes, or sends. Browser print can produce a PDF; actual print/PDF output is not verified in automated checks.
