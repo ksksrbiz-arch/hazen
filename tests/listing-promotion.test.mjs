@@ -8,14 +8,20 @@ test('Promotion copies public facts while excluding private fields and media pat
  assert.match(kit.social,/\$1,200,000/);assert.match(kit.social,/3 bedrooms · 2.5 bathrooms · 2,500 sq ft/);
  assert.match(kit.summary,/MLS reference: EXAMPLE/);assert.match(kit.email,/^Subject: Country home — Active/);
  assert.match(kit.social,/Entered description\.\nSecond paragraph\./);
- for(const copy of [kit.caption,kit.social,kit.email,kit.summary,JSON.stringify(kit.sheet)]){assert.doesNotMatch(copy,/PRIVATE CLIENT NOTE|private-photo|studio\/preview/);}
+ for(const copy of [kit.caption,kit.social,kit.email,kit.summary,kit.launch,kit.outreach,kit.update,JSON.stringify(kit.sheet)]){assert.doesNotMatch(copy,/PRIVATE CLIENT NOTE|private-photo|studio\/preview/);}
  assert.deepEqual(kit.missing,[]);
 });
 test('Only a matching published snapshot can produce a public page link',()=>{
  assert.equal(listingPromotion(item,state).publicUrl,'https://example.com/properties/country-home/');
  for(const changes of [{published:false},{dirty:true},{hasUnpublishedChanges:true},{publicSlug:'old-address'},{origin:'http://example.com'},{origin:'https://user:secret@example.com'}]){
-  const kit=listingPromotion(item,{...state,...changes});assert.equal(kit.publicUrl,'');assert.doesNotMatch(kit.social,/Property page:/);
+  const kit=listingPromotion(item,{...state,...changes});assert.equal(kit.publicUrl,'');for(const copy of [kit.social,kit.launch,kit.outreach,kit.update])assert.doesNotMatch(copy,/https:\/\/example.com\/properties\//);
  }
+});
+
+test('Planning and follow-up use blank prompts and status-aware public facts',()=>{
+ const kit=listingPromotion(item,state);assert.match(kit.launch,/Approved launch date: \[add date\]/);assert.match(kit.launch,/Budget: \[agreed amount or not applicable\]/);assert.match(kit.launch,/Property page: https:\/\/example.com\/properties\/country-home\//);
+ assert.match(kit.update,/Property inquiries: \[count and source\]/);assert.match(kit.update,/Advertising spend: \[actual amount and source, or not applicable\]/);assert.doesNotMatch(kit.update,/inquiries: \d|Showings: \d/);
+ for(const status of ['Pending','Sold']){const k=listingPromotion({...item,status});assert.doesNotMatch(k.outreach,/viewing arrangements/);assert.match(k.launch,/WORKING DRAFT/);assert.match(k.update,/WORKING DRAFT/);if(status==='Sold')assert.match(k.outreach,/Listed price: \$1,200,000/);}
 });
 test('Pending and Sold copy never offers the property as available or calls a listed price a sale price',()=>{
  const pending=listingPromotion({...item,status:'Pending'}).social,sold=listingPromotion({...item,status:'Sold'}).social;

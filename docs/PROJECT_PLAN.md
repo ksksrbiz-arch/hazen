@@ -140,3 +140,11 @@ Confirmed production D1/R2 bindings, no preview data bindings, and disabled publ
 ## Marketing sheet and short caption — October 10, 2026
 
 Expanded the authenticated promotion kit with a concise property caption and same-page printable marketing sheet. The sheet uses whitelisted entered public facts and the current prepared cover photo; internal notes and private photo routes are excluded. Unpublished/changed drafts carry an explicit working-draft label and no public URL. Editing or cloud operations invalidate the kit and sheet; preview never saves, publishes, or sends. Browser print can produce a PDF; actual print/PDF output is not verified in automated checks.
+
+## Campaign planning and follow-up — October 11, 2026 (UTC)
+
+Expanded the promotion kit with a campaign launch brief, status-aware agent outreach copy and a seller-update outline. Presentation and planning formats are grouped in the selector and included in the text download. Launch approvals, channel owners, dates and budgets remain explicit prompts; seller activity, showing counts, feedback and spend must come from actual records. No metrics or completed marketing services are invented. These formats retain public-fact allowlists, draft warnings, matching-publication link guards and edit invalidation. No CRM, MLS, automated posting or message delivery is added.
+
+## Itemized billing draft — October 11, 2026 (UTC)
+
+Started an editable scope ledger covering 24 completed deliverable bundles through the marketing-sheet release. Iterative revisions are grouped by deliverable, not charged as separate tasks or guessed hours. Fees are unassigned and the build subtotal remains blank until every bundle is priced. The earlier $3,500 working estimate remains provisional. Pending MLS/Ylopo, visitor accounts/alerts, direct inquiry delivery, approved assets and final launch work are excluded. Campaign planning and follow-up are a subsequent addition to the promotion-tools bundle.
