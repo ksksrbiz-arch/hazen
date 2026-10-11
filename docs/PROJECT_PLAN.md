@@ -156,3 +156,7 @@ Added a public guides/tools hub grouping existing seller preparation, photograph
 ## Buyer preparation and worksheet retention — October 10, 2026 (Pacific)
 
 Added an 18-prompt buyer conversation worksheet, optional questions/notes, review progress, reset, print layout and blank text download. Linked it from the buying page and public resource hub. Buyer and seller worksheets now share rendering and behavior, and Download My Worksheet preserves the current reviewed prompts and notes in a local text file. Notes and checkbox values stay in the current page until the visitor explicitly downloads or prints; no storage, inquiry submission or automated message is added. Export formatting has bounded inputs and excludes unrelated fields. Actual printer/PDF output remains unverified.
+
+## Public guide discovery — October 11, 2026
+
+Added an in-page resource finder with buying/selling categories, title-and-description keyword matching, live result counts, clear filters and an empty state. Multiple search words must all match the resource. Category jump links also reset the search so their destination stays visible. Controls appear only after initialization; all eight guides remain usable without JavaScript. Filtering does not submit or retain visitor searches. No MLS, accounts or external service integration was added.

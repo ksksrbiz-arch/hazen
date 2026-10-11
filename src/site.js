@@ -115,3 +115,19 @@ if(worksheet){
 
 const photoGuidePrint=document.querySelector('[data-print-guide]');
 if(photoGuidePrint){photoGuidePrint.hidden=false;photoGuidePrint.addEventListener('click',()=>window.print());}
+
+// Filter the public guide hub in place; links remain available without JavaScript.
+const resourceFinder=document.querySelector('[data-resource-finder]');
+if(resourceFinder){
+ const search=resourceFinder.querySelector('#resource-search'),topic=resourceFinder.querySelector('#resource-topic'),count=resourceFinder.querySelector('[data-resource-count]'),empty=document.querySelector('[data-resource-empty]');
+ const groups=[...document.querySelectorAll('.resource-group')].map(group=>({group,cards:[...group.querySelectorAll('.resource-card')].map(card=>({card,text:card.textContent.toLocaleLowerCase()}))}));
+ const update=()=>{
+  const terms=search.value.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);let matches=0;
+  for(const {group,cards} of groups){let visible=0;for(const {card,text} of cards){const show=(topic.value==='all'||topic.value===group.id)&&terms.every(term=>text.includes(term));card.hidden=!show;if(show)visible++;}group.hidden=visible===0;matches+=visible;}
+  empty.hidden=matches!==0;count.textContent=matches+' of '+groups.reduce((total,{cards})=>total+cards.length,0)+' guides shown.';
+ };
+ resourceFinder.hidden=false;search.addEventListener('input',update);topic.addEventListener('change',update);
+ resourceFinder.querySelector('[data-resource-clear]').addEventListener('click',()=>{search.value='';topic.value='all';update();search.focus();});
+ const categoryLinks=document.querySelector('.page-sections');categoryLinks?.addEventListener('click',event=>{const link=event.target.closest('a');if(!link)return;const category=link.getAttribute('href')?.slice(1);if(!groups.some(({group})=>group.id===category))return;topic.value=category;search.value='';update();});
+ window.addEventListener('pageshow',update);update();
+}

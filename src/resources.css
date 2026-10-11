@@ -26,3 +26,14 @@
 .worksheet-feedback:empty{display:none}
 @media print{body.worksheet-page .worksheet-feedback{display:none!important}}
 @media(max-width:650px){.resource-grid{grid-template-columns:1fr}.resource-card{padding:1.25rem}.resource-card h3{font-size:20px}.resource-group{margin:2rem 0 3rem}.resource-help{flex-direction:column;align-items:stretch;padding:1.25rem;gap:1.25rem}.resource-help .button{width:100%}.resource-next nav{display:grid;grid-template-columns:1fr}.resource-next a{justify-content:space-between}}
+
+.resource-finder{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) auto;gap:1rem;align-items:start;text-align:left;background:#f5f3ed;padding:1.5rem;margin:2rem 0;border:1px solid #dce1e5}
+.resource-finder label{display:block;font-size:13px;font-weight:600;color:#182b40;margin-bottom:.5rem}
+.resource-finder input,.resource-finder select{width:100%;min-height:46px;border:1px solid #aab3ba;border-radius:0;background:#fff;color:#182b40;padding:.7rem;font:inherit;font-size:13px;box-sizing:border-box}
+.resource-finder #resource-search-help{font-size:12px;line-height:1.7;margin:.5rem 0 0;color:#59646d}
+.resource-finder button{min-height:46px;margin-top:1.7rem;border:1px solid #aab3ba;background:#fff;padding:.7rem 1rem;color:#182b40;font:inherit;font-size:12px;cursor:pointer}
+.resource-finder button:hover{background:#fbf7ee;border-color:#75551b}
+.resource-results{grid-column:1/-1;font-size:12px;margin:0;color:#182b40}
+.resource-no-results{text-align:left;padding:1.5rem;border-left:3px solid #ba9b54;background:#fbf7ee;font-size:14px}
+.resource-finder[hidden],.resource-card[hidden],.resource-group[hidden],.resource-no-results[hidden]{display:none}
+@media(max-width:650px){.resource-finder{grid-template-columns:1fr;padding:1.25rem}.resource-finder button{margin:0;width:100%}}
