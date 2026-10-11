@@ -13,7 +13,7 @@ document.querySelectorAll('[data-inquiry]').forEach(form=>{
  const interest=form.elements.interest,location=form.elements.location,sellerContext=form.querySelector('.seller-context');
  if(form.dataset.inquiry==='contact'&&!interest.value){
   const startingPoint=communityInquiryContext(window.location.search,inquiryCommunities);
-  if(startingPoint){interest.value=startingPoint.interest;if(!location.value)location.value=startingPoint.location;const context=form.querySelector('[data-inquiry-context]');context.textContent='Starting with '+startingPoint.location+'. You can change the topic or location below.';context.hidden=false;}
+  if(startingPoint){interest.value=startingPoint.interest;if(!location.value)location.value=startingPoint.location;const context=form.closest('.inquiry-panel')?.querySelector('[data-inquiry-context]');if(context){context.textContent='Starting with '+startingPoint.location+'. You can change the topic or location below.';context.hidden=false;}}
  }
  const goalLinks=[...document.querySelectorAll('[data-seller-goal]')];
  const syncGoal=()=>goalLinks.forEach(link=>{if(interest.value==='Selling a home'&&link.dataset.sellerGoal===form.elements.sellerGoal.value)link.setAttribute('aria-current','true');else link.removeAttribute('aria-current');});
