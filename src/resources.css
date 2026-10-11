@@ -22,4 +22,7 @@
 .resource-next a:hover{background:#fbf7ee;border-color:#ba9b54}
 .inquiry-intro .inquiry-context{font-size:12px;line-height:1.8;border-left:3px solid #ba9b54;padding:.75rem 1rem;background:#fbf7ee;color:#182b40}
 .inquiry-context[hidden]{display:none}
+.worksheet-feedback{font-size:12px;line-height:1.8;color:#182b40}
+.worksheet-feedback:empty{display:none}
+@media print{body.worksheet-page .worksheet-feedback{display:none!important}}
 @media(max-width:650px){.resource-grid{grid-template-columns:1fr}.resource-card{padding:1.25rem}.resource-card h3{font-size:20px}.resource-group{margin:2rem 0 3rem}.resource-help{flex-direction:column;align-items:stretch;padding:1.25rem;gap:1.25rem}.resource-help .button{width:100%}.resource-next nav{display:grid;grid-template-columns:1fr}.resource-next a{justify-content:space-between}}
