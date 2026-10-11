@@ -131,3 +131,19 @@ if(resourceFinder){
  const categoryLinks=document.querySelector('.page-sections');categoryLinks?.addEventListener('click',event=>{const link=event.target.closest('a');if(!link)return;const category=link.getAttribute('href')?.slice(1);if(!groups.some(({group})=>group.id===category))return;topic.value=category;search.value='';update();});
  window.addEventListener('pageshow',update);update();
 }
+
+// Temporary shortlist of public community guides, with an allowlisted inquiry handoff.
+const communityCompare=document.querySelector('[data-community-compare]');
+if(communityCompare){
+ const choices=[...communityCompare.querySelectorAll('input[type="checkbox"]')],cards=[...communityCompare.querySelectorAll('[data-compare-card]')],status=communityCompare.querySelector('[data-compare-status]'),clear=communityCompare.querySelector('[data-compare-clear]'),contact=communityCompare.querySelector('[data-compare-contact]'),link=communityCompare.querySelector('[data-compare-inquiry]'),empty=communityCompare.querySelector('[data-compare-empty]');
+ const update=()=>{
+  // Browser history can restore controls; keep the same three-community limit.
+  const selected=choices.filter(choice=>choice.checked);selected.slice(3).forEach(choice=>choice.checked=false);const slugs=selected.slice(0,3).map(choice=>choice.value);
+  choices.forEach(choice=>choice.disabled=slugs.length===3&&!choice.checked);cards.forEach(card=>card.hidden=!slugs.includes(card.dataset.compareCard));
+  status.textContent=slugs.length+' of 3 communities selected.'+(slugs.length===3?' Uncheck one to choose a different area.':'');
+  clear.disabled=slugs.length===0;empty.hidden=slugs.length!==0;contact.hidden=slugs.length===0;
+  link.href=slugs.length?'/contact/?communities='+encodeURIComponent(slugs.join(','))+'#inquiry':'/contact/#inquiry';
+ };
+ communityCompare.hidden=false;const jump=document.querySelector('[data-compare-jump]');if(jump)jump.hidden=false;
+ communityCompare.addEventListener('change',update);clear.addEventListener('click',()=>{choices.forEach(choice=>choice.checked=false);update();choices[0]?.focus();});window.addEventListener('pageshow',update);update();
+}

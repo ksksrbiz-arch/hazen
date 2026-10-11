@@ -160,3 +160,7 @@ Added an 18-prompt buyer conversation worksheet, optional questions/notes, revie
 ## Public guide discovery — October 11, 2026
 
 Added an in-page resource finder with buying/selling categories, title-and-description keyword matching, live result counts, clear filters and an empty state. Multiple search words must all match the resource. Category jump links also reset the search so their destination stays visible. Controls appear only after initialization; all eight guides remain usable without JavaScript. Filtering does not submit or retain visitor searches. No MLS, accounts or external service integration was added.
+
+## Community comparison — October 10, 2026
+
+Added a temporary, three-community shortlist to Communities. Selected cards reuse existing guide introductions and official-resource links, with common visit prompts and a buyer worksheet link. Selection controls and shortcut appear only after JavaScript initialization; the original guide grid remains the fallback. The inquiry handoff accepts only one allowlisted set of one to three unique community slugs, rejects ambiguous/unknown/repeated/oversized sets, and fills editable buyer location context. Selections travel in the contact-page URL only when the visitor continues. No account preferences are saved and no inquiry is sent automatically. No new property inventory or location rankings are implied.

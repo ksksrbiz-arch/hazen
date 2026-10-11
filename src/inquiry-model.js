@@ -4,8 +4,15 @@ export const sellerPropertyTypes=['House','Condo or townhome','Land or acreage',
 // Only known public community slugs can seed the general inquiry form.
 export function communityInquiryContext(search,communities){
  const params=new URLSearchParams(search),values=params.getAll('community');
- if(values.length!==1||!Object.hasOwn(communities,values[0]))return null;
- return {interest:'Buying a home',location:communities[values[0]]};
+ const lists=params.getAll('communities');
+ if(values.length){
+  if(values.length!==1||lists.length||!Object.hasOwn(communities,values[0]))return null;
+  return {interest:'Buying a home',location:communities[values[0]]};
+ }
+ if(lists.length!==1)return null;
+ const slugs=lists[0].split(',');
+ if(slugs.length<1||slugs.length>3||new Set(slugs).size!==slugs.length||slugs.some(slug=>!Object.hasOwn(communities,slug)))return null;
+ return {interest:'Buying a home',location:slugs.map(slug=>communities[slug]).join(', ')};
 }
 
 export function inquiryDraftBody(data){
