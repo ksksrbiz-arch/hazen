@@ -1,153 +1,1018 @@
-import {blankListing,listingErrors,listingSlug} from './listing-model.js';
-import {preparePhoto,photoSize,photoLimits} from './photo-preparation.js';
+import {blankListing, listingErrors, listingSlug} from './listing-model.js';
+import {preparePhoto, photoSize, photoLimits} from './photo-preparation.js';
 import {listingPromotion} from './listing-promotion.js';
-import {studioRequest,listingWorkingNotes} from './studio-recovery.js';
-const form=document.querySelector('#listing-editor');
-const status=document.querySelector('#editor-status');
-let promotionKit=null,marketingSheetUrl=null;
-let currentId=null,photos=[],revision=0,published=false,busy=false,objectUrls=[],dirty=false,archived=false,publicSlug=null,listingsCache=[],photoImport=null;
-form.addEventListener('input',()=>{document.querySelector('#validation-errors').replaceChildren();setDirty(true);});
-window.addEventListener('beforeunload',event=>{if(dirty){event.preventDefault();event.returnValue='';}});
-const discard=()=>!dirty||confirm('Discard unsaved changes to this draft?');
-const field=name=>form.elements.namedItem(name);
-const say=(message,kind='info')=>{status.textContent=message;status.dataset.kind=kind;};
-const node=(tag,text,className)=>{const result=document.createElement(tag);if(text!=null)result.textContent=text;if(className)result.className=className;return result;};
-function record(){
- const result=blankListing();
- for(const name of ['title','slug','address','mlsId','description','attribution','permissionNote','updatedAt','status','videoUrl','propertyType','sourceUrl'])result[name]=field(name).value.trim();
- for(const name of ['price','beds','baths','squareFeet','lotAcres']){const value=field(name).value.trim();if(value)result[name]=Number(value);else if(name==='price')result.price=null;}
- result.featured=field('featured').checked;result.images=photos.map(({file,alt})=>({file,alt}));return result;
-}
-function fill(item){clearPromotion();for(const element of form.elements){if(!element.name)continue;if(element.type==='checkbox')element.checked=Boolean(item[element.name]);else element.value=item[element.name]??'';}document.querySelector('#listing-preview').hidden=true;renderPhotos();}
-async function api(path='',options={}){return studioRequest('/api/admin/'+path,{...options,credentials:'same-origin',headers:{'Content-Type':'application/json',...options.headers}});}
-function showRecovery(error){const panel=document.querySelector('#editor-recovery');panel.hidden=false;panel.querySelector('[data-recovery-message]').textContent=error.message;panel.querySelector('[data-recovery-signin]').hidden=error.kind!=='session';}
-
-function setDirty(value){if(value)clearPromotion();dirty=value;updateOverview();}
-function updateOverview(){
- const saveState=document.querySelector('#save-state'),saveText=dirty?'Unsaved changes':currentId?'Saved online · Revision '+revision:'New draft';if(saveState.textContent!==saveText)saveState.textContent=saveText;
- const saved=listingsCache.find(item=>item.id===currentId);
- document.querySelector('#listing-summary').textContent=archived?'Archived · restore this draft to edit it':published?(dirty||saved?.hasUnpublishedChanges?'Published · working draft has unpublished changes':'Published · saved draft matches the website'):'Private draft · not on the website';
- document.querySelector('#current-listing-title').textContent=field('title').value.trim()||'New listing';
- document.querySelector('#save-state').dataset.state=dirty?'unsaved':'saved';
- document.querySelector('#slug-preview').textContent='/properties/'+(field('slug').value.trim()||'your-listing')+'/';
- document.querySelector('#generate-slug').disabled=busy||archived||!field('address').value.trim();
- document.querySelector('#delete-draft').disabled=busy||archived||!currentId;
- const errors=listingErrors(record());renderReadiness(errors);const remaining=new Set(errors.map(error=>publicationIssue(error).label)).size;document.querySelector('#readiness-status').textContent=remaining?remaining+' '+(remaining===1?'item':'items')+' to complete before publishing':'Ready for publication review';
- const previewLink=document.querySelector('#saved-preview-link');previewLink.hidden=!currentId;if(currentId)previewLink.href='/studio/preview/'+currentId+'/';else previewLink.removeAttribute('href');
- const link=document.querySelector('#published-link');link.hidden=!published;if(published)link.href='/properties/'+publicSlug+'/';else link.removeAttribute('href');
- document.querySelector('#restore-draft').hidden=!archived;form.inert=archived||busy;
-}
-function renderDrafts(){
- const container=document.querySelector('#draft-list'),filter=document.querySelector('#listing-filter').value,query=document.querySelector('#listing-search').value.trim().toLowerCase();container.replaceChildren();
- const visible=listingsCache.filter(draft=>(!query||(draft.listing.title+' '+draft.listing.address).toLowerCase().includes(query))&&(filter==='draft'?!draft.published:filter==='published'?draft.published:filter==='changes'?draft.hasUnpublishedChanges:true));
- for(const draft of visible){const label=(draft.listing.title||'Untitled listing')+' · '+(draft.archived?'Archived':draft.published?draft.hasUnpublishedChanges?'Unpublished changes':'Published':'Draft');const button=node('button');button.type='button';button.className='draft-card'+(draft.id===currentId?' selected-draft':'');button.setAttribute('aria-label',label);button.setAttribute('aria-pressed',String(draft.id===currentId));button.append(node('strong',draft.listing.title||'Untitled listing'),node('span',draft.listing.address||'Address not added'),node('small',draft.archived?'Archived':draft.published?draft.hasUnpublishedChanges?'Unpublished changes':'Published':'Private draft'));button.addEventListener('click',()=>loadDraft(draft.id));container.append(button);}
- if(!visible.length)container.append(node('p',listingsCache.length?'No listings match these filters.':filter==='archived'?'No archived listings.':'No cloud drafts saved yet.'));
-}
-async function loadDraft(id){if(busy||!discard())return;await run(async()=>{
- const loaded=await api('listings/'+id);const nextPhotos=await Promise.all(loaded.listing.images.map(async image=>{const response=await fetch('/api/admin/listings/'+id+'/photos/'+image.file,{credentials:'same-origin'});if(!response.ok)throw Error('Could not load saved photos. Sign in and try again.');return {...image,blob:await response.blob(),uploaded:true};}));
- const history=await api('listings/'+id+'/history');currentId=loaded.id;revision=loaded.revision;published=loaded.published;archived=loaded.archived;publicSlug=loaded.publicSlug;photos=nextPhotos;dirty=false;document.querySelector('#photo-preparation-panel').hidden=true;fill(loaded.listing);renderHistory(history.events);say(archived?'Archived listing loaded. Restore it to resume editing.':published?'Published listing loaded. Edits stay private until Publish is selected again.':'Cloud draft loaded.');await refresh();
- });}
-function renderHistory(events){const list=document.querySelector('#listing-history');list.replaceChildren();for(const event of events)list.append(node('li',event.action+' · revision '+event.revision+' · '+new Date(event.happened_at).toLocaleString()+' · '+event.actor));if(!events.length)list.append(node('li','No recorded changes yet.'));}
-async function refresh(){
- const filter=document.querySelector('#listing-filter').value;const data=await api('listings'+(filter==='archived'?'?archived=1':''));listingsCache=data.listings;
- const counts=document.querySelector('#listing-counts');counts.replaceChildren();for(const [label,value] of [['Drafts',data.counts.drafts],['Published',data.counts.published],['Archived',data.counts.archived]]){const metric=node('div');metric.append(node('strong',value),node('span',label));counts.append(metric);}renderDrafts();if(data.hasMore)document.querySelector('#draft-list').append(node('p','Showing the 200 most recently updated listings. Search covers only these; archive finished listings to see older ones.'));updateOverview();document.querySelector('#unpublish-draft').disabled=!published||archived;
-}
-document.querySelector('#listing-search').addEventListener('input',renderDrafts);
-document.querySelector('#listing-filter').addEventListener('change',()=>{if(busy)return;run(refresh);});
-document.querySelector('#restore-draft').addEventListener('click',()=>run(async()=>{const saved=await api('listings/'+currentId+'/restore',{method:'POST',body:JSON.stringify({revision})});revision=saved.revision;archived=false;published=false;publicSlug=null;document.querySelector('#listing-filter').value='all';await refresh();renderHistory((await api('listings/'+currentId+'/history')).events);say('Restored as a private draft. Review it before publishing again.');}));
-async function run(action,progress='Working…'){if(busy)return;clearPromotion();busy=true;say(progress,'busy');document.querySelector('.studio-editor-column').setAttribute('aria-busy','true');const buttons=[...document.querySelectorAll('#listing-editor input,#listing-editor select,#listing-editor textarea,#listing-editor button,#new-draft,#listing-search,#listing-filter,#restore-draft')];const previousDisabled=buttons.map(b=>b.disabled);form.inert=true;buttons.forEach(b=>b.disabled=true);try{await action();document.querySelector('#editor-recovery').hidden=true;}catch(error){say(error.message,'error');showRecovery(error);}finally{busy=false;document.querySelector('.studio-editor-column').setAttribute('aria-busy','false');form.inert=archived;buttons.forEach((b,i)=>b.disabled=previousDisabled[i]);document.querySelector('#unpublish-draft').disabled=!published||archived;updateOverview();if(status.dataset.kind==='busy')say('Listing workspace updated.');}}
-async function save(){
- const listing=record();let saved;
- if(!currentId){saved=await api('listings',{method:'POST',body:JSON.stringify({listing})});currentId=saved.id;revision=saved.revision;}
- for(const photo of photos){if(photo.uploaded)continue;await api('listings/'+currentId+'/photos/'+photo.file,{method:'PUT',headers:{'Content-Type':photo.blob.type},body:photo.blob});photo.uploaded=true;}
- saved=await api('listings/'+currentId,{method:'POST',body:JSON.stringify({listing,revision})});revision=saved.revision;published=saved.published;publicSlug=saved.publicSlug;dirty=false;await refresh();renderHistory((await api('listings/'+currentId+'/history')).events);
- say('Draft saved securely online. '+(published?'The website still shows the last published version.':'Nothing has been published.'),'success');
-}
-function renderPhotos(focusFile=null){document.querySelector('#photo-storage-summary').textContent=photos.length?photos.length+' '+(photos.length===1?'photo':'photos')+' · '+photoSize(photos.reduce((sum,photo)=>sum+photo.blob.size,0))+' prepared for the website':'';document.querySelector('#photo-count').textContent=photos.length+' / 20';document.querySelector('#photo-empty').hidden=photos.length>0;document.querySelector('#listing-preview').hidden=true;objectUrls.forEach(url=>URL.revokeObjectURL(url));objectUrls=[];const container=document.querySelector('#photo-editor');container.replaceChildren();photos.forEach((photo,index)=>{const card=node('article',null,'studio-photo');const url=URL.createObjectURL(photo.blob);objectUrls.push(url);const image=node('img');image.src=url;image.alt=photo.alt||'Draft photo';const label=node('label',`${index===0?'Cover photo':'Photo '+(index+1)} description`);const input=node('input');input.value=photo.alt;input.maxLength=200;input.addEventListener('input',()=>{setDirty(true);photo.alt=input.value.trim();updateOverview();image.alt=photo.alt||'Draft photo';});label.append(input);input.id='photo-description-'+photo.file;const metadata=node('p',photoSize(photo.blob.size)+(photo.width?' · '+photo.width+' × '+photo.height:''),'photo-metadata');image.addEventListener('load',()=>{metadata.textContent=photoSize(photo.blob.size)+' · '+image.naturalWidth+' × '+image.naturalHeight;});const source=photo.sourceName?node('p','From '+photo.sourceName,'photo-source'):null;const controls=node('div',null,'photo-actions');const cover=node('button','Make Cover');cover.type='button';cover.disabled=index===0;cover.addEventListener('click',()=>{setDirty(true);photos.splice(index,1);photos.unshift(photo);renderPhotos(photo.file);updateOverview();});const remove=node('button','Remove');remove.type='button';remove.addEventListener('click',()=>{setDirty(true);photos.splice(index,1);renderPhotos(photos[index]?.file||photos[index-1]?.file||'empty');updateOverview();});const download=node('a','Download Photo');download.href=url;download.download=photo.file;const earlier=node('button','Move Earlier'),later=node('button','Move Later');earlier.type=later.type='button';earlier.disabled=index===0;later.disabled=index===photos.length-1;for(const [button,offset] of [[earlier,-1],[later,1]])button.addEventListener('click',()=>{setDirty(true);photos.splice(index,1);photos.splice(index+offset,0,photo);renderPhotos(photo.file);updateOverview();});controls.append(cover,earlier,later,remove,download);const badge=node('span',index===0?'Cover image':'Photo '+(index+1),'photo-badge');card.append(image,badge,metadata);if(source)card.append(source);card.append(label,controls);container.append(card);});if(focusFile){const index=photos.findIndex(photo=>photo.file===focusFile);const target=index<0?document.querySelector('#photo-input'):container.querySelectorAll('input')[index];target.focus({preventScroll:true});target.scrollIntoView({block:'nearest'});}}
-function publicationIssue(error){
- const mapping=[[/^Property slug/,"Add a valid listing page address",'slug'],[/title must/,"Add a listing title",'title'],[/address must/,"Add the property address",'address'],[/^Property price/,"Enter a valid price",'price'],[/description must/,"Write the property description",'description'],[/attribution must/,"Add the listing attribution",'attribution'],[/permissionNote must/,"Record photo and listing authorization",'permissionNote'],[/updatedAt|update date/,"Choose a valid review date",'updatedAt'],[/^Property status/,"Choose Active, Pending, or Sold",'status'],[/authorized image/,"Add at least one authorized photo",'photo-input'],[/Image alt/,"Describe every photo",'photo-input'],[/local asset/,"Replace the invalid photo",'photo-input'],[/Tour\/video/,"Use an HTTPS tour or video link",'videoUrl'],[/^Invalid beds/,"Check the bedroom count",'beds'],[/^Invalid baths/,"Check the bathroom count",'baths'],[/^Invalid lotAcres,"Check the lot acreage",'lotAcres'],[/^Property type/,"Use a short property type",'propertyType'],[/^Listing source/,"Use an HTTPS source link",'sourceUrl'],[/^Invalid squareFeet/,"Check the square footage",'squareFeet']];
- const match=mapping.find(([pattern])=>pattern.test(error));return {label:match?.[1]||error,target:match?.[2]||'title'};
-}
-let readinessKey='';
-function renderReadiness(errors){const key=JSON.stringify([errors,archived]);if(key===readinessKey)return;readinessKey=key;const list=document.querySelector('#readiness-list');list.replaceChildren();if(!errors.length){list.append(node('li','Required fields complete. Review the saved page and confirm permission before publishing.'));return;}const issues=new Map(errors.map(error=>{const issue=publicationIssue(error);return [issue.label,issue];}));for(const issue of issues.values()){const row=node('li');if(archived)row.append(node('span',issue.label));else{const link=node('a',issue.label);link.href='#'+(issue.target==='photo-input'?'listing-photos':'field-'+issue.target);link.addEventListener('click',event=>{event.preventDefault();if(busy||archived)return;const target=issue.target==='photo-input'?document.querySelector('#photo-input'):field(issue.target);target.focus();target.scrollIntoView({block:'center',behavior:'smooth'});});row.append(link);}list.append(row);}}
-document.querySelector('#generate-slug').addEventListener('click',()=>{const next=listingSlug(field('address').value);if(!next){say('Add an address with letters or numbers to create the page address.','error');return;}if(field('slug').value.trim()&&field('slug').value!==next&&!confirm('Replace the listing page address? A published link changes only after you publish again.'))return;field('slug').value=next;setDirty(true);say('Page address created. Save your draft to keep it.');});
-function validate(item){const errors=listingErrors(item),container=document.querySelector('#validation-errors');container.replaceChildren();if(errors.length){container.append(node('p','Choose a publication requirement above to jump to the field that needs attention.'));document.querySelector('.readiness-panel').open=true;}return !errors.length;}
-form.addEventListener('submit',async event=>{event.preventDefault();if(!form.reportValidity())return;await run(save,'Saving your draft and photos…');});
-document.querySelector('#new-draft').addEventListener('click',()=>{if(busy||!discard())return;dirty=false;currentId=null;revision=0;published=false;archived=false;publicSlug=null;photos=[];document.querySelector('#photo-preparation-panel').hidden=true;fill(blankListing());document.querySelector('#validation-errors').replaceChildren();say('New draft started. Save it online before leaving.');document.querySelector('#unpublish-draft').disabled=true;renderHistory([]);updateOverview();field('title').focus();});
-document.querySelector('#delete-draft').addEventListener('click',async()=>{if(!currentId){say('This draft has not been saved.');return;}if(!confirm('Archive this listing and remove its published page? Its saved history is retained.'))return;await run(async()=>{await api('listings/'+currentId+'/archive',{method:'POST',body:JSON.stringify({revision})});dirty=false;currentId=null;revision=0;published=false;archived=false;publicSlug=null;photos=[];document.querySelector('#photo-preparation-panel').hidden=true;fill(blankListing());await refresh();renderHistory([]);say('Listing archived. It is no longer on the website.');});});
-document.querySelector('#publish-draft').addEventListener('click',async()=>{if(!validate(record())){say('This listing is not ready to publish.','error');document.querySelector('.readiness-panel').scrollIntoView({block:'center'});return;}if(!confirm('Publish this listing and its photos on Brad’s website?'))return;await run(async()=>{await save();const saved=await api('listings/'+currentId+'/publish',{method:'POST',body:JSON.stringify({revision})});revision=saved.revision;published=true;publicSlug=saved.publicSlug;await refresh();renderHistory((await api('listings/'+currentId+'/history')).events);say('Published. View the listing at /properties/'+saved.publicSlug+'/');});});
-document.querySelector('#unpublish-draft').addEventListener('click',async()=>{if(!currentId||!published)return;if(!confirm('Remove this listing from the public website? Your cloud draft will remain.'))return;await run(async()=>{const saved=await api('listings/'+currentId+'/unpublish',{method:'POST',body:JSON.stringify({revision})});revision=saved.revision;published=false;publicSlug=null;await refresh();renderHistory((await api('listings/'+currentId+'/history')).events);say('Listing unpublished. Draft and photos retained.');});});
-document.querySelector('#cancel-photo-preparation').addEventListener('click',()=>{if(photoImport){photoImport.abort();document.querySelector('#cancel-photo-preparation').disabled=true;document.querySelector('#photo-preparation-status').textContent='Stopping… photos already prepared will stay in your draft.';}});
-document.querySelector('#photo-input').addEventListener('change',async event=>{
- const files=[...event.target.files];event.target.value='';if(busy||archived||!files.length)return;
- if(files.reduce((sum,file)=>sum+file.size,0)>photoLimits.batchBytes){say('Choose a batch under 100 MB. Add larger sets in smaller batches.','error');return;}
- const panel=document.querySelector('#photo-preparation-panel'),progress=document.querySelector('#photo-preparation-progress'),message=document.querySelector('#photo-preparation-status'),results=document.querySelector('#photo-preparation-results'),cancel=document.querySelector('#cancel-photo-preparation');
- results.replaceChildren();progress.max=files.length;progress.value=0;panel.hidden=false;cancel.hidden=false;cancel.disabled=false;photoImport=new AbortController();let added=0,skipped=0,stopped=false,firstFile=null;
- await run(async()=>{
-  try{
-   for(const [index,file] of files.entries()){
-    if(photoImport.signal.aborted){stopped=true;break;}
-    const row=node('li');row.append(node('strong',file.name));const outcome=node('span','Preparing…');row.append(outcome);results.append(row);message.textContent='Preparing photo '+(index+1)+' of '+files.length+'…';progress.setAttribute('aria-valuetext',message.textContent);
-    if(photos.length>=20){skipped++;outcome.textContent='Not added: the draft already has 20 photos.';progress.value=index+1;continue;}
-    try{
-     const prepared=await preparePhoto(file,{signal:photoImport.signal});
-     const ext=prepared.blob.type==='image/webp'?'webp':prepared.blob.type==='image/jpeg'?'jpg':'png',name='listing-'+crypto.randomUUID()+'.'+ext;
-     photos.push({...prepared,file:name,alt:''});firstFile??=name;added++;setDirty(true);
-     outcome.textContent=photoSize(file.size)+' → '+photoSize(prepared.blob.size)+' · '+prepared.width+' × '+prepared.height;
-     const describe=node('button','Describe Photo');describe.type='button';describe.disabled=true;describe.addEventListener('click',()=>{if(busy||archived)return;const input=document.getElementById('photo-description-'+name);if(input){input.focus();input.scrollIntoView({block:'center'});}else say('This photo has been removed from the current draft.');});row.append(describe);
-    }catch(error){if(error.name==='AbortError'){stopped=true;outcome.textContent='Not added: preparation stopped.';break;}skipped++;outcome.textContent='Not added: '+error.message;}
-    progress.value=index+1;
-   }
-  }finally{cancel.hidden=true;photoImport=null;renderPhotos();updateOverview();}
-  const summary=added+' '+(added===1?'photo':'photos')+' prepared'+(skipped?' · '+skipped+' not added':'')+(stopped?' · stopped early':'')+'.';message.textContent=summary+(added?' Review each photo and add a description. Save online when ready.':' Your existing draft photos are unchanged.');progress.setAttribute('aria-valuetext',summary);say(added?'Photos prepared in your draft. Nothing has been uploaded yet.':stopped?'Photo preparation stopped. Your previous photos are unchanged.':'No photos were added. See the preparation results. ',added?'success':'info');
- },'Preparing website photos…');
- results.querySelectorAll('button').forEach(button=>{button.disabled=archived;});
- if(firstFile&&!archived){const input=document.getElementById('photo-description-'+firstFile);input?.focus({preventScroll:true});}
+import {studioRequest, listingWorkingNotes} from './studio-recovery.js';
+const form = document.querySelector('#listing-editor');
+const status = document.querySelector('#editor-status');
+let promotionKit = null,
+  marketingSheetUrl = null;
+let currentId = null,
+  photos = [],
+  revision = 0,
+  published = false,
+  busy = false,
+  objectUrls = [],
+  dirty = false,
+  archived = false,
+  publicSlug = null,
+  listingsCache = [],
+  photoImport = null;
+form.addEventListener('input', () => {
+  document.querySelector('#validation-errors').replaceChildren();
+  setDirty(true);
 });
-document.querySelector('#export-draft').addEventListener('click',()=>{const item=record();if(!validate(item)){say('The draft needs a few details before export.');return;}const blob=new Blob([JSON.stringify(item,null,2)+'\n'],{type:'application/json'}),url=URL.createObjectURL(blob),a=node('a');a.href=url;a.download=item.slug+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);say('Unpublished listing JSON exported. Download each photo and keep the files as your own backup.');});
-document.querySelector('#preview-draft').addEventListener('click',()=>{const item=record(),container=document.querySelector('#preview-content');container.replaceChildren();container.append(node('p','Draft preview · Not published','eyebrow'));if(photos[0]){const image=node('img');const url=URL.createObjectURL(photos[0].blob);objectUrls.push(url);image.src=url;image.alt=photos[0].alt;container.append(image);}container.append(node('h3',item.title||'Untitled listing'),node('p',item.address||'Add an address'),node('p',item.price==null?'Add a price':new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(item.price)),node('p',item.status),node('p',item.description||'Add a description'),node('p',item.attribution));document.querySelector('#listing-preview').hidden=false;document.querySelector('#listing-preview').scrollIntoView({block:'start',behavior:'smooth'});say('Preview updated. Your edits are not published until you choose Publish.');});
-const moreActions=document.querySelector('.listing-more');document.addEventListener('click',event=>{if(moreActions.open&&!moreActions.contains(event.target))moreActions.open=false;});document.addEventListener('keydown',event=>{if(event.key==='Escape'&&moreActions.open){moreActions.open=false;moreActions.querySelector('summary').focus();}});moreActions.querySelectorAll('button').forEach(button=>button.addEventListener('click',()=>{moreActions.open=false;}));
+window.addEventListener('beforeunload', event => {
+  if (dirty) {
+    event.preventDefault();
+    event.returnValue = '';
+  }
+});
+const discard = () => !dirty || confirm('Discard unsaved changes to this draft?');
+const field = name => form.elements.namedItem(name);
+const say = (message, kind = 'info') => {
+  status.textContent = message;
+  status.dataset.kind = kind;
+};
+const node = (tag, text, className) => {
+  const result = document.createElement(tag);
+  if (text != null) result.textContent = text;
+  if (className) result.className = className;
+  return result;
+};
+function record() {
+  const result = blankListing();
+  for (const name of [
+    'title',
+    'slug',
+    'address',
+    'mlsId',
+    'description',
+    'attribution',
+    'permissionNote',
+    'updatedAt',
+    'status',
+    'videoUrl',
+    'propertyType',
+    'sourceUrl'
+  ])
+    result[name] = field(name).value.trim();
+  for (const name of ['price', 'beds', 'baths', 'squareFeet', 'lotAcres']) {
+    const value = field(name).value.trim();
+    if (value) result[name] = Number(value);
+    else if (name === 'price') result.price = null;
+  }
+  result.featured = field('featured').checked;
+  result.images = photos.map(({file, alt}) => ({file, alt}));
+  return result;
+}
+function fill(item) {
+  clearPromotion();
+  for (const element of form.elements) {
+    if (!element.name) continue;
+    if (element.type === 'checkbox') element.checked = Boolean(item[element.name]);
+    else element.value = item[element.name] ?? '';
+  }
+  document.querySelector('#listing-preview').hidden = true;
+  renderPhotos();
+}
+async function api(path = '', options = {}) {
+  return studioRequest('/api/admin/' + path, {
+    ...options,
+    credentials: 'same-origin',
+    headers: {'Content-Type': 'application/json', ...options.headers}
+  });
+}
+function showRecovery(error) {
+  const panel = document.querySelector('#editor-recovery');
+  panel.hidden = false;
+  panel.querySelector('[data-recovery-message]').textContent = error.message;
+  panel.querySelector('[data-recovery-signin]').hidden = error.kind !== 'session';
+}
+
+function setDirty(value) {
+  if (value) clearPromotion();
+  dirty = value;
+  updateOverview();
+}
+function updateOverview() {
+  const saveState = document.querySelector('#save-state'),
+    saveText = dirty ? 'Unsaved changes' : currentId ? 'Saved online · Revision ' + revision : 'New draft';
+  if (saveState.textContent !== saveText) saveState.textContent = saveText;
+  const saved = listingsCache.find(item => item.id === currentId);
+  document.querySelector('#listing-summary').textContent = archived
+    ? 'Archived · restore this draft to edit it'
+    : published
+      ? dirty || saved?.hasUnpublishedChanges
+        ? 'Published · working draft has unpublished changes'
+        : 'Published · saved draft matches the website'
+      : 'Private draft · not on the website';
+  document.querySelector('#current-listing-title').textContent = field('title').value.trim() || 'New listing';
+  document.querySelector('#save-state').dataset.state = dirty ? 'unsaved' : 'saved';
+  document.querySelector('#slug-preview').textContent =
+    '/properties/' + (field('slug').value.trim() || 'your-listing') + '/';
+  document.querySelector('#generate-slug').disabled = busy || archived || !field('address').value.trim();
+  document.querySelector('#delete-draft').disabled = busy || archived || !currentId;
+  const errors = listingErrors(record());
+  renderReadiness(errors);
+  const remaining = new Set(errors.map(error => publicationIssue(error).label)).size;
+  document.querySelector('#readiness-status').textContent = remaining
+    ? remaining + ' ' + (remaining === 1 ? 'item' : 'items') + ' to complete before publishing'
+    : 'Ready for publication review';
+  const previewLink = document.querySelector('#saved-preview-link');
+  previewLink.hidden = !currentId;
+  if (currentId) previewLink.href = '/studio/preview/' + currentId + '/';
+  else previewLink.removeAttribute('href');
+  const link = document.querySelector('#published-link');
+  link.hidden = !published;
+  if (published) link.href = '/properties/' + publicSlug + '/';
+  else link.removeAttribute('href');
+  document.querySelector('#restore-draft').hidden = !archived;
+  form.inert = archived || busy;
+}
+function renderDrafts() {
+  const container = document.querySelector('#draft-list'),
+    filter = document.querySelector('#listing-filter').value,
+    query = document.querySelector('#listing-search').value.trim().toLowerCase();
+  container.replaceChildren();
+  const visible = listingsCache.filter(
+    draft =>
+      (!query || (draft.listing.title + ' ' + draft.listing.address).toLowerCase().includes(query)) &&
+      (filter === 'draft'
+        ? !draft.published
+        : filter === 'published'
+          ? draft.published
+          : filter === 'changes'
+            ? draft.hasUnpublishedChanges
+            : true)
+  );
+  for (const draft of visible) {
+    const label =
+      (draft.listing.title || 'Untitled listing') +
+      ' · ' +
+      (draft.archived
+        ? 'Archived'
+        : draft.published
+          ? draft.hasUnpublishedChanges
+            ? 'Unpublished changes'
+            : 'Published'
+          : 'Draft');
+    const button = node('button');
+    button.type = 'button';
+    button.className = 'draft-card' + (draft.id === currentId ? ' selected-draft' : '');
+    button.setAttribute('aria-label', label);
+    button.setAttribute('aria-pressed', String(draft.id === currentId));
+    button.append(
+      node('strong', draft.listing.title || 'Untitled listing'),
+      node('span', draft.listing.address || 'Address not added'),
+      node(
+        'small',
+        draft.archived
+          ? 'Archived'
+          : draft.published
+            ? draft.hasUnpublishedChanges
+              ? 'Unpublished changes'
+              : 'Published'
+            : 'Private draft'
+      )
+    );
+    button.addEventListener('click', () => loadDraft(draft.id));
+    container.append(button);
+  }
+  if (!visible.length)
+    container.append(
+      node(
+        'p',
+        listingsCache.length
+          ? 'No listings match these filters.'
+          : filter === 'archived'
+            ? 'No archived listings.'
+            : 'No cloud drafts saved yet.'
+      )
+    );
+}
+async function loadDraft(id) {
+  if (busy || !discard()) return;
+  await run(async () => {
+    const loaded = await api('listings/' + id);
+    const nextPhotos = await Promise.all(
+      loaded.listing.images.map(async image => {
+        const response = await fetch('/api/admin/listings/' + id + '/photos/' + image.file, {
+          credentials: 'same-origin'
+        });
+        if (!response.ok) throw Error('Could not load saved photos. Sign in and try again.');
+        return {...image, blob: await response.blob(), uploaded: true};
+      })
+    );
+    const history = await api('listings/' + id + '/history');
+    currentId = loaded.id;
+    revision = loaded.revision;
+    published = loaded.published;
+    archived = loaded.archived;
+    publicSlug = loaded.publicSlug;
+    photos = nextPhotos;
+    dirty = false;
+    document.querySelector('#photo-preparation-panel').hidden = true;
+    fill(loaded.listing);
+    renderHistory(history.events);
+    say(
+      archived
+        ? 'Archived listing loaded. Restore it to resume editing.'
+        : published
+          ? 'Published listing loaded. Edits stay private until Publish is selected again.'
+          : 'Cloud draft loaded.'
+    );
+    await refresh();
+  });
+}
+function renderHistory(events) {
+  const list = document.querySelector('#listing-history');
+  list.replaceChildren();
+  for (const event of events)
+    list.append(
+      node(
+        'li',
+        event.action +
+          ' · revision ' +
+          event.revision +
+          ' · ' +
+          new Date(event.happened_at).toLocaleString() +
+          ' · ' +
+          event.actor
+      )
+    );
+  if (!events.length) list.append(node('li', 'No recorded changes yet.'));
+}
+async function refresh() {
+  const filter = document.querySelector('#listing-filter').value;
+  const data = await api('listings' + (filter === 'archived' ? '?archived=1' : ''));
+  listingsCache = data.listings;
+  const counts = document.querySelector('#listing-counts');
+  counts.replaceChildren();
+  for (const [label, value] of [
+    ['Drafts', data.counts.drafts],
+    ['Published', data.counts.published],
+    ['Archived', data.counts.archived]
+  ]) {
+    const metric = node('div');
+    metric.append(node('strong', value), node('span', label));
+    counts.append(metric);
+  }
+  renderDrafts();
+  if (data.hasMore)
+    document
+      .querySelector('#draft-list')
+      .append(
+        node(
+          'p',
+          'Showing the 200 most recently updated listings. Search covers only these; archive finished listings to see older ones.'
+        )
+      );
+  updateOverview();
+  document.querySelector('#unpublish-draft').disabled = !published || archived;
+}
+document.querySelector('#listing-search').addEventListener('input', renderDrafts);
+document.querySelector('#listing-filter').addEventListener('change', () => {
+  if (busy) return;
+  run(refresh);
+});
+document.querySelector('#restore-draft').addEventListener('click', () =>
+  run(async () => {
+    const saved = await api('listings/' + currentId + '/restore', {method: 'POST', body: JSON.stringify({revision})});
+    revision = saved.revision;
+    archived = false;
+    published = false;
+    publicSlug = null;
+    document.querySelector('#listing-filter').value = 'all';
+    await refresh();
+    renderHistory((await api('listings/' + currentId + '/history')).events);
+    say('Restored as a private draft. Review it before publishing again.');
+  })
+);
+async function run(action, progress = 'Working…') {
+  if (busy) return;
+  clearPromotion();
+  busy = true;
+  say(progress, 'busy');
+  document.querySelector('.studio-editor-column').setAttribute('aria-busy', 'true');
+  const buttons = [
+    ...document.querySelectorAll(
+      '#listing-editor input,#listing-editor select,#listing-editor textarea,#listing-editor button,#new-draft,#listing-search,#listing-filter,#restore-draft'
+    )
+  ];
+  const previousDisabled = buttons.map(b => b.disabled);
+  form.inert = true;
+  buttons.forEach(b => (b.disabled = true));
+  try {
+    await action();
+    document.querySelector('#editor-recovery').hidden = true;
+  } catch (error) {
+    say(error.message, 'error');
+    showRecovery(error);
+  } finally {
+    busy = false;
+    document.querySelector('.studio-editor-column').setAttribute('aria-busy', 'false');
+    form.inert = archived;
+    buttons.forEach((b, i) => (b.disabled = previousDisabled[i]));
+    document.querySelector('#unpublish-draft').disabled = !published || archived;
+    updateOverview();
+    if (status.dataset.kind === 'busy') say('Listing workspace updated.');
+  }
+}
+async function save() {
+  const listing = record();
+  let saved;
+  if (!currentId) {
+    saved = await api('listings', {method: 'POST', body: JSON.stringify({listing})});
+    currentId = saved.id;
+    revision = saved.revision;
+  }
+  for (const photo of photos) {
+    if (photo.uploaded) continue;
+    await api('listings/' + currentId + '/photos/' + photo.file, {
+      method: 'PUT',
+      headers: {'Content-Type': photo.blob.type},
+      body: photo.blob
+    });
+    photo.uploaded = true;
+  }
+  saved = await api('listings/' + currentId, {method: 'POST', body: JSON.stringify({listing, revision})});
+  revision = saved.revision;
+  published = saved.published;
+  publicSlug = saved.publicSlug;
+  dirty = false;
+  await refresh();
+  renderHistory((await api('listings/' + currentId + '/history')).events);
+  say(
+    'Draft saved securely online. ' +
+      (published ? 'The website still shows the last published version.' : 'Nothing has been published.'),
+    'success'
+  );
+}
+function renderPhotos(focusFile = null) {
+  document.querySelector('#photo-storage-summary').textContent = photos.length
+    ? photos.length +
+      ' ' +
+      (photos.length === 1 ? 'photo' : 'photos') +
+      ' · ' +
+      photoSize(photos.reduce((sum, photo) => sum + photo.blob.size, 0)) +
+      ' prepared for the website'
+    : '';
+  document.querySelector('#photo-count').textContent = photos.length + ' / 20';
+  document.querySelector('#photo-empty').hidden = photos.length > 0;
+  document.querySelector('#listing-preview').hidden = true;
+  objectUrls.forEach(url => URL.revokeObjectURL(url));
+  objectUrls = [];
+  const container = document.querySelector('#photo-editor');
+  container.replaceChildren();
+  photos.forEach((photo, index) => {
+    const card = node('article', null, 'studio-photo');
+    const url = URL.createObjectURL(photo.blob);
+    objectUrls.push(url);
+    const image = node('img');
+    image.src = url;
+    image.alt = photo.alt || 'Draft photo';
+    const label = node('label', `${index === 0 ? 'Cover photo' : 'Photo ' + (index + 1)} description`);
+    const input = node('input');
+    input.value = photo.alt;
+    input.maxLength = 200;
+    input.addEventListener('input', () => {
+      setDirty(true);
+      photo.alt = input.value.trim();
+      updateOverview();
+      image.alt = photo.alt || 'Draft photo';
+    });
+    label.append(input);
+    input.id = 'photo-description-' + photo.file;
+    const metadata = node(
+      'p',
+      photoSize(photo.blob.size) + (photo.width ? ' · ' + photo.width + ' × ' + photo.height : ''),
+      'photo-metadata'
+    );
+    image.addEventListener('load', () => {
+      metadata.textContent = photoSize(photo.blob.size) + ' · ' + image.naturalWidth + ' × ' + image.naturalHeight;
+    });
+    const source = photo.sourceName ? node('p', 'From ' + photo.sourceName, 'photo-source') : null;
+    const controls = node('div', null, 'photo-actions');
+    const cover = node('button', 'Make Cover');
+    cover.type = 'button';
+    cover.disabled = index === 0;
+    cover.addEventListener('click', () => {
+      setDirty(true);
+      photos.splice(index, 1);
+      photos.unshift(photo);
+      renderPhotos(photo.file);
+      updateOverview();
+    });
+    const remove = node('button', 'Remove');
+    remove.type = 'button';
+    remove.addEventListener('click', () => {
+      setDirty(true);
+      photos.splice(index, 1);
+      renderPhotos(photos[index]?.file || photos[index - 1]?.file || 'empty');
+      updateOverview();
+    });
+    const download = node('a', 'Download Photo');
+    download.href = url;
+    download.download = photo.file;
+    const earlier = node('button', 'Move Earlier'),
+      later = node('button', 'Move Later');
+    earlier.type = later.type = 'button';
+    earlier.disabled = index === 0;
+    later.disabled = index === photos.length - 1;
+    for (const [button, offset] of [
+      [earlier, -1],
+      [later, 1]
+    ])
+      button.addEventListener('click', () => {
+        setDirty(true);
+        photos.splice(index, 1);
+        photos.splice(index + offset, 0, photo);
+        renderPhotos(photo.file);
+        updateOverview();
+      });
+    controls.append(cover, earlier, later, remove, download);
+    const badge = node('span', index === 0 ? 'Cover image' : 'Photo ' + (index + 1), 'photo-badge');
+    card.append(image, badge, metadata);
+    if (source) card.append(source);
+    card.append(label, controls);
+    container.append(card);
+  });
+  if (focusFile) {
+    const index = photos.findIndex(photo => photo.file === focusFile);
+    const target = index < 0 ? document.querySelector('#photo-input') : container.querySelectorAll('input')[index];
+    target.focus({preventScroll: true});
+    target.scrollIntoView({block: 'nearest'});
+  }
+}
+function publicationIssue(error) {
+  const mapping = [
+    [/^Property slug/, 'Add a valid listing page address', 'slug'],
+    [/title must/, 'Add a listing title', 'title'],
+    [/address must/, 'Add the property address', 'address'],
+    [/^Property price/, 'Enter a valid price', 'price'],
+    [/description must/, 'Write the property description', 'description'],
+    [/attribution must/, 'Add the listing attribution', 'attribution'],
+    [/permissionNote must/, 'Record photo and listing authorization', 'permissionNote'],
+    [/updatedAt|update date/, 'Choose a valid review date', 'updatedAt'],
+    [/^Property status/, 'Choose Active, Pending, or Sold', 'status'],
+    [/authorized image/, 'Add at least one authorized photo', 'photo-input'],
+    [/Image alt/, 'Describe every photo', 'photo-input'],
+    [/local asset/, 'Replace the invalid photo', 'photo-input'],
+    [/Tour\/video/, 'Use an HTTPS tour or video link', 'videoUrl'],
+    [/^Invalid beds/, 'Check the bedroom count', 'beds'],
+    [/^Invalid baths/, 'Check the bathroom count', 'baths'],
+    [/^Invalid lotAcres/, 'Check the lot acreage', 'lotAcres'],
+    [/^Property type/, 'Use a short property type', 'propertyType'],
+    [/^Listing source/, 'Use an HTTPS source link', 'sourceUrl'],
+    [/^Invalid squareFeet/, 'Check the square footage', 'squareFeet']
+  ];
+  const match = mapping.find(([pattern]) => pattern.test(error));
+  return {label: match?.[1] || error, target: match?.[2] || 'title'};
+}
+let readinessKey = '';
+function renderReadiness(errors) {
+  const key = JSON.stringify([errors, archived]);
+  if (key === readinessKey) return;
+  readinessKey = key;
+  const list = document.querySelector('#readiness-list');
+  list.replaceChildren();
+  if (!errors.length) {
+    list.append(
+      node('li', 'Required fields complete. Review the saved page and confirm permission before publishing.')
+    );
+    return;
+  }
+  const issues = new Map(
+    errors.map(error => {
+      const issue = publicationIssue(error);
+      return [issue.label, issue];
+    })
+  );
+  for (const issue of issues.values()) {
+    const row = node('li');
+    if (archived) row.append(node('span', issue.label));
+    else {
+      const link = node('a', issue.label);
+      link.href = '#' + (issue.target === 'photo-input' ? 'listing-photos' : 'field-' + issue.target);
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        if (busy || archived) return;
+        const target = issue.target === 'photo-input' ? document.querySelector('#photo-input') : field(issue.target);
+        target.focus();
+        target.scrollIntoView({block: 'center', behavior: 'smooth'});
+      });
+      row.append(link);
+    }
+    list.append(row);
+  }
+}
+document.querySelector('#generate-slug').addEventListener('click', () => {
+  const next = listingSlug(field('address').value);
+  if (!next) {
+    say('Add an address with letters or numbers to create the page address.', 'error');
+    return;
+  }
+  if (
+    field('slug').value.trim() &&
+    field('slug').value !== next &&
+    !confirm('Replace the listing page address? A published link changes only after you publish again.')
+  )
+    return;
+  field('slug').value = next;
+  setDirty(true);
+  say('Page address created. Save your draft to keep it.');
+});
+function validate(item) {
+  const errors = listingErrors(item),
+    container = document.querySelector('#validation-errors');
+  container.replaceChildren();
+  if (errors.length) {
+    container.append(node('p', 'Choose a publication requirement above to jump to the field that needs attention.'));
+    document.querySelector('.readiness-panel').open = true;
+  }
+  return !errors.length;
+}
+form.addEventListener('submit', async event => {
+  event.preventDefault();
+  if (!form.reportValidity()) return;
+  await run(save, 'Saving your draft and photos…');
+});
+document.querySelector('#new-draft').addEventListener('click', () => {
+  if (busy || !discard()) return;
+  dirty = false;
+  currentId = null;
+  revision = 0;
+  published = false;
+  archived = false;
+  publicSlug = null;
+  photos = [];
+  document.querySelector('#photo-preparation-panel').hidden = true;
+  fill(blankListing());
+  document.querySelector('#validation-errors').replaceChildren();
+  say('New draft started. Save it online before leaving.');
+  document.querySelector('#unpublish-draft').disabled = true;
+  renderHistory([]);
+  updateOverview();
+  field('title').focus();
+});
+document.querySelector('#delete-draft').addEventListener('click', async () => {
+  if (!currentId) {
+    say('This draft has not been saved.');
+    return;
+  }
+  if (!confirm('Archive this listing and remove its published page? Its saved history is retained.')) return;
+  await run(async () => {
+    await api('listings/' + currentId + '/archive', {method: 'POST', body: JSON.stringify({revision})});
+    dirty = false;
+    currentId = null;
+    revision = 0;
+    published = false;
+    archived = false;
+    publicSlug = null;
+    photos = [];
+    document.querySelector('#photo-preparation-panel').hidden = true;
+    fill(blankListing());
+    await refresh();
+    renderHistory([]);
+    say('Listing archived. It is no longer on the website.');
+  });
+});
+document.querySelector('#publish-draft').addEventListener('click', async () => {
+  if (!validate(record())) {
+    say('This listing is not ready to publish.', 'error');
+    document.querySelector('.readiness-panel').scrollIntoView({block: 'center'});
+    return;
+  }
+  if (!confirm('Publish this listing and its photos on Brad’s website?')) return;
+  await run(async () => {
+    await save();
+    const saved = await api('listings/' + currentId + '/publish', {method: 'POST', body: JSON.stringify({revision})});
+    revision = saved.revision;
+    published = true;
+    publicSlug = saved.publicSlug;
+    await refresh();
+    renderHistory((await api('listings/' + currentId + '/history')).events);
+    say('Published. View the listing at /properties/' + saved.publicSlug + '/');
+  });
+});
+document.querySelector('#unpublish-draft').addEventListener('click', async () => {
+  if (!currentId || !published) return;
+  if (!confirm('Remove this listing from the public website? Your cloud draft will remain.')) return;
+  await run(async () => {
+    const saved = await api('listings/' + currentId + '/unpublish', {method: 'POST', body: JSON.stringify({revision})});
+    revision = saved.revision;
+    published = false;
+    publicSlug = null;
+    await refresh();
+    renderHistory((await api('listings/' + currentId + '/history')).events);
+    say('Listing unpublished. Draft and photos retained.');
+  });
+});
+document.querySelector('#cancel-photo-preparation').addEventListener('click', () => {
+  if (photoImport) {
+    photoImport.abort();
+    document.querySelector('#cancel-photo-preparation').disabled = true;
+    document.querySelector('#photo-preparation-status').textContent =
+      'Stopping… photos already prepared will stay in your draft.';
+  }
+});
+document.querySelector('#photo-input').addEventListener('change', async event => {
+  const files = [...event.target.files];
+  event.target.value = '';
+  if (busy || archived || !files.length) return;
+  if (files.reduce((sum, file) => sum + file.size, 0) > photoLimits.batchBytes) {
+    say('Choose a batch under 100 MB. Add larger sets in smaller batches.', 'error');
+    return;
+  }
+  const panel = document.querySelector('#photo-preparation-panel'),
+    progress = document.querySelector('#photo-preparation-progress'),
+    message = document.querySelector('#photo-preparation-status'),
+    results = document.querySelector('#photo-preparation-results'),
+    cancel = document.querySelector('#cancel-photo-preparation');
+  results.replaceChildren();
+  progress.max = files.length;
+  progress.value = 0;
+  panel.hidden = false;
+  cancel.hidden = false;
+  cancel.disabled = false;
+  photoImport = new AbortController();
+  let added = 0,
+    skipped = 0,
+    stopped = false,
+    firstFile = null;
+  await run(async () => {
+    try {
+      for (const [index, file] of files.entries()) {
+        if (photoImport.signal.aborted) {
+          stopped = true;
+          break;
+        }
+        const row = node('li');
+        row.append(node('strong', file.name));
+        const outcome = node('span', 'Preparing…');
+        row.append(outcome);
+        results.append(row);
+        message.textContent = 'Preparing photo ' + (index + 1) + ' of ' + files.length + '…';
+        progress.setAttribute('aria-valuetext', message.textContent);
+        if (photos.length >= 20) {
+          skipped++;
+          outcome.textContent = 'Not added: the draft already has 20 photos.';
+          progress.value = index + 1;
+          continue;
+        }
+        try {
+          const prepared = await preparePhoto(file, {signal: photoImport.signal});
+          const ext =
+              prepared.blob.type === 'image/webp' ? 'webp' : prepared.blob.type === 'image/jpeg' ? 'jpg' : 'png',
+            name = 'listing-' + crypto.randomUUID() + '.' + ext;
+          photos.push({...prepared, file: name, alt: ''});
+          firstFile ??= name;
+          added++;
+          setDirty(true);
+          outcome.textContent =
+            photoSize(file.size) +
+            ' → ' +
+            photoSize(prepared.blob.size) +
+            ' · ' +
+            prepared.width +
+            ' × ' +
+            prepared.height;
+          const describe = node('button', 'Describe Photo');
+          describe.type = 'button';
+          describe.disabled = true;
+          describe.addEventListener('click', () => {
+            if (busy || archived) return;
+            const input = document.getElementById('photo-description-' + name);
+            if (input) {
+              input.focus();
+              input.scrollIntoView({block: 'center'});
+            } else say('This photo has been removed from the current draft.');
+          });
+          row.append(describe);
+        } catch (error) {
+          if (error.name === 'AbortError') {
+            stopped = true;
+            outcome.textContent = 'Not added: preparation stopped.';
+            break;
+          }
+          skipped++;
+          outcome.textContent = 'Not added: ' + error.message;
+        }
+        progress.value = index + 1;
+      }
+    } finally {
+      cancel.hidden = true;
+      photoImport = null;
+      renderPhotos();
+      updateOverview();
+    }
+    const summary =
+      added +
+      ' ' +
+      (added === 1 ? 'photo' : 'photos') +
+      ' prepared' +
+      (skipped ? ' · ' + skipped + ' not added' : '') +
+      (stopped ? ' · stopped early' : '') +
+      '.';
+    message.textContent =
+      summary +
+      (added
+        ? ' Review each photo and add a description. Save online when ready.'
+        : ' Your existing draft photos are unchanged.');
+    progress.setAttribute('aria-valuetext', summary);
+    say(
+      added
+        ? 'Photos prepared in your draft. Nothing has been uploaded yet.'
+        : stopped
+          ? 'Photo preparation stopped. Your previous photos are unchanged.'
+          : 'No photos were added. See the preparation results. ',
+      added ? 'success' : 'info'
+    );
+  }, 'Preparing website photos…');
+  results.querySelectorAll('button').forEach(button => {
+    button.disabled = archived;
+  });
+  if (firstFile && !archived) {
+    const input = document.getElementById('photo-description-' + firstFile);
+    input?.focus({preventScroll: true});
+  }
+});
+document.querySelector('#export-draft').addEventListener('click', () => {
+  const item = record();
+  if (!validate(item)) {
+    say('The draft needs a few details before export.');
+    return;
+  }
+  const blob = new Blob([JSON.stringify(item, null, 2) + '\n'], {type: 'application/json'}),
+    url = URL.createObjectURL(blob),
+    a = node('a');
+  a.href = url;
+  a.download = item.slug + '.json';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  say('Unpublished listing JSON exported. Download each photo and keep the files as your own backup.');
+});
+document.querySelector('#preview-draft').addEventListener('click', () => {
+  const item = record(),
+    container = document.querySelector('#preview-content');
+  container.replaceChildren();
+  container.append(node('p', 'Draft preview · Not published', 'eyebrow'));
+  if (photos[0]) {
+    const image = node('img');
+    const url = URL.createObjectURL(photos[0].blob);
+    objectUrls.push(url);
+    image.src = url;
+    image.alt = photos[0].alt;
+    container.append(image);
+  }
+  container.append(
+    node('h3', item.title || 'Untitled listing'),
+    node('p', item.address || 'Add an address'),
+    node(
+      'p',
+      item.price == null
+        ? 'Add a price'
+        : new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(
+            item.price
+          )
+    ),
+    node('p', item.status),
+    node('p', item.description || 'Add a description'),
+    node('p', item.attribution)
+  );
+  document.querySelector('#listing-preview').hidden = false;
+  document.querySelector('#listing-preview').scrollIntoView({block: 'start', behavior: 'smooth'});
+  say('Preview updated. Your edits are not published until you choose Publish.');
+});
+const moreActions = document.querySelector('.listing-more');
+document.addEventListener('click', event => {
+  if (moreActions.open && !moreActions.contains(event.target)) moreActions.open = false;
+});
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && moreActions.open) {
+    moreActions.open = false;
+    moreActions.querySelector('summary').focus();
+  }
+});
+moreActions.querySelectorAll('button').forEach(button =>
+  button.addEventListener('click', () => {
+    moreActions.open = false;
+  })
+);
 fill(blankListing());
 
-const workingNotesButton=document.querySelector('#download-working-notes');workingNotesButton.hidden=false;
-workingNotesButton.addEventListener('click',()=>{const blob=new Blob([listingWorkingNotes(record())],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),link=node('a');link.href=url;link.download=(listingSlug(field('title').value)||'listing')+'-private-working-notes.txt';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);document.querySelector('#working-notes-feedback').textContent='Current text and photo descriptions downloaded. Photo files are not included. Nothing was saved online or published.';});
-document.querySelector('#check-editor-connection').addEventListener('click',()=>run(async()=>{await api('session');await refresh();say('Editor connection confirmed. Your current fields and photos remain in this tab. Review any newer saved version before repeating a failed save.','success');},'Checking editor connection…'));
-
-await run(async()=>{const session=await api('session');document.querySelector('#storage-status').textContent='Signed in as '+session.email+'. Drafts and photos are stored in Cloudflare.';await refresh();say('Cloud editor ready. Save a draft, review it, then publish when approved.');});
-
-function clearPromotion(){promotionKit=null;document.body.classList.remove('printing-marketing-sheet');document.querySelector('#marketing-sheet-review').hidden=true;document.querySelector('#marketing-sheet').replaceChildren();if(marketingSheetUrl){URL.revokeObjectURL(marketingSheetUrl);marketingSheetUrl=null;}document.querySelector('#promotion-kit').hidden=true;document.querySelector('#promotion-copy').value='';}
-function showPromotionFormat(){if(!promotionKit)return;document.querySelector('#promotion-copy').value=promotionKit[document.querySelector('#promotion-format').value];document.querySelector('#promotion-feedback').textContent='Review this copy, then copy or download. Nothing is sent automatically.';}
-document.querySelector('#prepare-promotion').addEventListener('click',()=>{
- if(busy||archived)return;const item=record(),saved=listingsCache.find(listing=>listing.id===currentId);
- promotionKit=listingPromotion(item,{origin:location.origin,published,dirty,hasUnpublishedChanges:saved?.hasUnpublishedChanges??true,publicSlug});
- document.querySelector('#promotion-source').textContent=promotionKit.publicUrl?'The entered details match the saved published version. Its public page link is included.':'Working draft copy. No public page link is included. Save, review, and publish the listing before promoting it as live.';
- document.querySelector('#promotion-missing').textContent=promotionKit.missing.length?'Add before sharing: '+promotionKit.missing.join(', ')+'.':'';
- document.querySelector('#promotion-format').value='caption';showPromotionFormat();document.querySelector('#promotion-kit').hidden=false;document.querySelector('#promotion-heading').focus();document.querySelector('#promotion-kit').scrollIntoView({block:'start',behavior:'smooth'});
+const workingNotesButton = document.querySelector('#download-working-notes');
+workingNotesButton.hidden = false;
+workingNotesButton.addEventListener('click', () => {
+  const blob = new Blob([listingWorkingNotes(record())], {type: 'text/plain;charset=utf-8'}),
+    url = URL.createObjectURL(blob),
+    link = node('a');
+  link.href = url;
+  link.download = (listingSlug(field('title').value) || 'listing') + '-private-working-notes.txt';
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  document.querySelector('#working-notes-feedback').textContent =
+    'Current text and photo descriptions downloaded. Photo files are not included. Nothing was saved online or published.';
 });
-document.querySelector('#promotion-format').addEventListener('change',showPromotionFormat);
-document.querySelector('#close-promotion').addEventListener('click',()=>{clearPromotion();field('title').focus();field('title').scrollIntoView({block:'center'});});
-document.querySelector('#copy-promotion').addEventListener('click',async()=>{if(!promotionKit||busy)return;const copy=document.querySelector('#promotion-copy');try{await navigator.clipboard.writeText(copy.value);if(promotionKit)document.querySelector('#promotion-feedback').textContent='Text copied. Review it in your chosen app before sharing.';}catch{if(promotionKit){copy.focus();copy.select();document.querySelector('#promotion-feedback').textContent='Automatic copying is unavailable. The text is selected; use your device’s Copy command.';}}});
-document.querySelector('#download-promotion').addEventListener('click',()=>{if(!promotionKit||busy)return;const content=['REVIEW COPY — verify facts and permissions before sharing',document.querySelector('#promotion-source').textContent,document.querySelector('#promotion-missing').textContent,'SHORT PROPERTY CAPTION',promotionKit.caption,'FULL PROPERTY POST',promotionKit.social,'BUYER EMAIL',promotionKit.email,'PROPERTY HANDOFF',promotionKit.summary,'CAMPAIGN LAUNCH BRIEF',promotionKit.launch,'AGENT OUTREACH',promotionKit.outreach,'SELLER UPDATE OUTLINE',promotionKit.update].filter(Boolean).join('\n\n');const blob=new Blob([content+'\n'],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),link=node('a');link.href=url;link.download=(listingSlug(field('title').value)||'listing')+'-promotion-kit.txt';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);document.querySelector('#promotion-feedback').textContent='Templates downloaded for review. Nothing was sent or published.';});
+document.querySelector('#check-editor-connection').addEventListener('click', () =>
+  run(async () => {
+    await api('session');
+    await refresh();
+    say(
+      'Editor connection confirmed. Your current fields and photos remain in this tab. Review any newer saved version before repeating a failed save.',
+      'success'
+    );
+  }, 'Checking editor connection…')
+);
+
+await run(async () => {
+  const session = await api('session');
+  document.querySelector('#storage-status').textContent =
+    'Signed in as ' + session.email + '. Drafts and photos are stored in Cloudflare.';
+  await refresh();
+  say('Cloud editor ready. Save a draft, review it, then publish when approved.');
+});
+
+function clearPromotion() {
+  promotionKit = null;
+  document.body.classList.remove('printing-marketing-sheet');
+  document.querySelector('#marketing-sheet-review').hidden = true;
+  document.querySelector('#marketing-sheet').replaceChildren();
+  if (marketingSheetUrl) {
+    URL.revokeObjectURL(marketingSheetUrl);
+    marketingSheetUrl = null;
+  }
+  document.querySelector('#promotion-kit').hidden = true;
+  document.querySelector('#promotion-copy').value = '';
+}
+function showPromotionFormat() {
+  if (!promotionKit) return;
+  document.querySelector('#promotion-copy').value = promotionKit[document.querySelector('#promotion-format').value];
+  document.querySelector('#promotion-feedback').textContent =
+    'Review this copy, then copy or download. Nothing is sent automatically.';
+}
+document.querySelector('#prepare-promotion').addEventListener('click', () => {
+  if (busy || archived) return;
+  const item = record(),
+    saved = listingsCache.find(listing => listing.id === currentId);
+  promotionKit = listingPromotion(item, {
+    origin: location.origin,
+    published,
+    dirty,
+    hasUnpublishedChanges: saved?.hasUnpublishedChanges ?? true,
+    publicSlug
+  });
+  document.querySelector('#promotion-source').textContent = promotionKit.publicUrl
+    ? 'The entered details match the saved published version. Its public page link is included.'
+    : 'Working draft copy. No public page link is included. Save, review, and publish the listing before promoting it as live.';
+  document.querySelector('#promotion-missing').textContent = promotionKit.missing.length
+    ? 'Add before sharing: ' + promotionKit.missing.join(', ') + '.'
+    : '';
+  document.querySelector('#promotion-format').value = 'caption';
+  showPromotionFormat();
+  document.querySelector('#promotion-kit').hidden = false;
+  document.querySelector('#promotion-heading').focus();
+  document.querySelector('#promotion-kit').scrollIntoView({block: 'start', behavior: 'smooth'});
+});
+document.querySelector('#promotion-format').addEventListener('change', showPromotionFormat);
+document.querySelector('#close-promotion').addEventListener('click', () => {
+  clearPromotion();
+  field('title').focus();
+  field('title').scrollIntoView({block: 'center'});
+});
+document.querySelector('#copy-promotion').addEventListener('click', async () => {
+  if (!promotionKit || busy) return;
+  const copy = document.querySelector('#promotion-copy');
+  try {
+    await navigator.clipboard.writeText(copy.value);
+    if (promotionKit)
+      document.querySelector('#promotion-feedback').textContent =
+        'Text copied. Review it in your chosen app before sharing.';
+  } catch {
+    if (promotionKit) {
+      copy.focus();
+      copy.select();
+      document.querySelector('#promotion-feedback').textContent =
+        'Automatic copying is unavailable. The text is selected; use your device’s Copy command.';
+    }
+  }
+});
+document.querySelector('#download-promotion').addEventListener('click', () => {
+  if (!promotionKit || busy) return;
+  const content = [
+    'REVIEW COPY — verify facts and permissions before sharing',
+    document.querySelector('#promotion-source').textContent,
+    document.querySelector('#promotion-missing').textContent,
+    'SHORT PROPERTY CAPTION',
+    promotionKit.caption,
+    'FULL PROPERTY POST',
+    promotionKit.social,
+    'BUYER EMAIL',
+    promotionKit.email,
+    'PROPERTY HANDOFF',
+    promotionKit.summary,
+    'CAMPAIGN LAUNCH BRIEF',
+    promotionKit.launch,
+    'AGENT OUTREACH',
+    promotionKit.outreach,
+    'SELLER UPDATE OUTLINE',
+    promotionKit.update
+  ]
+    .filter(Boolean)
+    .join('\n\n');
+  const blob = new Blob([content + '\n'], {type: 'text/plain;charset=utf-8'}),
+    url = URL.createObjectURL(blob),
+    link = node('a');
+  link.href = url;
+  link.download = (listingSlug(field('title').value) || 'listing') + '-promotion-kit.txt';
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  document.querySelector('#promotion-feedback').textContent =
+    'Templates downloaded for review. Nothing was sent or published.';
+});
 
 // Same-page sheet preview: whitelisted public facts and an authorized working photo.
-document.querySelector('#prepare-marketing-sheet').addEventListener('click',()=>{
- if(!promotionKit||busy)return;
- const sheet=promotionKit.sheet,container=document.querySelector('#marketing-sheet');container.replaceChildren();
- if(marketingSheetUrl){URL.revokeObjectURL(marketingSheetUrl);marketingSheetUrl=null;}
- const branding=node('div',null,'marketing-sheet-brand');branding.append(node('strong','BRAD HAZEN'),node('span','Real Estate Broker · Realty Pro, Inc.'));container.append(branding);
- container.append(node('p',promotionKit.publicUrl?'Published property details · verify current availability':'WORKING DRAFT · review before sharing · not a published listing','marketing-sheet-label'));
- if(photos[0]){marketingSheetUrl=URL.createObjectURL(photos[0].blob);const image=node('img');image.src=marketingSheetUrl;image.alt=photos[0].alt||'Working cover photo';image.className='marketing-sheet-cover';container.append(image);}else container.append(node('p','Cover photo has not been added.','marketing-sheet-no-photo'));
- container.append(node('p',sheet.status,'marketing-sheet-status'),node('h3',sheet.title),node('p',sheet.address||'Address to be confirmed','marketing-sheet-address'),node('p',sheet.priceLabel,'marketing-sheet-price'));
- if(sheet.facts)container.append(node('p',sheet.facts,'marketing-sheet-facts'));
- if(sheet.description)container.append(node('p',sheet.description,'marketing-sheet-description'));else container.append(node('p','Property description to be added.'));
- if(sheet.publicUrl){const link=node('a',sheet.publicUrl);link.href=sheet.publicUrl;link.className='marketing-sheet-link';container.append(link);}
- if(sheet.tourUrl){const link=node('a','Tour: '+sheet.tourUrl);link.href=sheet.tourUrl;container.append(link);}
- const footer=node('div',null,'marketing-sheet-footer');footer.append(node('p',sheet.action),node('p',sheet.contact));if(sheet.reviewed)footer.append(node('p',sheet.reviewed));if(sheet.attribution)footer.append(node('p','Listing attribution: '+sheet.attribution));container.append(footer);
- document.querySelector('#marketing-sheet-review').hidden=false;document.querySelector('#marketing-sheet-heading').focus({preventScroll:true});document.querySelector('#marketing-sheet-review').scrollIntoView({block:'start',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+document.querySelector('#prepare-marketing-sheet').addEventListener('click', () => {
+  if (!promotionKit || busy) return;
+  const sheet = promotionKit.sheet,
+    container = document.querySelector('#marketing-sheet');
+  container.replaceChildren();
+  if (marketingSheetUrl) {
+    URL.revokeObjectURL(marketingSheetUrl);
+    marketingSheetUrl = null;
+  }
+  const branding = node('div', null, 'marketing-sheet-brand');
+  branding.append(node('strong', 'BRAD HAZEN'), node('span', 'Real Estate Broker · Realty Pro, Inc.'));
+  container.append(branding);
+  container.append(
+    node(
+      'p',
+      promotionKit.publicUrl
+        ? 'Published property details · verify current availability'
+        : 'WORKING DRAFT · review before sharing · not a published listing',
+      'marketing-sheet-label'
+    )
+  );
+  if (photos[0]) {
+    marketingSheetUrl = URL.createObjectURL(photos[0].blob);
+    const image = node('img');
+    image.src = marketingSheetUrl;
+    image.alt = photos[0].alt || 'Working cover photo';
+    image.className = 'marketing-sheet-cover';
+    container.append(image);
+  } else container.append(node('p', 'Cover photo has not been added.', 'marketing-sheet-no-photo'));
+  container.append(
+    node('p', sheet.status, 'marketing-sheet-status'),
+    node('h3', sheet.title),
+    node('p', sheet.address || 'Address to be confirmed', 'marketing-sheet-address'),
+    node('p', sheet.priceLabel, 'marketing-sheet-price')
+  );
+  if (sheet.facts) container.append(node('p', sheet.facts, 'marketing-sheet-facts'));
+  if (sheet.description) container.append(node('p', sheet.description, 'marketing-sheet-description'));
+  else container.append(node('p', 'Property description to be added.'));
+  if (sheet.publicUrl) {
+    const link = node('a', sheet.publicUrl);
+    link.href = sheet.publicUrl;
+    link.className = 'marketing-sheet-link';
+    container.append(link);
+  }
+  if (sheet.tourUrl) {
+    const link = node('a', 'Tour: ' + sheet.tourUrl);
+    link.href = sheet.tourUrl;
+    container.append(link);
+  }
+  const footer = node('div', null, 'marketing-sheet-footer');
+  footer.append(node('p', sheet.action), node('p', sheet.contact));
+  if (sheet.reviewed) footer.append(node('p', sheet.reviewed));
+  if (sheet.attribution) footer.append(node('p', 'Listing attribution: ' + sheet.attribution));
+  container.append(footer);
+  document.querySelector('#marketing-sheet-review').hidden = false;
+  document.querySelector('#marketing-sheet-heading').focus({preventScroll: true});
+  document.querySelector('#marketing-sheet-review').scrollIntoView({
+    block: 'start',
+    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+  });
 });
-document.querySelector('#close-marketing-sheet').addEventListener('click',()=>{document.querySelector('#marketing-sheet-review').hidden=true;document.querySelector('#prepare-marketing-sheet').focus();});
-document.querySelector('#print-marketing-sheet').addEventListener('click',()=>{if(!promotionKit||busy||document.querySelector('#marketing-sheet-review').hidden)return;document.body.classList.add('printing-marketing-sheet');try{window.print();}catch{document.body.classList.remove('printing-marketing-sheet');document.querySelector('#promotion-feedback').textContent='Printing is unavailable here. Use your browser’s Print command from the sheet preview.';}});
-window.addEventListener('afterprint',()=>document.body.classList.remove('printing-marketing-sheet'));
+document.querySelector('#close-marketing-sheet').addEventListener('click', () => {
+  document.querySelector('#marketing-sheet-review').hidden = true;
+  document.querySelector('#prepare-marketing-sheet').focus();
+});
+document.querySelector('#print-marketing-sheet').addEventListener('click', () => {
+  if (!promotionKit || busy || document.querySelector('#marketing-sheet-review').hidden) return;
+  document.body.classList.add('printing-marketing-sheet');
+  try {
+    window.print();
+  } catch {
+    document.body.classList.remove('printing-marketing-sheet');
+    document.querySelector('#promotion-feedback').textContent =
+      'Printing is unavailable here. Use your browser’s Print command from the sheet preview.';
+  }
+});
+window.addEventListener('afterprint', () => document.body.classList.remove('printing-marketing-sheet'));
 
-const promotionShortcut=document.querySelector('[data-promotion-shortcut]');
-if(promotionShortcut)promotionShortcut.addEventListener('click',event=>{event.preventDefault();document.querySelector('#prepare-promotion').click();});
+const promotionShortcut = document.querySelector('[data-promotion-shortcut]');
+if (promotionShortcut)
+  promotionShortcut.addEventListener('click', event => {
+    event.preventDefault();
+    document.querySelector('#prepare-promotion').click();
+  });

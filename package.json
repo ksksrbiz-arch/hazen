@@ -9,7 +9,9 @@
     "check": "node scripts/check.mjs",
     "test": "node --test",
     "test:browser": "playwright test",
-    "verify": "npm test && npm run build && npm run check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "verify": "npm run format:check && npm test && npm run build && npm run check",
     "check:runtime": "wrangler pages functions build --outdir .wrangler/runtime-check && node scripts/check-runtime.mjs"
   },
   "engines": {
@@ -21,6 +23,7 @@
   "devDependencies": {
     "@playwright/test": "^1.64.0",
     "axe-core": "^4.14.0",
+    "prettier": "^3.9.10",
     "wrangler": "^4.149.0"
   }
 }
