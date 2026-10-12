@@ -180,3 +180,7 @@ Added truthful session, conflict, server and connection errors, a 25-second requ
 ## Public recovery and homepage resilience - October 11, 2026
 
 Missing static pages and unavailable property links now use branded recovery pages with useful buying/selling/resources navigation and direct contact. Unknown property pages retain HTTP 404; failed property collection reads retain 503. No request path or private listing state is echoed. Recovery responses are non-cacheable, noindex and secured by middleware. When the listing database query fails, the homepage retains its marketing content and displays a truthful featured-listing fallback instead of returning a whole-page error. Isolated runtime checks simulate unpublication and a database outage; no live storage is modified.
+
+## Preparation tools across visitor journeys - October 11, 2026
+
+The homepage now introduces the seller worksheet, buyer worksheet and photo preparation guide, with a direct path to the full resource hub. Buy and home assessment expose useful preparation links beside their primary inquiry action. Related resources now connect community guides, comparison, worksheets, photography and listing marketing in both directions. All links remain native and usable without JavaScript; the comparison section itself still requires JavaScript. No new registration, tracking or inventory was introduced.

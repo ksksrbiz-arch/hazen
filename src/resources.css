@@ -170,3 +170,21 @@
 .recovery-footer{max-width:1000px;margin:0 auto;background:none;padding:0 1.5rem 2rem;display:flex;justify-content:space-between;color:#59646d;font-size:11px}
 .recovery-footer a{color:#182b40}
 @media(max-width:650px){.recovery-header{align-items:flex-start;flex-direction:column;padding:1rem}.recovery-page{padding:2rem 1rem}.recovery-paths{grid-template-columns:1fr}.recovery-actions{align-items:stretch;flex-direction:column;gap:1rem}.recovery-actions .button{width:100%;box-sizing:border-box}.recovery-contact{align-items:flex-start;flex-direction:column;text-align:left;gap:.75rem}.recovery-paths>a{padding:1.25rem}}
+
+/* Connect preparation resources to the main visitor journeys. */
+.home-preparation{background:#f5f3ed;text-align:left;max-width:none;margin:0;padding-inline:max(6%,24px)}
+.home-preparation-heading{display:flex;align-items:center;justify-content:space-between;gap:2rem;max-width:1200px;margin:0 auto 1.75rem}
+.home-preparation-heading>div{max-width:850px}
+.home-preparation-heading .eyebrow{font-size:11px;color:#75551b;letter-spacing:1.5px}
+.home-preparation-heading h2{font-size:clamp(24px,3vw,33px);line-height:1.5;color:#182b40;margin:.5rem 0 .75rem}
+.home-preparation-heading p{font-size:14px;line-height:1.9;color:#59646d;margin:0}
+.home-preparation-heading>a{font-size:12px;line-height:1.8;white-space:nowrap;color:#182b40;font-weight:600;min-height:44px;display:flex;align-items:center}
+.home-preparation-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;max-width:1200px;margin:auto}
+.home-preparation-grid>a{display:flex;gap:1rem;min-width:0;background:#fff;border:1px solid #dce1e5;border-top:3px solid #ba9b54;padding:1.5rem;color:#182b40;text-decoration:none}
+.home-preparation-grid>a:hover{background:#fbf7ee;border-color:#ba9b54}
+.preparation-number{font-size:17px;font-weight:600;color:#75551b;line-height:1.6;flex-shrink:0}
+.home-preparation-grid>a>div{display:flex;flex-direction:column;min-width:0}
+.home-preparation-grid h3{font-size:19px;line-height:1.6;margin:.5rem 0 .75rem}
+.home-preparation-grid p{font-size:13px;line-height:1.9;color:#59646d;margin:0 0 1rem}
+@media(max-width:900px){.home-preparation-heading{align-items:flex-start;flex-direction:column;gap:.75rem}.home-preparation-grid{grid-template-columns:1fr}.home-preparation-grid>a{padding:1.25rem}.home-preparation-grid h3{font-size:20px}}
+@media(max-width:650px){.home-preparation{padding-inline:20px}.home-preparation-heading h2{font-size:25px}.home-preparation-grid>a{padding:1.15rem;gap:.75rem}}
