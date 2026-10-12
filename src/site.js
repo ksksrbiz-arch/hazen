@@ -64,7 +64,7 @@ document.querySelectorAll('[data-inquiry]').forEach(form=>{
   const data=new FormData(form);
   const value=key=>String(data.get(key)||'').trim();
   const body=inquiryDraftBody(data);
-  const href='mailto:b.hazen@hotmail.com?subject='+encodeURIComponent('Website inquiry: '+value('interest'))+'&body='+encodeURIComponent(body);
+  const href=contact.emailHref+'?subject='+encodeURIComponent('Website inquiry: '+value('interest'))+'&body='+encodeURIComponent(body);
   backup.hidden=false;form.classList.add('reviewing-draft');backup.querySelector('textarea').value=body;
   backup.querySelector('[data-open-email]').href=href;
   backup.querySelector('[data-email-subject]').textContent='Subject: Website inquiry: '+value('interest');
@@ -74,7 +74,7 @@ document.querySelectorAll('[data-inquiry]').forEach(form=>{
  form.querySelector('.edit-inquiry').addEventListener('click',()=>{backup.hidden=true;form.classList.remove('reviewing-draft');backup.querySelector('[data-open-email]').removeAttribute('href');setInquiryStage(1);validationAttempted=false;renderInquiryErrors();status.textContent='Update your details, then review the draft again.';form.elements.name.focus();});
  form.querySelector('.copy-message').addEventListener('click',async()=>{
   const field=form.querySelector('.email-backup textarea');
-  try{await navigator.clipboard.writeText(field.value);form.querySelector('.form-status').textContent='Message copied. Paste it into an email to b.hazen@hotmail.com and send it.';}
+  try{await navigator.clipboard.writeText(field.value);form.querySelector('.form-status').textContent='Message copied. Paste it into an email to '+contact.email+' and send it.';}
   catch{field.focus();field.select();form.querySelector('.form-status').textContent='Select and copy the prepared message, then paste it into your email.';}
  });
  form.noValidate=true;form.inert=false;

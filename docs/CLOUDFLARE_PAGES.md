@@ -7,7 +7,7 @@ In Cloudflare dashboard, choose Workers & Pages → Create application → Pages
 - Project name: brad-hazen-preview (subject to availability)
 - Production branch: main
 - Framework preset: None
-- Build command: npm run build
+- Build command: npm run verify (runs tests, the build and the route/asset check, so a failing check blocks the deploy; `npm run build` alone skips them)
 - Build output directory: dist
 - Root directory: repository root
 - Environment variable: NODE_VERSION = 24

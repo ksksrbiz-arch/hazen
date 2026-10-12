@@ -8,6 +8,7 @@
     "preview": "python3 -m http.server 8000 --directory dist",
     "check": "node scripts/check.mjs",
     "test": "node --test",
+    "verify": "npm test && npm run build && npm run check",
     "check:runtime": "wrangler pages functions build --outdir .wrangler/runtime-check && node scripts/check-runtime.mjs"
   },
   "engines": {

@@ -1,3 +1,4 @@
+import {contact} from '../src/contact.js';
 import {sellerGoals} from '../src/inquiry-model.js';
 export const sellerChecklist=[
  ['Your goals','Preferred timing, what matters most in the sale, and questions about your next move.'],
@@ -8,7 +9,7 @@ export const sellerChecklist=[
  ['Questions for the listing plan','Proposed price, included marketing services, any additional costs, and how updates will be communicated.']
 ];
 
-export const sellerChecklistText='BRAD HAZEN — SELLER CONVERSATION CHECKLIST\n\n'+sellerChecklist.map(([title,detail],i)=>`${i+1}. ${title}\n${detail}\nNotes: ______________________________`).join('\n\n')+'\n\nBring general property information. Do not send financial documents, access codes, or sensitive personal records through the website.\n\nDiscuss the final marketing services, scope, costs, and timing with Brad before proceeding.\n\nBrad Hazen · Realty Pro, Inc.\n(360) 921-9484 · b.hazen@hotmail.com\n';
+export const sellerChecklistText='BRAD HAZEN — SELLER CONVERSATION CHECKLIST\n\n'+sellerChecklist.map(([title,detail],i)=>`${i+1}. ${title}\n${detail}\nNotes: ______________________________`).join('\n\n')+'\n\nBring general property information. Do not send financial documents, access codes, or sensitive personal records through the website.\n\nDiscuss the final marketing services, scope, costs, and timing with Brad before proceeding.\n\nBrad Hazen · Realty Pro, Inc.\n'+contact.phone+' · '+contact.email+'\n';
 
 export function sellerHomepage(){return `<section class="seller-feature section" aria-labelledby="seller-feature-heading"><div class="seller-feature-copy"><p class="eyebrow">For your next listing</p><h2 id="seller-feature-heading">Put your property’s strongest details forward.</h2><p>A clear presentation gives buyers a place to explore the photos, understand the property, and take the next step with Brad.</p><ul><li>A dedicated property page with photos and key details</li><li>A shareable link for the listing conversation</li><li>A direct way to ask about the home or a showing</li></ul><div class="page-actions"><a class="button" href="/listing-marketing/">Explore the Listing Approach</a><a href="/sell/#inquiry">Talk About My Property</a></div></div><figure><img src="/assets/prairie-home.webp" width="600" height="338" alt="Illustrative country home in a Pacific Northwest landscape" loading="lazy" decoding="async"><figcaption>Original AI-generated illustration · not an actual listing</figcaption></figure></section>`;}
 
