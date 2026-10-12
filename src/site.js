@@ -11,13 +11,38 @@ if(menu){
 document.querySelectorAll('[data-inquiry]').forEach(form=>{
  const backup=form.querySelector('.email-backup'),status=form.querySelector('.form-status');
  const interest=form.elements.interest,location=form.elements.location,sellerContext=form.querySelector('.seller-context');
+ const errorsPanel=form.querySelector('[data-inquiry-errors]');let validationAttempted=false,lastIssuesSignature='';
+ const stepItems=[...form.closest('.inquiry-panel').querySelectorAll('.inquiry-steps li')];
+ const setInquiryStage=stage=>stepItems.forEach((item,i)=>{if(i===stage-1)item.setAttribute('aria-current','step');else item.removeAttribute('aria-current');});
+ const errorFor=field=>{
+  if(field.disabled)return '';
+  if(field.required&&!field.value.trim())return ({name:'Enter your name.',email:'Enter your email address.',interest:'Choose a topic for your conversation.',location:'Enter the property address for your assessment.'})[field.name]||'Complete this field.';
+  if(!field.checkValidity())return field.type==='email'?'Enter a valid email address, such as name@example.com.':'Check this field before continuing.';
+  return '';
+ };
+ const renderInquiryErrors=()=>{
+  const issues=[];
+  for(const field of form.querySelectorAll('.inquiry-fields input,.inquiry-fields select,.inquiry-fields textarea')){
+   const message=validationAttempted?errorFor(field):'',wrapper=field.closest('.inquiry-field'),id=field.id+'-error';let note=wrapper.querySelector('.inquiry-field-error');
+   if(!note){note=document.createElement('p');note.className='inquiry-field-error';note.id=id;wrapper.append(note);}
+   if(note.textContent!==message)note.textContent=message;note.hidden=!message;const described=(field.getAttribute('aria-describedby')||'').split(/\s+/).filter(value=>value&&value!==id);
+   if(message){field.setAttribute('aria-invalid','true');described.push(id);issues.push({field,message});}else field.removeAttribute('aria-invalid');
+   if(described.length)field.setAttribute('aria-describedby',described.join(' '));else field.removeAttribute('aria-describedby');
+  }
+  const signature=JSON.stringify(issues.map(({field,message})=>[field.id,message]));const list=errorsPanel.querySelector('[data-inquiry-error-list]');if(signature!==lastIssuesSignature){list.replaceChildren();
+  for(const {field,message} of issues){const row=document.createElement('li'),link=document.createElement('a');link.href='#'+field.id;link.textContent=message;link.addEventListener('click',event=>{event.preventDefault();field.focus();});row.append(link);list.append(row);}
+  lastIssuesSignature=signature;}
+  const count=errorsPanel.querySelector('[data-inquiry-error-count]'),countText=issues.length+' '+(issues.length===1?'field needs':'fields need')+' a quick check. Your other details are still here.';if(count.textContent!==countText)count.textContent=countText;errorsPanel.hidden=!issues.length;if(validationAttempted){const feedback=issues.length?'Review the highlighted fields to prepare your draft. Nothing has been sent.':'Your details are ready to review. Nothing has been sent.';if(status.textContent!==feedback)status.textContent=feedback;}return issues;
+ };
+ setInquiryStage(1);
+
  if(form.dataset.inquiry==='contact'&&!interest.value){
   const startingPoint=communityInquiryContext(window.location.search,inquiryCommunities);
   if(startingPoint){interest.value=startingPoint.interest;if(!location.value)location.value=startingPoint.location;const context=form.closest('.inquiry-panel')?.querySelector('[data-inquiry-context]');if(context){context.textContent='Starting with '+startingPoint.location+'. You can change the topic or location below.';context.hidden=false;}}
  }
  const goalLinks=[...document.querySelectorAll('[data-seller-goal]')];
  const syncGoal=()=>goalLinks.forEach(link=>{if(interest.value==='Selling a home'&&link.dataset.sellerGoal===form.elements.sellerGoal.value)link.setAttribute('aria-current','true');else link.removeAttribute('aria-current');});
- const invalidateDraft=()=>{if(!backup.hidden){backup.hidden=true;form.classList.remove('reviewing-draft');backup.querySelector('[data-open-email]').removeAttribute('href');status.textContent='Your details changed. Review your draft again before opening an email.';}};
+ const invalidateDraft=()=>{if(!backup.hidden){backup.hidden=true;form.classList.remove('reviewing-draft');setInquiryStage(1);backup.querySelector('[data-open-email]').removeAttribute('href');status.textContent='Your details changed. Review your draft again before opening an email.';}};
  const updateTopic=()=>{
   const sellerRelated=['Selling a home','A home assessment'].includes(interest.value);sellerContext.hidden=!sellerRelated;sellerContext.querySelectorAll('input,select,textarea').forEach(control=>control.disabled=!sellerRelated);syncGoal();
   const assessment=interest.value==='A home assessment',address=assessment||['Selling a home','Request a showing','A property inquiry'].includes(interest.value);
@@ -25,17 +50,17 @@ document.querySelectorAll('[data-inquiry]').forEach(form=>{
   form.querySelector('[data-location-label]').textContent=address?'Property address'+(assessment?' *':' (optional)'):interest.value==='Buying a home'?'Preferred communities (optional)':'Property or community (optional)';
   form.querySelector('#location-hint').textContent=address?'Include the city, if you know it.':interest.value==='Buying a home'?'Share the places you are considering.':'Add a place or property, if relevant.';
  };
- interest.addEventListener('change',()=>{invalidateDraft();updateTopic();});updateTopic();
+ interest.addEventListener('change',()=>{invalidateDraft();updateTopic();if(validationAttempted)renderInquiryErrors();});updateTopic();
  goalLinks.forEach(link=>link.addEventListener('click',()=>{if(!sellerGoals.includes(link.dataset.sellerGoal))return;interest.value='Selling a home';form.elements.sellerGoal.value=link.dataset.sellerGoal;updateTopic();invalidateDraft();sellerContext.open=true;form.elements.name.focus({preventScroll:true});}));
  form.querySelector('button[type="submit"]').disabled=false;
  form.addEventListener('input',event=>{
   if(event.target.matches('input,select,textarea'))event.target.setCustomValidity('');
-  invalidateDraft();syncGoal();
+  invalidateDraft();syncGoal();if(validationAttempted)renderInquiryErrors();
  });
  form.addEventListener('submit',event=>{
   event.preventDefault();
-  form.querySelectorAll('[required]').forEach(field=>field.setCustomValidity(field.value.trim()?'':'Please complete this field.'));
-  if(!form.reportValidity())return;
+  validationAttempted=true;const issues=renderInquiryErrors();if(issues.length){status.textContent='Review the highlighted fields to prepare your draft. Nothing has been sent.';issues[0].field.focus();return;}
+  setInquiryStage(2);
   const data=new FormData(form);
   const value=key=>String(data.get(key)||'').trim();
   const body=inquiryDraftBody(data);
@@ -46,13 +71,13 @@ document.querySelectorAll('[data-inquiry]').forEach(form=>{
   status.textContent='Your draft is ready to review. Nothing has been sent.';
   backup.querySelector('h3').focus({preventScroll:true});backup.scrollIntoView({block:'start',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
  });
- form.querySelector('.edit-inquiry').addEventListener('click',()=>{backup.hidden=true;form.classList.remove('reviewing-draft');backup.querySelector('[data-open-email]').removeAttribute('href');status.textContent='Update your details, then review the draft again.';form.elements.name.focus();});
+ form.querySelector('.edit-inquiry').addEventListener('click',()=>{backup.hidden=true;form.classList.remove('reviewing-draft');backup.querySelector('[data-open-email]').removeAttribute('href');setInquiryStage(1);validationAttempted=false;renderInquiryErrors();status.textContent='Update your details, then review the draft again.';form.elements.name.focus();});
  form.querySelector('.copy-message').addEventListener('click',async()=>{
   const field=form.querySelector('.email-backup textarea');
   try{await navigator.clipboard.writeText(field.value);form.querySelector('.form-status').textContent='Message copied. Paste it into an email to b.hazen@hotmail.com and send it.';}
   catch{field.focus();field.select();form.querySelector('.form-status').textContent='Select and copy the prepared message, then paste it into your email.';}
  });
- form.inert=false;
+ form.noValidate=true;form.inert=false;
 });
 
 // Property tools enhance ordinary image links; the page remains usable without JavaScript.

@@ -188,3 +188,26 @@
 .home-preparation-grid p{font-size:13px;line-height:1.9;color:#59646d;margin:0 0 1rem}
 @media(max-width:900px){.home-preparation-heading{align-items:flex-start;flex-direction:column;gap:.75rem}.home-preparation-grid{grid-template-columns:1fr}.home-preparation-grid>a{padding:1.25rem}.home-preparation-grid h3{font-size:20px}}
 @media(max-width:650px){.home-preparation{padding-inline:20px}.home-preparation-heading h2{font-size:25px}.home-preparation-grid>a{padding:1.15rem;gap:.75rem}}
+
+/* Clear details/review stages and field-specific inquiry feedback. */
+.inquiry-intro h2{font-size:clamp(24px,2.4vw,30px);line-height:1.45;color:#182b40}
+.inquiry-steps li{padding:.7rem .65rem;border-radius:5px;border:1px solid transparent}
+.inquiry-steps li[aria-current=step]{background:#fff;border-color:#d5c496;color:#182b40;font-weight:600}
+.inquiry-steps li[aria-current=step]:before{background:#936b1c;color:#fff;border-color:#936b1c}
+.inquiry-stage-label{font-size:10px!important;letter-spacing:1px;text-transform:uppercase;font-weight:600;color:#75551b;margin:0 0 .75rem!important}
+.inquiry-form.reviewing-draft>.inquiry-stage-label{display:none}
+.inquiry-errors{grid-column:1/-1;border:1px solid #ddb9b9;border-left:3px solid #8b2626;border-radius:5px;background:#fff7f6;padding:1rem 1.15rem;margin:0 0 1.5rem}
+.inquiry-errors h3{font-size:16px;line-height:1.5;color:#742121;margin:0 0 .4rem}
+.inquiry-errors p,.inquiry-errors li{font-size:12px;line-height:1.8}
+.inquiry-errors p{margin:0 0 .5rem}.inquiry-errors ul{padding-left:1.1rem;margin:0}
+.inquiry-errors a{color:#742121;text-underline-offset:3px}
+.inquiry-form input[aria-invalid=true],.inquiry-form select[aria-invalid=true],.inquiry-form textarea[aria-invalid=true]{border-color:#8b2626;background:#fffafa}
+.inquiry-form .inquiry-field-error{font-size:11px;line-height:1.8;color:#8b2626;margin:.45rem 0 0}
+.inquiry-errors[hidden],.inquiry-field-error[hidden]{display:none}
+.inquiry-form .email-backup h3{font-size:22px;line-height:1.5;color:#182b40;margin:0}
+.inquiry-form .email-backup>p{margin:0;font-size:13px}
+.inquiry-form .email-backup textarea{background:#f8f9fa;border-color:#bdc6ce;font-size:13px;line-height:1.85;min-height:230px}
+.inquiry-form .draft-actions{align-items:stretch;gap:.7rem}
+.inquiry-form .draft-actions a,.inquiry-form .draft-actions button{min-height:46px;border-radius:3px}
+.inquiry-form .form-status:empty{display:none}
+@media(max-width:600px){.inquiry-steps{grid-template-columns:1fr;gap:.5rem}.inquiry-steps li{grid-template-columns:27px 1fr;align-items:center;gap:.75rem;padding:.6rem .75rem}.inquiry-form .draft-actions{display:grid;grid-template-columns:1fr}.inquiry-form .draft-actions a,.inquiry-form .draft-actions button{width:100%;box-sizing:border-box;justify-content:center}.inquiry-errors{padding:.85rem 1rem}.inquiry-form .email-backup h3{font-size:20px}}

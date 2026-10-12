@@ -184,3 +184,7 @@ Missing static pages and unavailable property links now use branded recovery pag
 ## Preparation tools across visitor journeys - October 11, 2026
 
 The homepage now introduces the seller worksheet, buyer worksheet and photo preparation guide, with a direct path to the full resource hub. Buy and home assessment expose useful preparation links beside their primary inquiry action. Related resources now connect community guides, comparison, worksheets, photography and listing marketing in both directions. All links remain native and usable without JavaScript; the comparison section itself still requires JavaScript. No new registration, tracking or inventory was introduced.
+
+## Inquiry UI and validation - October 11, 2026
+
+Shared public inquiries now show a current details/review stage, field-specific validation messages and an error summary with links that focus the affected controls. Required whitespace-only values are rejected; native email validity is retained. ARIA invalid/described-by states connect each error while preserving existing hints. Topic changes update assessment-address requirements and remove irrelevant errors. Valid details still prepare only an email draft; edit retains values and returns to the details stage. Native validation is disabled only after the enhanced handler initializes. Mobile draft actions stack with full-width targets and the step list uses vertical rows. No data is submitted, stored or sent automatically.
