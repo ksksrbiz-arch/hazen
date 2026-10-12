@@ -41,8 +41,11 @@ try{
 
  await DB.prepare('UPDATE listings SET published_json=NULL WHERE id=?').bind(id).run();
  assert.equal((await mf.dispatchFetch(mediaURL)).status,404);assert.equal((await mf.dispatchFetch(mediaURL,{headers:{'If-None-Match':etag}})).status,404);
- assert.equal((await mf.dispatchFetch('https://qa.example/properties/isolated-runtime-qa/')).status,404);
+ const missing=await mf.dispatchFetch('https://qa.example/properties/isolated-runtime-qa/');assert.equal(missing.status,404);const missingHTML=await missing.text();assert.ok(missingHTML.includes('Property page unavailable'));assert.ok(missingHTML.includes('recovery-header'));assert.ok(missingHTML.includes('href="/properties/"'));assert.ok(!missingHTML.includes('INTERNAL_QA_NOTE'));assert.equal(missing.headers.get('cache-control'),'no-store');
  const emptyCollection=await (await mf.dispatchFetch('https://qa.example/properties/')).text();assert.ok(emptyCollection.includes('Your next property conversation starts here.'));assert.ok(emptyCollection.includes('No listings published yet'));
  const homepage=await (await mf.dispatchFetch('https://qa.example/')).text();assert.ok(!homepage.includes('QA house'));
+ await DB.prepare('DROP TABLE listings').run();
+ const resilientHome=await mf.dispatchFetch('https://qa.example/'),resilientHTML=await resilientHome.text();assert.equal(resilientHome.status,200);assert.ok(resilientHTML.includes('SELL YOUR HOME WITH BRAD HAZEN'));assert.ok(resilientHTML.includes('Listings could not load right now.'));assert.ok(!resilientHTML.includes('QA house'));assert.equal(resilientHome.headers.get('cache-control'),'no-store');
+ const unavailable=await mf.dispatchFetch('https://qa.example/properties/');assert.equal(unavailable.status,503);assert.ok((await unavailable.text()).includes('Listings temporarily unavailable'));assert.equal(unavailable.headers.get('cache-control'),'no-store');assert.equal(unavailable.headers.get('x-frame-options'),'DENY');
  console.log('Compiled runtime verified: featured cards, collection/detail pages, private notes, auth rejection, media, unpublication and authenticated saved-draft previews.');
 }finally{await mf.dispose();}

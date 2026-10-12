@@ -176,3 +176,7 @@ Added a branded `/agent-login/` entry with existing original PNW illustration, B
 ## Editor interruption recovery - October 11, 2026
 
 Added truthful session, conflict, server and connection errors, a 25-second request timeout with no automatic mutation retry, a separate-tab sign-in path and a read-only connection check that retains current editor fields/photos. Download Working Notes works for incomplete drafts and includes current text/authorization notes/photo descriptions, but excludes photo bytes and unrelated credentials/media paths. It is a private text recovery aid, not a complete backup or import format. Tests cover error distinctions, lost mutation replies, timeout and incomplete/zero-valued recovery notes. Full backups and a recovery drill remain pending.
+
+## Public recovery and homepage resilience - October 11, 2026
+
+Missing static pages and unavailable property links now use branded recovery pages with useful buying/selling/resources navigation and direct contact. Unknown property pages retain HTTP 404; failed property collection reads retain 503. No request path or private listing state is echoed. Recovery responses are non-cacheable, noindex and secured by middleware. When the listing database query fails, the homepage retains its marketing content and displays a truthful featured-listing fallback instead of returning a whole-page error. Isolated runtime checks simulate unpublication and a database outage; no live storage is modified.
