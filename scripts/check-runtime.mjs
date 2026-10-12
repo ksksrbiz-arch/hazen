@@ -1,6 +1,6 @@
 // Runs compiled Pages Functions against isolated local D1/R2 and static assets.
 import assert from 'node:assert/strict';
-import {readFileSync} from 'node:fs';
+import {readFileSync,readdirSync} from 'node:fs';
 import path from 'node:path';
 import {generateKeyPair,exportJWK,SignJWT} from 'jose';
 import {Miniflare,convertV4MiniflareOptions} from 'miniflare';
@@ -12,7 +12,7 @@ const token=await new SignJWT({email:'qa@example.com'}).setProtectedHeader({alg:
 const mf=new Miniflare(convertV4MiniflareOptions({rootPath:bundle,modules:true,scriptPath:path.join(bundle,'index.js'),compatibilityDate:'2026-10-10',bindings:auth,outboundService:async request=>new URL(request.url).origin===auth.ACCESS_TEAM_DOMAIN?Response.json({keys:[jwk]}):new Response('No external network in QA',{status:403}),d1Databases:['DB'],r2Buckets:['PHOTOS'],serviceBindings:{ASSETS:async request=>{const pathname=new URL(request.url).pathname;try{return new Response(readFileSync(path.join(root,'dist',pathname,pathname.endsWith('/')?'index.html':'')),{headers:{'Content-Type':'text/html'}});}catch{return new Response('Not found',{status:404});}}}}));
 try{
  const DB=await mf.getD1Database('DB');
- for(const sql of readFileSync(path.join(root,'database/cloudflare/001_listings.sql'),'utf8').split(';').filter(s=>s.trim()))await DB.prepare(sql).run();
+ for(const name of readdirSync(path.join(root,'database/cloudflare')).sort())for(const sql of readFileSync(path.join(root,'database/cloudflare',name),'utf8').split(';').filter(s=>s.replace(/^--.*$/gm,'').trim()))await DB.prepare(sql).run();
  const id='8caa1a53-05bd-4212-9c9c-a487cc334550',file='listing-8caa1a53-05bd-4212-9c9c-a487cc334551.webp';
  const draft={slug:'isolated-runtime-qa',title:'QA house <test>',address:'Test data only',price:100,beds:3,status:'Active',description:'Test description',attribution:'QA',permissionNote:'INTERNAL_QA_NOTE',updatedAt:'2026-10-10',images:[{file,alt:'Test photo'}],featured:true,published:false};
  await DB.prepare('INSERT INTO listings(id,draft_json,published_json,updated_at,updated_by) VALUES(?,?,?,?,?)').bind(id,JSON.stringify(draft),JSON.stringify(publicListing(draft)),'now','QA').run();

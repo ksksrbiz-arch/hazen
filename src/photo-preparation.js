@@ -1,4 +1,5 @@
-export const photoLimits={sourceBytes:25000000,batchBytes:100000000,pixels:50000000,edge:1600,outputBytes:400000};
+import {photoMaxBytes} from './listing-model.js';
+export const photoLimits={sourceBytes:25000000,batchBytes:100000000,pixels:50000000,edge:1600,outputBytes:photoMaxBytes};
 const types=new Set(['image/jpeg','image/png','image/webp']);
 export function sourcePhotoType(file){
  const inferred=/\.jpe?g$/i.test(file.name||'')?'image/jpeg':/\.png$/i.test(file.name||'')?'image/png':/\.webp$/i.test(file.name||'')?'image/webp':'';

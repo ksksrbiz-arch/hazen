@@ -1,20 +1,33 @@
-import {listingErrors} from '../src/listing-model.js';
+import {listingErrors,photoMaxBytes,photoHistoryLimit} from '../src/listing-model.js';
+export {photoMaxBytes,photoHistoryLimit};
+// Bad editor input (as opposed to infrastructure failures); reported to the editor as a 400.
+export class ListingInputError extends Error{}
+const numberFields=new Set(['price','beds','baths','squareFeet','lotAcres']);
 export const idPattern=/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 export const filePattern=/^listing-[0-9a-f-]{36}\.(jpg|png|webp)$/;
 const fields=['slug','title','address','mlsId','price','status','description','attribution','permissionNote','updatedAt','beds','baths','squareFeet','featured','videoUrl','propertyType','lotAcres','sourceUrl'];
 export function cleanDraft(input){
- if(!input||typeof input!=='object'||Array.isArray(input))throw Error('Invalid listing');
+ if(!input||typeof input!=='object'||Array.isArray(input))throw new ListingInputError('Invalid listing');
  const item={published:false};
- for(const name of fields){const value=input[name];if(value!==undefined){if(typeof value==='string'){if(value.length>(name==='description'?6000:500))throw Error('Listing text is too long');item[name]=value.trim();}else if(typeof value==='boolean'||value===null||typeof value==='number'&&Number.isFinite(value))item[name]=value;else throw Error('Invalid listing field');}}
- if(!Array.isArray(input.images)||input.images.length>20)throw Error('Maximum 20 photos');
- item.images=input.images.map(image=>{if(!filePattern.test(image.file)||typeof image.alt!=='string'||image.alt.length>200)throw Error('Invalid photo');return {file:image.file,alt:image.alt.trim()};});
+ for(const name of fields){const value=input[name];if(value!==undefined){if(numberFields.has(name)){if(value!==null&&!(typeof value==='number'&&Number.isFinite(value)))throw new ListingInputError('Invalid listing field');item[name]=value;}
+ else if(name==='featured'){if(typeof value!=='boolean')throw new ListingInputError('Invalid listing field');item[name]=value;}
+ else if(typeof value==='string'){if(value.length>(name==='description'?6000:500))throw new ListingInputError('Listing text is too long');item[name]=value.trim();}else throw new ListingInputError('Invalid listing field');}}
+ if(!Array.isArray(input.images)||input.images.length>20)throw new ListingInputError('Maximum 20 photos');
+ item.images=input.images.map(image=>{if(!image||typeof image!=='object'||!filePattern.test(image.file)||typeof image.alt!=='string'||image.alt.length>200)throw new ListingInputError('Invalid photo');return {file:image.file,alt:image.alt.trim()};});
  return item;
 }
 export function publicListing(item){const {permissionNote,...publicItem}=item;return {...publicItem,published:true};}
 export function rowRecord(row){return {id:row.id,revision:row.revision,listing:JSON.parse(row.draft_json),published:row.published_json!==null,publicSlug:row.published_json?JSON.parse(row.published_json).slug:null,savedAt:row.updated_at,archived:Boolean(row.archived),hasUnpublishedChanges:row.published_json!==null&&JSON.stringify(publicListing(JSON.parse(row.draft_json)))!==row.published_json};}
 export async function publishErrors(item,id,env){
- const errors=listingErrors(item);
- for(const image of item.images){const key=id+'/'+image.file;const row=await env.DB.prepare('SELECT key FROM photos WHERE key = ? AND listing_id = ?').bind(key,id).first();if(!row||!await env.PHOTOS.head(key))errors.push('Save all listing photos before publishing');}
+ const errors=listingErrors(item),images=Array.isArray(item.images)?item.images:[];
+ if(images.length){
+  // One registration query for all photos, then parallel storage checks.
+  const keys=images.map(image=>id+'/'+image.file);
+  const registered=await env.DB.prepare('SELECT key FROM photos WHERE listing_id = ? AND key IN ('+keys.map(()=>'?').join(',')+')').bind(id,...keys).all();
+  const known=new Set(registered.results.map(row=>row.key));
+  const stored=await Promise.all(keys.map(async key=>known.has(key)&&Boolean(await env.PHOTOS.head(key))));
+  if(stored.some(ok=>!ok))errors.push('Save all listing photos before publishing');
+ }
  return [...new Set(errors)];
 }
 export async function change(env,id,revision,actor,action,listing){

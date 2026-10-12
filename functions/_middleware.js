@@ -1,5 +1,5 @@
 import {publicRecoveryResponse,homepageListingFallback} from '../server/public-recovery.js';
-import {editor} from '../server/auth.js';
+import {editor,ConfigError} from '../server/auth.js';
 import {cards,detail,published,collection} from '../server/public.js';
 import {idPattern} from '../server/listings.js';
 import {secureResponse} from '../server/response-security.js';
@@ -7,16 +7,16 @@ export async function onRequest(context){return secureResponse(await handleReque
 async function handleRequest(context){
  const {request,env}=context,url=new URL(request.url),path=url.pathname;
  if(path==='/studio'||path.startsWith('/studio/')){
-  try{await editor(request,env);}catch{return new Response('Sign in to the private listing studio.',{status:401,headers:{'Cache-Control':'no-store','X-Robots-Tag':'noindex'}});}
+  try{await editor(request,env);}catch(error){if(error instanceof ConfigError){console.error('Editor authentication is not configured');return new Response('The listing studio is not configured. Contact the developer.',{status:503,headers:{'Cache-Control':'no-store','X-Robots-Tag':'noindex'}});}return new Response('Sign in to the private listing studio.',{status:401,headers:{'Cache-Control':'no-store','X-Robots-Tag':'noindex'}});}
   if(path.startsWith('/studio/preview/')){
    const id=path.slice('/studio/preview/'.length).replace(/\/$/,'');
    const headers={'Cache-Control':'private, no-store','X-Robots-Tag':'noindex, nofollow','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'};
    if(!['GET','HEAD'].includes(request.method))return new Response('Method not allowed',{status:405,headers});
    if(!idPattern.test(id))return new Response('Draft not found.',{status:404,headers});
    if(!env.DB)return new Response('Draft preview is temporarily unavailable.',{status:503,headers});
-   let row;try{row=await env.DB.prepare('SELECT draft_json FROM listings WHERE id=?').bind(id).first();}catch{return new Response('Draft preview is temporarily unavailable.',{status:503,headers});}
+   let row,item;try{row=await env.DB.prepare('SELECT draft_json FROM listings WHERE id=?').bind(id).first();if(row)item=JSON.parse(row.draft_json);}catch(error){console.error('Draft preview failed',error?.name);return new Response('Draft preview is temporarily unavailable.',{status:503,headers});}
    if(!row)return new Response('Draft not found.',{status:404,headers});
-   const item=JSON.parse(row.draft_json),shell=await env.ASSETS.fetch(new Request(url.origin+'/properties/'));
+   const shell=await env.ASSETS.fetch(new Request(url.origin+'/properties/'));
    const response=new Response(shell.body,{status:shell.status,headers:{...Object.fromEntries(shell.headers),...headers}});
    return new HTMLRewriter().on('main',{element(el){el.setInnerContent(detail(id,item,{preview:true}),{html:true});}}).on('title',{element(el){el.setInnerContent('Private preview: '+(item.title||'Untitled listing')+' | Brad Hazen');}}).on('meta[property^="og:"]',{element(el){el.remove();}}).on('meta[name="description"]',{element(el){el.remove();}}).on('link[rel="canonical"]',{element(el){el.remove();}}).on('.mobile-contact',{element(el){el.remove();}}).transform(response);
   }
