@@ -91,3 +91,45 @@
 .studio-guide-link{border-top:1px solid #dce1e5;padding-top:1rem;margin-top:1rem}
 .studio-guide-link p{margin-top:.4rem}
 @media print{body.studio-guide-page{background:#fff}body.studio-guide-page .studio-header,body.studio-guide-page .skip,body.studio-guide-page .guide-actions,body.studio-guide-page .page-sections,body.studio-guide-page .studio-guide-support>a{display:none!important}.studio-guide-main{max-width:none;padding:0}.studio-guide-question>p{display:block!important}.studio-guide-question{break-inside:avoid}.studio-guide-steps li{break-inside:avoid}.studio-guide-section h2{break-after:avoid}}
+
+/* Agent sign-in entry and workspace identity. */
+.agent-login-page{background:#f3f5f6;color:#182b40;padding-bottom:0}
+.agent-login-header{position:static;display:flex;justify-content:space-between;gap:1rem;padding:1.25rem max(4%,24px);background:#182b40;min-height:80px;box-sizing:border-box}
+.agent-login-header>a{color:#fff;text-decoration:none;font-size:12px}
+.login-wordmark{display:flex;align-items:center;gap:.8rem}
+.login-wordmark>span{font-size:20px;font-weight:600;letter-spacing:1px;line-height:1.4}
+.login-wordmark small{display:block;font-size:9px;font-weight:400;letter-spacing:1px;color:#e5e9ec}
+.agent-login-main{display:grid;grid-template-columns:1.15fr 1fr;max-width:1200px;margin:3rem auto;padding:0 1.5rem;gap:0}
+.agent-login-scene{min-width:0;position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:3rem 2.5rem;background:linear-gradient(135deg,rgba(12,29,44,.93),rgba(12,29,44,.6)),url('/assets/river-hero.webp') center/cover;color:#fff}
+.agent-login-scene .eyebrow{color:#e3c37d;font-size:11px;letter-spacing:1.5px}
+.agent-login-scene h1{font-size:clamp(29px,3.4vw,43px);line-height:1.4;margin:1rem 0;color:#fff}
+.agent-login-scene p{font-size:14px;line-height:1.9}
+.agent-login-scene ul{padding-left:1.2rem;margin:1.5rem 0;font-size:13px;line-height:2.2}
+.agent-login-scene .login-image-note{font-size:10px;line-height:1.8;margin:2rem 0 0;color:#d5dce3}
+.agent-login-card{background:#fff;border:1px solid #dce1e5;padding:3rem 2.5rem;min-width:0}
+.agent-login-card>.eyebrow{font-size:10px;color:#75551b;letter-spacing:1.4px}
+.agent-login-card h2{font-size:28px;line-height:1.4;margin:.75rem 0;color:#182b40}
+.agent-login-card>p,.login-help p{font-size:13px;line-height:1.9}
+.agent-signin-button{display:flex;width:100%;justify-content:space-between;align-items:center;gap:1rem;text-align:left;box-sizing:border-box;min-height:50px;margin:1.5rem 0;white-space:normal}
+.login-steps{font-size:12px;line-height:2.2;padding-left:1.25rem;color:#59646d}
+.agent-login-card .login-security-note{font-size:11px;color:#59646d;line-height:1.8}
+.login-help{padding:1rem 0;border-block:1px solid #dce1e5;margin:1.25rem 0}
+.login-help summary{font-size:12px;font-weight:600;cursor:pointer;min-height:24px}
+.login-visitor p{font-size:12px;line-height:1.9;margin:.75rem 0}
+.login-visitor a{font-size:13px;font-weight:600;color:#182b40}
+.login-visitor p:last-child{font-size:11px;color:#59646d}
+.agent-login-footer{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:none;color:#59646d;max-width:1200px;margin:0 auto;padding:0 1.5rem 2rem;font-size:11px}
+.agent-login-footer a{color:#182b40}
+.footer-account-links{display:flex;gap:1rem;flex-wrap:wrap}
+.studio-header .studio-brand-mark{display:flex;flex-direction:row;align-items:center;gap:.7rem}
+.studio-header .studio-brand-mark>span{font-size:20px;line-height:1.4;color:#f0cf86}
+.studio-brand-mark small{display:block}
+.studio-start{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin:1.5rem 0}
+.studio-start a{display:flex;flex-direction:column;gap:.5rem;background:#fff;border:1px solid #dce1e5;border-top:3px solid #ba9b54;padding:1.25rem;text-decoration:none;color:#182b40;min-width:0}
+.studio-start a:hover{background:#fbf7ee;border-color:#ba9b54}
+.studio-start span{font-size:10px;color:#75551b;letter-spacing:.5px}
+.studio-start strong{font-size:16px;line-height:1.5}
+.studio-start small{font-size:11px;line-height:1.8;color:#59646d}
+@media(max-width:850px){.agent-login-main{grid-template-columns:1fr;max-width:650px;margin:1.5rem auto}.agent-login-scene,.agent-login-card{padding:2rem}.agent-login-scene h1{font-size:32px}.studio-start{grid-template-columns:1fr}.studio-start a{padding:1rem}}
+@media(max-width:520px){.agent-login-header{align-items:flex-start;flex-direction:column;padding:1rem;gap:.75rem}.login-wordmark>span{font-size:18px}.login-wordmark small{font-size:8px}.agent-login-main{padding:0 1rem}.agent-login-scene,.agent-login-card{padding:1.5rem}.agent-login-scene h1{font-size:28px}.agent-login-card h2{font-size:25px}.agent-login-footer{padding:0 1rem 1.5rem}}
+@media print{.studio-start{display:none!important}}

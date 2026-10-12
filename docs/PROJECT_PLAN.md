@@ -168,3 +168,7 @@ Added a temporary, three-community shortlist to Communities. Selected cards reus
 ## Client handoff preparation - October 11, 2026
 
 Added a private Listing Studio Guide with the six-step save/review/publish workflow, common tasks, troubleshooting, promotion limits and Brad's post-handoff responsibilities. The editor opens it separately to preserve unsaved work; a text copy is downloadable. Studio authorization and private/no-store responses cover both routes. Anonymous access is included in runtime checks. A launch checklist records remaining content, provider and acceptance requirements. The $1,500 build price is agreed; $225 monthly technical maintenance is proposed. Listing entry and ongoing marketing operations belong to Brad, not maintenance.
+
+## Agent sign-in and workspace branding - October 11, 2026
+
+Added a branded `/agent-login/` entry with existing original PNW illustration, BH mark, secure sign-in button, email-code instructions and visitor contact alternative. It collects no credentials and links to the existing protected studio. The public footer links to Agent Sign In. Studio now has the same mark, favicon and shortcuts for property entry, promotion preparation and the private guide. Full Cloudflare Access login colors/logo are organization-wide and would affect ClearView; keep those shared settings unchanged. Hazen-specific app name/logo can be set independently without changing policies. Backup/recovery, first approved listing validation and IDX onboarding remain launch work; branding does not imply those are complete.

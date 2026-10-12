@@ -140,3 +140,6 @@ document.querySelector('#prepare-marketing-sheet').addEventListener('click',()=>
 document.querySelector('#close-marketing-sheet').addEventListener('click',()=>{document.querySelector('#marketing-sheet-review').hidden=true;document.querySelector('#prepare-marketing-sheet').focus();});
 document.querySelector('#print-marketing-sheet').addEventListener('click',()=>{if(!promotionKit||busy||document.querySelector('#marketing-sheet-review').hidden)return;document.body.classList.add('printing-marketing-sheet');try{window.print();}catch{document.body.classList.remove('printing-marketing-sheet');document.querySelector('#promotion-feedback').textContent='Printing is unavailable here. Use your browser’s Print command from the sheet preview.';}});
 window.addEventListener('afterprint',()=>document.body.classList.remove('printing-marketing-sheet'));
+
+const promotionShortcut=document.querySelector('[data-promotion-shortcut]');
+if(promotionShortcut)promotionShortcut.addEventListener('click',event=>{event.preventDefault();document.querySelector('#prepare-promotion').click();});

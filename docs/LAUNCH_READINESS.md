@@ -51,3 +51,7 @@ Open the private guide. Have Brad create and manage an approved listing himself 
 ## Developer maintenance boundary
 
 Technical maintenance covers updates, functionality checks, hosting oversight, security fixes and troubleshooting of the agreed platform. It does not include routine listing entry, copywriting, pricing decisions, client replies, advertising or new features. Provider outages and subscriptions remain subject to the provider's service and terms.
+
+## Login presentation
+
+`/agent-login/` is the branded public entry point; Continue opens `/studio/` through Cloudflare Access. It has no credential fields and does not grant access. The full Cloudflare login theme is shared with other applications and must not be changed for Brad alone. Keep the existing editor allowlist, application audience, destinations and identity provider intact.
