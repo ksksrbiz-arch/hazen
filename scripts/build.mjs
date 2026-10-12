@@ -80,10 +80,13 @@ const photoPreparation=await readFile(path.join(root,'src/photo-preparation.js')
 const photoPreparationName='photo-preparation.'+createHash('sha256').update(photoPreparation).digest('hex').slice(0,12)+'.js';
 const promotion=await readFile(path.join(root,'src/listing-promotion.js'),'utf8');
 const promotionName='listing-promotion.'+createHash('sha256').update(promotion).digest('hex').slice(0,12)+'.js';
-const studio=(await readFile(path.join(root,'src/studio.js'),'utf8')).replace('./listing-model.js','./'+modelName).replace('./photo-preparation.js','./'+photoPreparationName).replace('./listing-promotion.js','./'+promotionName);
+const recovery=await readFile(path.join(root,'src/studio-recovery.js'),'utf8');
+const recoveryName='studio-recovery.'+createHash('sha256').update(recovery).digest('hex').slice(0,12)+'.js';
+const studio=(await readFile(path.join(root,'src/studio.js'),'utf8')).replace('./listing-model.js','./'+modelName).replace('./photo-preparation.js','./'+photoPreparationName).replace('./listing-promotion.js','./'+promotionName).replace('./studio-recovery.js','./'+recoveryName);
 const studioName='studio.'+createHash('sha256').update(studio).digest('hex').slice(0,12)+'.js';
 await mkdir(path.join(root,'dist/studio'),{recursive:true});
 await writeFile(path.join(root,'dist/studio',modelName),model);
+await writeFile(path.join(root,'dist/studio',recoveryName),recovery);
 await writeFile(path.join(root,'dist/studio',photoPreparationName),photoPreparation);
 await writeFile(path.join(root,'dist/studio',promotionName),promotion);
 await writeFile(path.join(root,'dist/studio',studioName),studio);
