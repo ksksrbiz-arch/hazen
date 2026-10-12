@@ -1,7 +1,7 @@
 import {listingErrors} from '../src/listing-model.js';
 export const idPattern=/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 export const filePattern=/^listing-[0-9a-f-]{36}\.(jpg|png|webp)$/;
-const fields=['slug','title','address','mlsId','price','status','description','attribution','permissionNote','updatedAt','beds','baths','squareFeet','featured','videoUrl'];
+const fields=['slug','title','address','mlsId','price','status','description','attribution','permissionNote','updatedAt','beds','baths','squareFeet','featured','videoUrl','propertyType','lotAcres','sourceUrl'];
 export function cleanDraft(input){
  if(!input||typeof input!=='object'||Array.isArray(input))throw Error('Invalid listing');
  const item={published:false};

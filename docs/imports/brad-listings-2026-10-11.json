@@ -1,0 +1,134 @@
+[
+  {
+    "id": "a61d8074-cec3-4725-8d5c-55165e0138e8",
+    "listing": {
+      "published": false,
+      "featured": true,
+      "slug": "e-yacolt-road",
+      "title": "E Yacolt Road — 1.5 Acres",
+      "address": "0 E Yacolt Rd, Yacolt, WA 98675",
+      "price": 2000000,
+      "status": "Active",
+      "propertyType": "Land",
+      "lotAcres": 1.5,
+      "mlsId": "24202394",
+      "updatedAt": "2026-10-11",
+      "sourceUrl": "https://www.realtor.com/realestateandhomes-detail/305-E-Yacolt-Rd_Yacolt_WA_98675_M98028-46433",
+      "description": "Explore a 1.5-acre, level parcel in Yacolt. The listing identifies C-1 zoning and commercial, multifamily and office uses. Parcel number: 067100000.\n\nDisclosure: Brad Hazen, the listing agent, is the owner of this parcel. Discuss permitted uses, utilities and the source’s land-lease information with Brad before making plans.\n\nListing images may include map and street-view graphics. Boundary outlines are approximate and do not replace a survey.",
+      "attribution": "Listed by Brad Hazen · Realty Pro, Inc. Source: RMLS via the supplied public listing. © 2026 Regional Multiple Listing Service, Inc. (RMLS™), Portland, Oregon.",
+      "permissionNote": "User requested publication of Brad’s two current listings and supplied source URLs on 2026-10-11. Sourced listing imagery retained without edits or watermark removal; details cross-checked. Brad to maintain current status and original photo records.",
+      "images": [
+        {
+          "file": "listing-76e9c253-4e36-41fb-b47d-09ed9932aa66.webp",
+          "alt": "Listing aerial map of the Yacolt parcel with an approximate boundary outline."
+        },
+        {
+          "file": "listing-fd919f49-2eca-4297-a879-5581aaf20baf.webp",
+          "alt": "Street-view image supplied with the listing, looking along E Yacolt Road."
+        }
+      ]
+    },
+    "photos": [
+      {
+        "name": "yacolt-1",
+        "bytes": 119878,
+        "source": "https://ap.rdcpix.com/af11cd07720bac9b0a74acfa05f428dbl-m3910414867rd-w960_h720.webp",
+        "assetFile": "listing-76e9c253-4e36-41fb-b47d-09ed9932aa66.webp",
+        "alt": "Listing aerial map of the Yacolt parcel with an approximate boundary outline.",
+        "sha256": "6342c148d6a96ae5b362cdd491946ea62820ef312939d0176836ed0f68ff3ae2"
+      },
+      {
+        "name": "yacolt-2",
+        "bytes": 95032,
+        "source": "https://ap.rdcpix.com/af11cd07720bac9b0a74acfa05f428dbl-m2015130328rd-w960_h720.webp",
+        "assetFile": "listing-fd919f49-2eca-4297-a879-5581aaf20baf.webp",
+        "alt": "Street-view image supplied with the listing, looking along E Yacolt Road.",
+        "sha256": "ff37c6e0c5833be16e47f58f6b0f3f5e92a7e2828154f10237273aed1b7df9af"
+      }
+    ]
+  },
+  {
+    "id": "f9b6cf88-b9e4-463d-845f-ee2ea57cb429",
+    "listing": {
+      "published": false,
+      "featured": true,
+      "slug": "ne-hazen-avenue",
+      "title": "NE Hazen Avenue — 11.35 Acres",
+      "address": "0 NE Hazen Ave, La Center, WA 98629",
+      "price": 12000000,
+      "status": "Active",
+      "propertyType": "Land",
+      "lotAcres": 11.35,
+      "mlsId": "24434415",
+      "updatedAt": "2026-10-11",
+      "sourceUrl": "https://www.realtor.com/realestateandhomes-detail/NE-Hazen-Ave_Lacenter_WA_98629_M97701-13186",
+      "description": "An 11.35-acre parcel near NE Hazen Avenue and NE 359th Street, with pasture, fir trees and valley views. The listing identifies R-5 zoning, gently sloping and rolling terrain, and parcel number 266970000.\n\nThe source description discusses potential division into two five-acre lots. Confirm current division eligibility, approvals, access and utilities with Brad and the appropriate authorities before relying on that possibility.\n\nListing images include approximate boundary outlines and map or street-view graphics; they do not replace a survey.",
+      "attribution": "Listed by Brad Hazen · Realty Pro, Inc. Source: RMLS via the supplied public listing. © 2026 Regional Multiple Listing Service, Inc. (RMLS™), Portland, Oregon.",
+      "permissionNote": "User requested publication of Brad’s two current listings and supplied source URLs on 2026-10-11. Sourced listing imagery retained without edits or watermark removal; details cross-checked. Brad to maintain current status and original photo records.",
+      "images": [
+        {
+          "file": "listing-3424b8e9-65af-49cf-bcd5-fb553367fac0.webp",
+          "alt": "Listing aerial of pasture and fir trees with an approximate property outline."
+        },
+        {
+          "file": "listing-6e8b2b80-0169-4949-9530-4f4e4d891fdc.webp",
+          "alt": "Second listing aerial of the acreage and surrounding valley."
+        },
+        {
+          "file": "listing-258c4c98-edc0-41ea-9496-8d02c00421e2.webp",
+          "alt": "Listing parcel map marked 11.35 acres; boundaries are approximate."
+        },
+        {
+          "file": "listing-6c3526af-84da-44e8-bee9-11865b5f530c.webp",
+          "alt": "Street-view image supplied with the listing showing pasture beside Hazen Avenue."
+        },
+        {
+          "file": "listing-b56ca875-36b3-4bf3-a806-d4e5efcea49b.webp",
+          "alt": "Street-view image supplied with the listing looking along Hazen Avenue."
+        }
+      ]
+    },
+    "photos": [
+      {
+        "name": "hazen-1",
+        "bytes": 177336,
+        "source": "https://ap.rdcpix.com/f4c0678b57e49a979a8c9638ca88d2f1l-m2800996746rd-w960_h720.webp",
+        "assetFile": "listing-3424b8e9-65af-49cf-bcd5-fb553367fac0.webp",
+        "alt": "Listing aerial of pasture and fir trees with an approximate property outline.",
+        "sha256": "0777207145c3f044ed07889ca45d97164153be4c566b6bb2cd789952f6fd2af5"
+      },
+      {
+        "name": "hazen-2",
+        "bytes": 209486,
+        "source": "https://ap.rdcpix.com/f4c0678b57e49a979a8c9638ca88d2f1l-m1604132177rd-w960_h720.webp",
+        "assetFile": "listing-6e8b2b80-0169-4949-9530-4f4e4d891fdc.webp",
+        "alt": "Second listing aerial of the acreage and surrounding valley.",
+        "sha256": "7ee2d36c003688c6ede46387d26f2842c40b0718e76fd6e9a49022c78c12bdd7"
+      },
+      {
+        "name": "hazen-3",
+        "bytes": 24356,
+        "source": "https://ap.rdcpix.com/f4c0678b57e49a979a8c9638ca88d2f1l-m2527845913rd-w480_h360.webp",
+        "assetFile": "listing-258c4c98-edc0-41ea-9496-8d02c00421e2.webp",
+        "alt": "Listing parcel map marked 11.35 acres; boundaries are approximate.",
+        "sha256": "7310fac6bc64ef6cea2f87e36c2ad5f51eb11c1195351d64b349ea036709adcf"
+      },
+      {
+        "name": "hazen-4",
+        "bytes": 26212,
+        "source": "https://ap.rdcpix.com/f4c0678b57e49a979a8c9638ca88d2f1l-m2656735087rd-w480_h360.webp",
+        "assetFile": "listing-6c3526af-84da-44e8-bee9-11865b5f530c.webp",
+        "alt": "Street-view image supplied with the listing showing pasture beside Hazen Avenue.",
+        "sha256": "4ad02df5de6a09f063accf4aebde1c85f69d75f9c9d6a907994c6b02a8dfbbcf"
+      },
+      {
+        "name": "hazen-5",
+        "bytes": 18668,
+        "source": "https://ap.rdcpix.com/f4c0678b57e49a979a8c9638ca88d2f1l-m2209417837rd-w480_h360.webp",
+        "assetFile": "listing-b56ca875-36b3-4bf3-a806-d4e5efcea49b.webp",
+        "alt": "Street-view image supplied with the listing looking along Hazen Avenue.",
+        "sha256": "054fd93da41dc9444f1abc690e3a9001230df248441764089d52bcf09df3d569"
+      }
+    ]
+  }
+]

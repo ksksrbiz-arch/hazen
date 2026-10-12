@@ -7,8 +7,8 @@ const contact='Brad Hazen · Realty Pro, Inc.\n(360) 921-9484 · b.hazen@hotmail
 // Templates use entered public facts only. Never serialize the listing object.
 export function listingPromotion(item,{origin='',published=false,dirty=true,hasUnpublishedChanges=true,publicSlug=''}={}){
  const title=oneLine(item.title)||'Property details',address=oneLine(item.address),status=['Active','Pending','Sold'].includes(item.status)?item.status:'Status not provided';
- const price=money(item.price),facts=[];
- for(const [key,label] of [['beds','bedrooms'],['baths','bathrooms'],['squareFeet','sq ft']]){const value=number(item[key]);if(value!=null)facts.push(value+' '+label);}
+ const price=money(item.price),facts=[];if(oneLine(item.propertyType))facts.push(oneLine(item.propertyType));
+ for(const [key,label] of [['beds','bedrooms'],['baths','bathrooms'],['squareFeet','sq ft'],['lotAcres','acres']]){const value=number(item[key]);if(value!=null)facts.push(value+' '+label);}
  let publicUrl='',tourUrl='';
  try{const base=new URL(origin);if(published&&!dirty&&!hasUnpublishedChanges&&publicSlug===item.slug&&/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(publicSlug)&&base.protocol==='https:'&&!base.username&&!base.password){publicUrl=base.origin+'/properties/'+publicSlug+'/';}}catch{}
  try{const url=new URL(item.videoUrl);if(url.protocol==='https:'&&!url.username&&!url.password)tourUrl=url.href;}catch{}
