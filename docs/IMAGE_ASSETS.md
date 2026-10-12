@@ -56,3 +56,7 @@ Use case: photorealistic-natural. Asset: wide 16:9 illustrative Pacific Northwes
 ## User-supplied Brad Hazen headshot — October 11, 2026
 
 Source: hf_20261012_030147_4f524d66-aef3-4b04-994c-2da25a463fe1(1).png, supplied by the user for Brad’s website. The original 2048px square image is unchanged. The website ships 400px (22,340 bytes) and 800px (70,388 bytes) WebP copies, preserving the full framing without retouching. Both homepage and Meet Brad use the same responsive image markup with a descriptive alternative text and explicit dimensions. This asset is distinct from the generated scenic illustrations above.
+
+## Heading font
+
+`src/assets/montserrat-latin.woff2` (12 KB) is a Latin subset of Montserrat Medium (SIL Open Font License 1.1; the license text is kept in the font's name table). The 243 KB original is kept at `docs/source-assets/Montserrat-Medium.ttf` and is not shipped. The subset covers Basic Latin, Latin-1, common typographic punctuation (– — ‘ ’ “ ” • …) and the arrows ← → ↗ the site uses; any other character in a heading falls back to the system font. To regenerate after adding characters, subset the original with fontTools (`pyftsubset` or `fontTools.subset`) keeping the `kern`, `liga`, `locl`, `mark`, `mkmk`, `ccmp` and `calt` features, output flavor `woff2`, and keep the name table IDs 0-6, 13 and 14.
