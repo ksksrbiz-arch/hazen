@@ -3,7 +3,7 @@
 ## Outcome and boundaries
 Create a single-agent marketing website that converts buyer/seller interest into conversations. Reference: https://www.realtypronw.net/. Recreate the reference layout closely, personalized for Brad. The revised preview uses sourced reference imagery; confirm asset permissions and replace where required before final launch. Use Brad-specific copy, never other agents’ testimonials or MLS inventory. No MLS feed, public accounts, saved searches, instant valuation, or custom CRM in Phase 1. Optional external brokerage search link requires Brad's approved URL.
 
-Working commercial estimate: $3,500 build, subject to final scope. Target 8–12 core pages plus six templated community guides; explicitly confirm the final page count in the proposal. Two design revision rounds. Client supplies draft text and licensed assets. Extensive copywriting, photography, subscriptions, ongoing SEO and maintenance are separate. CMS and real inquiry delivery are planned deliverables, not implemented features of this scaffold.
+Working commercial estimate (superseded: the agreed fixed build price is $1,500 — see LAUNCH_READINESS.md): $3,500 build, subject to final scope. Target 8–12 core pages plus six templated community guides; explicitly confirm the final page count in the proposal. Two design revision rounds. Client supplies draft text and licensed assets. Extensive copywriting, photography, subscriptions, ongoing SEO and maintenance are separate. CMS and real inquiry delivery are planned deliverables, not implemented features of this scaffold.
 
 ## Sitemap and conversion paths
 Home → Buy / Sell → Contact; Sell → Home assessment → personal follow-up. Communities → local guide → Contact. Featured properties → property details → showing inquiry.
@@ -147,7 +147,7 @@ Expanded the promotion kit with a campaign launch brief, status-aware agent outr
 
 ## Itemized billing draft — October 11, 2026 (UTC)
 
-Started an editable scope ledger covering 24 completed deliverable bundles through the marketing-sheet release. Iterative revisions are grouped by deliverable, not charged as separate tasks or guessed hours. Fees are unassigned and the build subtotal remains blank until every bundle is priced. The earlier $3,500 working estimate remains provisional. Pending MLS/Ylopo, visitor accounts/alerts, direct inquiry delivery, approved assets and final launch work are excluded. Campaign planning and follow-up are a subsequent addition to the promotion-tools bundle.
+Started an editable scope ledger covering 24 completed deliverable bundles through the marketing-sheet release. Iterative revisions are grouped by deliverable, not charged as separate tasks or guessed hours. Fees are unassigned and the build subtotal remains blank until every bundle is priced. The earlier $3,500 working estimate was superseded by the agreed $1,500 fixed build price. Pending MLS/Ylopo, visitor accounts/alerts, direct inquiry delivery, approved assets and final launch work are excluded. Campaign planning and follow-up are a subsequent addition to the promotion-tools bundle.
 
 ## Public resource discovery and community handoff — October 10, 2026 (Pacific)
 
@@ -207,7 +207,7 @@ Corrected the static Montserrat Medium face declaration from an inaccurate 400�
 
 User requested publication of E Yacolt Road (RMLS 24202394, $2,000,000, 1.5 acres) and NE Hazen Avenue (RMLS 24434415, $12,000,000, 11.35 acres), supplying Homes.com and Realtor.com property URLs. Core facts and Active status were cross-checked with the supplied Realtor.com pages. Yacolt uses the source’s displayed 0/E Yacolt address, not the 305 number in the legacy URL, and retains the agent-owner disclosure. Land-lease wording and parcel division claims are presented as questions to verify, not guaranteed terms or approvals.
 
-Both records use the normal D1 draft/published snapshot and private R2 photo model, so Brad can edit, republish, unpublish and archive through Studio. Seven source image copies are preserved without retouching or watermark removal, below the existing 400 KB photo budget. Sources, record IDs, image URLs and SHA-256 hashes are recorded in `imports/brad-listings-2026-10-11.json`. Map and boundary captions identify approximate outlines. Existing archived QA is untouched. Public status remains manually maintained; no MLS syncing is implied.
+Both records use the normal D1 draft/published snapshot and private R2 photo model, so Brad can edit, republish, unpublish and archive through Studio. Seven source image copies are preserved without retouching or watermark removal, below the existing 400 KB photo budget. Sources, record IDs, image URLs and SHA-256 hashes are recorded in `docs/docs/imports/brad-listings-2026-10-11.json`. Map and boundary captions identify approximate outlines. Existing archived QA is untouched. Public status remains manually maintained; no MLS syncing is implied.
 
 Added optional property type, lot acres and HTTPS source URL through draft normalization, validation, Studio fields, public cards/details, promotion copy and recovery notes. Missing home counts remain absent for land. Tests cover survival through save/render/export and rejection of negative acreage or unsafe source URLs. Publication and live gallery verification complete this increment; broader launch acceptance remains pending.
 

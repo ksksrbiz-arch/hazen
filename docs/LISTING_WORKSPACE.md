@@ -37,7 +37,7 @@ The first authenticated live session was verified with `skdev@1commercesolutions
 
 Automated showing/contact delivery is not connected: visitors use their own email application or call Brad. Add a verified sender/provider, approved recipient, bot protection, server validation and a truthful delivery result separately. MLS import and visitor accounts/alerts remain the separately planned IDX phase; an MLS login alone is not website API authorization.
 
-The earlier Supabase migration in `database/migrations/001_listing_workspace.sql` is an unused alternative design. It has not been applied and is superseded by this Cloudflare implementation.
+An earlier, never-applied Supabase design (`database/migrations/001_listing_workspace.sql`) was removed on October 12, 2026 because this Cloudflare implementation superseded it; it remains in git history. `database/cloudflare/` is the only schema directory.
 
 ## Listing management improvements
 

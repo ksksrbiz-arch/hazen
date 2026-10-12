@@ -1,3 +1,4 @@
+import {contact} from '../src/contact.js';
 import {conversationWorksheet} from './conversation-worksheet.mjs';
 export const buyerGroups=[
  ['Your next move','Clarify what you want to change and where you have flexibility.',[
@@ -14,5 +15,5 @@ export const buyerGroups=[
   'Choose a few priorities to discuss first.','Bring property addresses or public listing links of interest.','Ask how the next steps and updates will be handled.']]
 ];
 export const buyerWorksheetPage={slug:'buyer-checklist',title:'Your home-buying conversation checklist',intro:'Organize the priorities and questions for your next home purchase. Work through the prompts, keep your notes, and bring them to Brad.',sections:[]};
-export const buyerChecklistText='BRAD HAZEN — BUYER CONVERSATION CHECKLIST\n\n'+buyerGroups.map(([title,detail,prompts],i)=>`${i+1}. ${title}\n${detail}\n${prompts.map(prompt=>'[ ] '+prompt).join('\n')}\nNotes: ______________________________`).join('\n\n')+'\n\nKeep financial documents and sensitive personal information separate from website inquiries.\n\nBrad Hazen · Realty Pro, Inc.\n(360) 921-9484 · b.hazen@hotmail.com\n';
+export const buyerChecklistText='BRAD HAZEN — BUYER CONVERSATION CHECKLIST\n\n'+buyerGroups.map(([title,detail,prompts],i)=>`${i+1}. ${title}\n${detail}\n${prompts.map(prompt=>'[ ] '+prompt).join('\n')}\nNotes: ______________________________`).join('\n\n')+'\n\nKeep financial documents and sensitive personal information separate from website inquiries.\n\nBrad Hazen · Realty Pro, Inc.\n'+contact.phone+' · '+contact.email+'\n';
 export function buyerWorksheet(){return conversationWorksheet({label:'Buyer conversation worksheet',groups:buyerGroups,download:'/resources/buyer-conversation-checklist.txt',notesLabel:'Priorities and questions to bring to Brad (optional)',notesPlaceholder:'Which property features matter most, and what would you like to understand before your next move?',notesHint:'Use general property priorities. Keep financial documents, account details and sensitive personal information separate.',nextTitle:'Ready to discuss your next move?',nextText:'Download or print your notes before leaving this page. Use them when preparing your inquiry.',nextHref:'/buy/#inquiry',nextLabel:'Talk With Brad About Buying'});}

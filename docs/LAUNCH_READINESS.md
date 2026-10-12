@@ -14,7 +14,7 @@ Updated October 11, 2026 (Pacific). This is a checklist, not a claim of final la
 
 Marketing pages, original illustrative scenery, six community guides, comparison and resource tools, buyer/seller worksheets, reviewed inquiry email drafts, private listing editor, publication workflows, photo preparation, public property presentation, promotion templates and private saved previews are implemented. Editor access is restricted to the existing authorized emails. The operating guide is at `/studio/guide/` and opens separately from the editor.
 
-The user authorized publication of Brad’s E Yacolt Road and NE Hazen Avenue listings on October 11, 2026. Both are prepared from the supplied directory pages in the existing D1/R2 workspace; see `imports/brad-listings-2026-10-11.json` for source evidence and stable record IDs. The site remains a review preview with noindex. Automated inquiry delivery, live MLS search and visitor accounts are not connected.
+The user authorized publication of Brad’s E Yacolt Road and NE Hazen Avenue listings on October 11, 2026. Both are prepared from the supplied directory pages in the existing D1/R2 workspace; see `docs/imports/brad-listings-2026-10-11.json` for source evidence and stable record IDs. The site remains a review preview with noindex. Automated inquiry delivery, live MLS search and visitor accounts are not connected.
 
 ## Information still required from Brad
 
