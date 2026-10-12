@@ -23,19 +23,23 @@
     {
       "slug": "about",
       "title": "Meet Brad Hazen",
-      "intro": "Meet Brad Hazen, Real Estate Broker with Realty Pro, Inc. Start with a conversation about your property and your next move.",
+      "intro": "Brad Hazen brings a background in real estate, Clark County review engineering and land surveying to conversations about homes, land and your next move.",
       "sections": [
         [
-          "Experience with a local foundation",
-          "Brad’s business card describes a background in Clark County review engineering and land surveying alongside his real estate work. Bring your questions about a property, your priorities, and your plans to the first conversation."
+          "A property perspective shaped by local experience",
+          "Brad is a Real Estate Broker with Realty Pro, Inc. His background includes more than two decades of Clark County review engineering and land survey work, alongside more than 22 years in real estate. That experience gives property questions an additional technical perspective."
         ],
         [
-          "Your goals come first",
-          "Whether you are preparing to buy or considering a sale, begin by sharing your timing, the communities you are considering, and the questions you need answered."
+          "Homes, land and investment property",
+          "His public profile lists residential and commercial real estate, new construction, luxury homes, lots, acreage and investment properties. Start by discussing the property you own or want to buy, and the information you need to make a decision."
+        ],
+        [
+          "A local starting point",
+          "Brad’s public profile identifies Vancouver, Battle Ground and Salmon Creek among the areas he serves. Explore the community guides, then talk with him about your location, timing and property priorities."
         ],
         [
           "Connect directly",
-          "Reach Brad at (360) 921-9484 or b.hazen@hotmail.com to discuss your next move."
+          "Reach Brad at (360) 921-9484 or b.hazen@hotmail.com to discuss buying, selling or preparing a listing."
         ]
       ]
     },
@@ -221,7 +225,32 @@
     "phoneHref": "tel:+13609219484",
     "email": "b.hazen@hotmail.com",
     "brokerage": "Realty Pro, Inc.",
-    "source": "Business card supplied by user on 2026-10-10; current affiliation and experience wording to confirm before launch."
+    "source": "Contact details: user-supplied business card. Public specialties and areas: Realtor.com profile checked 2026-10-12 UTC. Brokerage: both supplied profiles. Conflicting experience, office address and directory phone details are recorded in docs/BRAD_PROFILE_SOURCES.md for confirmation.",
+    "publicProfiles": [
+      {
+        "label": "Homes.com",
+        "url": "https://www.homes.com/real-estate-agents/brad-hazen/f4xw5kr/"
+      },
+      {
+        "label": "Realtor.com",
+        "url": "https://www.realtor.com/realestateagents/62d7da73847980e7215b6a81"
+      }
+    ],
+    "specialties": [
+      "Residential",
+      "Commercial",
+      "New construction",
+      "Luxury homes",
+      "New homes",
+      "Lots",
+      "Acreage",
+      "Investment properties"
+    ],
+    "profileAreas": [
+      "Battle Ground",
+      "Salmon Creek",
+      "Vancouver"
+    ]
   },
   "communities": [
     {

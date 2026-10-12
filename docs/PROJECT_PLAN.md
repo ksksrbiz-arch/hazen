@@ -196,3 +196,9 @@ FAQs now use individual disclosure cards with clear plus/minus cues and a JavaSc
 ## Worksheet UX and progress - October 11, 2026
 
 Buyer and seller worksheets now prioritize downloading the completed worksheet, show a native progress bar and per-section reviewed counts, and provide native topic/notes jump links. Selected prompts have clearer highlighting and whole-section review state. Notes show the available character allowance. Overall progress text changes only when the check count changes, reducing repeated screen-reader announcements while typing. Reset clears the download-reminder state, so it does not falsely ask for another download before one has occurred. No entries are persisted or sent. Added controls are excluded from print styles; actual printed output remains a launch check.
+
+## Public profile enrichment and typography - October 11, 2026
+
+Expanded Brad’s introduction and homepage summary using the supplied Homes.com and Realtor.com profiles, with native external directory links on Meet Brad. Added specialties and profile service areas to agent metadata. Recorded conflicting experience totals, office addresses and phone details in BRAD_PROFILE_SOURCES.md; existing business-card direct contact remains authoritative. No directory listings, headshots, transaction statistics or reviews were imported.
+
+Corrected the static Montserrat Medium face declaration from an inaccurate 400–700 range to weight 500. Native system fonts now supply body/control weights while the existing Medium face is reserved for headings. Disabled synthetic font weights and introduced one shared typography layer with larger reading text, labels, helpers and navigation across marketing, inquiry, preparation tools, branded login and the private workspace. Print-specific dimensions remain unchanged. Desktop live layout/interaction review is required after deployment; private authenticated and physical-device/print verification remain launch checks.
