@@ -164,3 +164,7 @@ Added an in-page resource finder with buying/selling categories, title-and-descr
 ## Community comparison — October 10, 2026
 
 Added a temporary, three-community shortlist to Communities. Selected cards reuse existing guide introductions and official-resource links, with common visit prompts and a buyer worksheet link. Selection controls and shortcut appear only after JavaScript initialization; the original guide grid remains the fallback. The inquiry handoff accepts only one allowlisted set of one to three unique community slugs, rejects ambiguous/unknown/repeated/oversized sets, and fills editable buyer location context. Selections travel in the contact-page URL only when the visitor continues. No account preferences are saved and no inquiry is sent automatically. No new property inventory or location rankings are implied.
+
+## Client handoff preparation - October 11, 2026
+
+Added a private Listing Studio Guide with the six-step save/review/publish workflow, common tasks, troubleshooting, promotion limits and Brad's post-handoff responsibilities. The editor opens it separately to preserve unsaved work; a text copy is downloadable. Studio authorization and private/no-store responses cover both routes. Anonymous access is included in runtime checks. A launch checklist records remaining content, provider and acceptance requirements. The $1,500 build price is agreed; $225 monthly technical maintenance is proposed. Listing entry and ongoing marketing operations belong to Brad, not maintenance.

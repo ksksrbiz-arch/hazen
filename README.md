@@ -15,3 +15,5 @@ Planning: [IDX Phase 2](docs/IDX_PHASE_2.md). Manually maintained properties and
 Listing workspace: `/studio/` is protected by Cloudflare Access email sign-in. It saves drafts to D1 and photos to a private R2 bucket. Publish updates dynamic property pages and homepage features immediately; later draft edits stay private. See [workspace operations](docs/LISTING_WORKSPACE.md). MLS import and automated inquiry delivery remain pending.
 
 Property presentation: published listings support an enlarged photo viewer, link sharing and printable property sheets. Saved full-page previews remain private to enrolled editors at `/studio/preview/[id]/`. Run `npm test` and `npm run check:runtime` to verify storage, authentication, rendering and publication behavior in isolated fixtures.
+
+Client handoff: the private operating guide is at `/studio/guide/`, linked from the editor. It includes a downloadable text copy. See [launch readiness](docs/LAUNCH_READINESS.md) for remaining client inputs and final checks. Brad owns listing entry and real estate operations after handoff.

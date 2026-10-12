@@ -22,13 +22,17 @@ try{
  }
  const filtered=await (await mf.dispatchFetch('https://qa.example/properties/?min=100&max=100&beds=3')).text();assert.ok(filtered.includes('QA house &lt;test&gt;'));assert.ok(filtered.includes('1 of 1 property shown'));assert.ok(filtered.includes('3+ bedrooms'));
  const unmatched=await (await mf.dispatchFetch('https://qa.example/properties/?max=99')).text();assert.ok(!unmatched.includes('QA house &lt;test&gt;'));assert.ok(unmatched.includes('No listings match your filters'));
- for(const route of ['/studio/','/studio/preview/'+id+'/','/api/admin/listings'])assert.equal((await mf.dispatchFetch('https://qa.example'+route)).status,401);
+ for(const route of ['/studio/','/studio/guide/','/studio/guide/listing-studio-guide.txt','/studio/preview/'+id+'/','/api/admin/listings'])assert.equal((await mf.dispatchFetch('https://qa.example'+route)).status,401);
+ for(const route of ['/studio/guide/','/studio/guide/listing-studio-guide.txt']){
+  const response=await mf.dispatchFetch('https://qa.example'+route,{headers:{'cf-access-jwt-assertion':token}});assert.equal(response.status,200);assert.equal(response.headers.get('cache-control'),'private, no-store');assert.ok((await response.text()).includes('Publish'));
+ }
  const previewURL='https://qa.example/studio/preview/'+id+'/';
  const preview=await mf.dispatchFetch(previewURL,{headers:{'cf-access-jwt-assertion':token}}),previewHTML=await preview.text();
  assert.equal(preview.status,200);assert.equal(preview.headers.get('cache-control'),'private, no-store');assert.equal(preview.headers.get('referrer-policy'),'no-referrer');assert.ok(previewHTML.includes('Private saved-draft preview'));assert.ok(previewHTML.includes('/api/admin/listings/'+id+'/photos/'+file));assert.ok(!previewHTML.includes('INTERNAL_QA_NOTE'));assert.ok(!previewHTML.includes('og:image'));assert.ok(!previewHTML.includes('data-share-property'));
  const invalidPreview=await mf.dispatchFetch('https://qa.example/studio/preview/not-an-id/',{headers:{'cf-access-jwt-assertion':token}});assert.equal(invalidPreview.status,404);
  const nonEditor=await new SignJWT({email:'outsider@example.com'}).setProtectedHeader({alg:'RS256',kid:'runtime-qa'}).setSubject('outsider').setIssuer(auth.ACCESS_TEAM_DOMAIN).setAudience(auth.ACCESS_AUD).setExpirationTime('5m').sign(privateKey);
  assert.equal((await mf.dispatchFetch(previewURL,{headers:{'cf-access-jwt-assertion':nonEditor}})).status,401);
+ for(const route of ['/studio/guide/','/studio/guide/listing-studio-guide.txt'])assert.equal((await mf.dispatchFetch('https://qa.example'+route,{headers:{'cf-access-jwt-assertion':nonEditor}})).status,401);
  const privatePhoto=await mf.dispatchFetch('https://qa.example/api/admin/listings/'+id+'/photos/'+file,{headers:{'cf-access-jwt-assertion':token}});assert.equal(privatePhoto.status,200);
  const mediaURL='https://qa.example/media/'+id+'/'+file;
  const media=await mf.dispatchFetch(mediaURL);assert.equal(media.status,200);const etag=media.headers.get('etag');assert.ok(etag);assert.ok(media.headers.get('cache-control').includes('private, no-cache'));assert.equal(media.headers.get('x-frame-options'),'DENY');

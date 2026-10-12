@@ -68,3 +68,26 @@
 .community-compare[hidden],.compare-grid article[hidden],.compare-contact[hidden],[data-compare-empty][hidden],[data-compare-jump][hidden]{display:none}
 @media(max-width:900px){.compare-grid{grid-template-columns:1fr}.compare-options{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:650px){.community-compare{padding:1.25rem}.compare-options{grid-template-columns:1fr}.compare-toolbar{align-items:flex-start;flex-direction:column}.compare-contact .button{width:100%;box-sizing:border-box}}
+
+/* Private client operating guide. */
+.studio-guide-main{max-width:960px;margin:0 auto;padding:2.5rem 1.5rem 4rem;color:#182b40}
+.studio-guide-main h1{font-size:clamp(28px,4vw,42px);line-height:1.35;margin:.7rem 0 1rem}
+.studio-guide-main .section-lead{text-align:left;font-size:15px;line-height:1.9}
+.guide-actions{display:flex;flex-wrap:wrap;align-items:center;gap:1rem;margin:1.5rem 0}
+.guide-actions p,.studio-guide-link p{font-size:12px;line-height:1.8;margin:0;color:#59646d}
+.studio-guide-section{margin:2.5rem 0;scroll-margin-top:100px}
+.studio-guide-section h2,.studio-guide-support h2{font-size:24px;line-height:1.5;margin:0 0 1rem}
+.studio-guide-section h3{font-size:18px;line-height:1.5;margin:0 0 .5rem}
+.studio-guide-section p,.studio-guide-section li,.studio-guide-support p{font-size:14px;line-height:1.9}
+.studio-guide-steps{padding-left:1.6rem;display:grid;gap:1.25rem}
+.studio-guide-steps li{padding-left:.4rem}
+.studio-guide-steps li::marker{font-weight:700;color:#75551b}
+.studio-guide-steps p{margin:0}
+.studio-guide-question{border:1px solid #dce1e5;background:#fff;margin:.7rem 0}
+.studio-guide-question summary{padding:1rem;font-size:14px;font-weight:600;cursor:pointer;min-height:44px;box-sizing:border-box}
+.studio-guide-question p{padding:0 1rem 1rem;margin:0}
+.studio-guide-support{background:#f5f3ed;border-left:3px solid #ba9b54;padding:1.5rem}
+.studio-guide-support a,.studio-guide-link a{font-size:13px;color:#182b40;font-weight:600;line-height:1.8}
+.studio-guide-link{border-top:1px solid #dce1e5;padding-top:1rem;margin-top:1rem}
+.studio-guide-link p{margin-top:.4rem}
+@media print{body.studio-guide-page{background:#fff}body.studio-guide-page .studio-header,body.studio-guide-page .skip,body.studio-guide-page .guide-actions,body.studio-guide-page .page-sections,body.studio-guide-page .studio-guide-support>a{display:none!important}.studio-guide-main{max-width:none;padding:0}.studio-guide-question>p{display:block!important}.studio-guide-question{break-inside:avoid}.studio-guide-steps li{break-inside:avoid}.studio-guide-section h2{break-after:avoid}}

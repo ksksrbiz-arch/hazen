@@ -8,6 +8,7 @@ import {photoGuide} from './photo-guide.mjs';
 import {sellerWorksheet} from './seller-worksheet.mjs';
 import {buyerWorksheetPage,buyerWorksheet,buyerChecklistText} from './buyer-worksheet.mjs';
 import {studioPage} from './studio-page.mjs';
+import {studioGuide,studioGuideText} from './studio-guide.mjs';
 import {inquiry} from './inquiry.mjs';
 import {communityCompare} from './community-compare.mjs';
 import {resourcesPage,resourceHub,relatedResources} from './resources.mjs';
@@ -86,6 +87,9 @@ await writeFile(path.join(root,'dist/studio',photoPreparationName),photoPreparat
 await writeFile(path.join(root,'dist/studio',promotionName),promotion);
 await writeFile(path.join(root,'dist/studio',studioName),studio);
 await writeFile(path.join(root,'dist/studio/index.html'),studioPage(cssName).replace('/studio/studio.js','/studio/'+studioName));
+await mkdir(path.join(root,'dist/studio/guide'),{recursive:true});
+await writeFile(path.join(root,'dist/studio/guide/index.html'),studioGuide(cssName));
+await writeFile(path.join(root,'dist/studio/guide/listing-studio-guide.txt'),studioGuideText);
 // Restrict Function invocation to dynamic routes; marketing assets remain static.
 await writeFile(path.join(root,'dist/_routes.json'),JSON.stringify({version:1,include:['/','/properties','/properties/*','/studio','/studio/*','/api/admin/*','/media/*'],exclude:[]}));
 
