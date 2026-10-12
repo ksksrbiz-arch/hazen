@@ -1,0 +1,9 @@
+dist/
+node_modules/
+.wrangler/
+test-results/
+package-lock.json
+docs/
+src/content.json
+src/*.css
+database/

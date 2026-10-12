@@ -1,13 +1,28 @@
 import {contact} from '../src/contact.js';
-import {sellerGoals,sellerPropertyTypes} from '../src/inquiry-model.js';
-const e=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+import {sellerGoals, sellerPropertyTypes} from '../src/inquiry-model.js';
+const e = value =>
+  String(value ?? '').replace(
+    /[&<>"']/g,
+    c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'})[c]
+  );
 
 // Email drafts only. Nothing is submitted to a server by this form.
-export function inquiry(kind,property=null){
- const interest=kind==='buy'?'Buying a home':kind==='sell'?'Selling a home':kind==='assessment'?'A home assessment':kind==='property'?(property?.status==='Active'?'Request a showing':'A property inquiry'):'';
- const address=['sell','assessment','property'].includes(kind);
- return `<section id="inquiry" class="inquiry-panel" aria-labelledby="inquiry-heading">
- <div class="inquiry-intro"><p class="eyebrow">Connect with Brad</p><h2 id="inquiry-heading" tabindex="-1">${kind==='assessment'?'Request a home assessment':kind==='property'?'Ask about this property':kind==='sell'?'Tell Brad about your property':'Tell Brad about your plans'}</h2>
+export function inquiry(kind, property = null) {
+  const interest =
+    kind === 'buy'
+      ? 'Buying a home'
+      : kind === 'sell'
+        ? 'Selling a home'
+        : kind === 'assessment'
+          ? 'A home assessment'
+          : kind === 'property'
+            ? property?.status === 'Active'
+              ? 'Request a showing'
+              : 'A property inquiry'
+            : '';
+  const address = ['sell', 'assessment', 'property'].includes(kind);
+  return `<section id="inquiry" class="inquiry-panel" aria-labelledby="inquiry-heading">
+ <div class="inquiry-intro"><p class="eyebrow">Connect with Brad</p><h2 id="inquiry-heading" tabindex="-1">${kind === 'assessment' ? 'Request a home assessment' : kind === 'property' ? 'Ask about this property' : kind === 'sell' ? 'Tell Brad about your property' : 'Tell Brad about your plans'}</h2>
  <p>A few details give Brad a useful starting point for your conversation.</p><p class="inquiry-context" data-inquiry-context hidden></p>
  <ol class="inquiry-steps"><li>Tell Brad what you have in mind.</li><li>Review your prepared message.</li><li>Open your email application and send it.</li></ol>
  <div class="inquiry-direct"><span>Prefer to connect directly?</span><a href="${contact.phoneHref}">Call ${contact.phone}</a><a href="${contact.emailHref}">${contact.email}</a></div><noscript><p>Use the call or email links above to contact Brad. Preparing an email draft with the form requires JavaScript.</p></noscript></div>
@@ -16,10 +31,10 @@ export function inquiry(kind,property=null){
  <div class="inquiry-field"><label for="inquiry-name">Your name *</label><input id="inquiry-name" name="name" autocomplete="name" maxlength="100" required></div>
  <div class="inquiry-field"><label for="inquiry-email">Email address *</label><input id="inquiry-email" name="email" type="email" autocomplete="email" maxlength="150" required></div></div></fieldset>
  <fieldset><legend>Your plans</legend><div class="inquiry-fields">
- <div class="inquiry-field"><label for="inquiry-interest">I’m interested in *</label><select id="inquiry-interest" name="interest" required><option value="" ${!interest?'selected':''}>Choose a topic</option>${['Selling a home','A home assessment','Buying a home','Request a showing','A property inquiry','Other questions'].map(value=>`<option ${interest===value?'selected':''}>${value}</option>`).join('')}</select></div>
- <div class="inquiry-field"><label for="inquiry-location" data-location-label>${address?'Property address'+(kind==='assessment'?' *':' (optional)'):kind==='buy'?'Preferred communities (optional)':'Property or community (optional)'}</label><input id="inquiry-location" name="location" autocomplete="off" maxlength="200" value="${e(property?.address)}" ${kind==='assessment'?'required':''} aria-describedby="location-hint"><small id="location-hint">${address?'Include the city, if you know it.':kind==='buy'?'Share the places you are considering.':'Add a place or property, if relevant.'}</small></div>
+ <div class="inquiry-field"><label for="inquiry-interest">I’m interested in *</label><select id="inquiry-interest" name="interest" required><option value="" ${!interest ? 'selected' : ''}>Choose a topic</option>${['Selling a home', 'A home assessment', 'Buying a home', 'Request a showing', 'A property inquiry', 'Other questions'].map(value => `<option ${interest === value ? 'selected' : ''}>${value}</option>`).join('')}</select></div>
+ <div class="inquiry-field"><label for="inquiry-location" data-location-label>${address ? 'Property address' + (kind === 'assessment' ? ' *' : ' (optional)') : kind === 'buy' ? 'Preferred communities (optional)' : 'Property or community (optional)'}</label><input id="inquiry-location" name="location" autocomplete="off" maxlength="200" value="${e(property?.address)}" ${kind === 'assessment' ? 'required' : ''} aria-describedby="location-hint"><small id="location-hint">${address ? 'Include the city, if you know it.' : kind === 'buy' ? 'Share the places you are considering.' : 'Add a place or property, if relevant.'}</small></div>
  <div class="inquiry-field full"><label for="inquiry-message">What would you like Brad to know? (optional)</label><textarea id="inquiry-message" name="message" rows="4" maxlength="1500" placeholder="Share your priorities, questions, or property details."></textarea></div></div>
- <details class="inquiry-options seller-context" ${['sell','assessment'].includes(kind)?'':'hidden'}><summary>Add property details (optional)</summary><p class="seller-context-hint">Choose what you’d like to discuss and a few details about the property. You can leave these blank.</p><div class="inquiry-fields"><div class="inquiry-field"><label for="inquiry-seller-goal">Conversation focus (optional)</label><select id="inquiry-seller-goal" name="sellerGoal"><option value="">Choose a focus</option>${sellerGoals.map(value=>`<option>${e(value)}</option>`).join('')}</select></div><div class="inquiry-field"><label for="inquiry-property-type">Property type (optional)</label><select id="inquiry-property-type" name="propertyType"><option value="">Choose a property type</option>${sellerPropertyTypes.map(value=>`<option>${e(value)}</option>`).join('')}</select></div><div class="inquiry-field full"><label for="inquiry-property-features">Features or recent improvements (optional)</label><textarea id="inquiry-property-features" name="propertyFeatures" rows="3" maxlength="600" placeholder="For example: outdoor space, an updated kitchen, or a distinctive layout."></textarea></div></div></details>
+ <details class="inquiry-options seller-context" ${['sell', 'assessment'].includes(kind) ? '' : 'hidden'}><summary>Add property details (optional)</summary><p class="seller-context-hint">Choose what you’d like to discuss and a few details about the property. You can leave these blank.</p><div class="inquiry-fields"><div class="inquiry-field"><label for="inquiry-seller-goal">Conversation focus (optional)</label><select id="inquiry-seller-goal" name="sellerGoal"><option value="">Choose a focus</option>${sellerGoals.map(value => `<option>${e(value)}</option>`).join('')}</select></div><div class="inquiry-field"><label for="inquiry-property-type">Property type (optional)</label><select id="inquiry-property-type" name="propertyType"><option value="">Choose a property type</option>${sellerPropertyTypes.map(value => `<option>${e(value)}</option>`).join('')}</select></div><div class="inquiry-field full"><label for="inquiry-property-features">Features or recent improvements (optional)</label><textarea id="inquiry-property-features" name="propertyFeatures" rows="3" maxlength="600" placeholder="For example: outdoor space, an updated kitchen, or a distinctive layout."></textarea></div></div></details>
  <details class="inquiry-options"><summary>Add a phone number and timing (optional)</summary><div class="inquiry-fields">
  <div class="inquiry-field"><label for="inquiry-phone">Phone (optional)</label><input id="inquiry-phone" name="phone" type="tel" autocomplete="tel" maxlength="40"></div>
  <div class="inquiry-field"><label for="inquiry-timing">Timing (optional)</label><select id="inquiry-timing" name="timing"><option>Just exploring</option><option>Within 3 months</option><option>3–6 months</option><option>6 months or later</option></select></div></div></details></fieldset>
