@@ -15,4 +15,4 @@ Confirm current brokerage, role, license number, Realtor designation, and experi
 
 Suggested positioning for approval: real estate guidance informed by a background in county review and land surveying. Do not claim current engineering or surveying licensure, guaranteed development approval, or additional credentials.
 
-Design direction: white, black, and muted gold inspired by the supplied card; exact brand assets and brokerage usage guidelines are still needed. Request the original portrait and approved Realty Pro logo rather than using a photograph of the printed card as final website art.
+Design direction: white, black, and muted gold inspired by the supplied card; exact brand assets and brokerage usage guidelines are still needed. The user supplied a separate headshot on October 11, 2026, now integrated as responsive WebP copies. An approved Realty Pro logo and brand usage rules remain needed.

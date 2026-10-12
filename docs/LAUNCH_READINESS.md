@@ -19,7 +19,8 @@ The user authorized publication of Brad’s E Yacolt Road and NE Hazen Avenue li
 ## Information still required from Brad
 
 - [ ] Confirm the quote scope and monthly maintenance arrangement.
-- [ ] Original headshot and approved brokerage brand files; use replacement imagery only with permission.
+- [x] User-supplied headshot integrated on homepage and Meet Brad (October 11, 2026).
+- [ ] Approved brokerage brand files and usage guidance.
 - [ ] Approved bio, license details, brokerage disclosures and service areas.
 - [ ] Confirm public contact details and receiving inbox.
 - [ ] Domain ownership and access through supported roles.

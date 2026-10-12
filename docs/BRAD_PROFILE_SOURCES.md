@@ -21,7 +21,7 @@ Both profiles identify Brad Hazen with Realty Pro, Inc. Realtor.com lists reside
 | Office | Realtor.com: 12000 SE Mill Plain Blvd, Suite 101, Vancouver 98684-6060; Homes.com: 7710 NE Greenwood Dr #140, Vancouver 98662 | Do not publish either as Brad’s current office until confirmed |
 | Phone | Homes.com presents (360) 732-8205 | Retain user-supplied direct phone; do not replace it with a directory contact number |
 | Other domain | Realtor.com links bradhazengroup.com | Record for domain/redirect discussion; ownership and current use not verified |
-| Headshot | Both profiles display a portrait | Request Brad’s original approved image; no directory image copied into assets |
+| Headshot | Both profiles display a portrait | User supplied a headshot on October 11, 2026; integrated into homepage and Meet Brad. No directory portrait copied into assets. |
 
 ## Property references to review with Brad
 

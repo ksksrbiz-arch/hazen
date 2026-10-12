@@ -1,7 +1,7 @@
 # What to ask Brad for
 
 ## Needed for the current website
-1. Original high-resolution headshot, approved Realty Pro logo files, and any brand rules. Confirm we can use brokerage/reference-site images, or provide licensed replacements.
+1. Headshot received October 11, 2026 and integrated. Still need approved Realty Pro logo files and any brand rules; scenic assets already use original illustrations.
 2. Exact brokerage legal name, office address, current license number/state, preferred public role, required brokerage disclosures, and the broker contact who can approve the site.
 3. Confirm (360) 921-9484 and b.hazen@hotmail.com; identify the inbox for inquiries and whether calls/texts are preferred. No outreach or test emails until authorized.
 4. Short biography: areas of expertise, current years in real estate, and accurate dates/details for county review engineering and land survey experience. Original card periods overlap; do not add them together or infer current professional licensure.
@@ -20,4 +20,4 @@ Provider references:
 - https://support.idxbroker.com/hc/en-us/articles/35752663986459-How-to-Access-MLS-Instructions
 
 ## Short message you can send
-Brad, to personalize and finish your website, please send your original headshot, approved Realty Pro logo, a short bio, license/brokerage details, the cities you serve, and any reviews or properties you want featured. Please confirm your phone/email and where website inquiries should go. Also, which MLS do you belong to, and do you already have a personal home-search page or an IDX/Ylopo subscription through Realty Pro? We don’t need your MLS password, and MLS access isn’t required for the current website.
+Brad, to personalize and finish your website, we have your headshot; please send your approved Realty Pro logo, a short bio, license/brokerage details, the cities you serve, and any reviews or properties you want featured. Please confirm your phone/email and where website inquiries should go. Also, which MLS do you belong to, and do you already have a personal home-search page or an IDX/Ylopo subscription through Realty Pro? We don’t need your MLS password, and MLS access isn’t required for the current website.

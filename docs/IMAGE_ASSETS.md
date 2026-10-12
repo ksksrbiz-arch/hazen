@@ -52,3 +52,7 @@ Use case: photorealistic-natural. Asset: wide 16:9 illustrative Pacific Northwes
 ### riverwalk
 
 Use case: photorealistic-natural. Asset: wide 16:9 illustrative Pacific Northwest community-guide photo. Original editorial photograph of a quiet gravel riverside trail and a simple wooden viewing deck beside a river, natural reeds and deciduous trees in the foreground, evergreen foothills on the opposite bank, open blue-gray sky. Soft summer morning light, natural calm blue-green palette, realistic photographic texture, welcoming public outdoors feel. Wide horizontal framing. No people, recognizable landmark, bridge, signs, text, logos or watermarks. Not a specific town or property listing.
+
+## User-supplied Brad Hazen headshot — October 11, 2026
+
+Source: hf_20261012_030147_4f524d66-aef3-4b04-994c-2da25a463fe1(1).png, supplied by the user for Brad’s website. The original 2048px square image is unchanged. The website ships 400px (22,340 bytes) and 800px (70,388 bytes) WebP copies, preserving the full framing without retouching. Both homepage and Meet Brad use the same responsive image markup with a descriptive alternative text and explicit dimensions. This asset is distinct from the generated scenic illustrations above.

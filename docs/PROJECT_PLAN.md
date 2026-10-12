@@ -210,3 +210,7 @@ User requested publication of E Yacolt Road (RMLS 24202394, $2,000,000, 1.5 acre
 Both records use the normal D1 draft/published snapshot and private R2 photo model, so Brad can edit, republish, unpublish and archive through Studio. Seven source image copies are preserved without retouching or watermark removal, below the existing 400 KB photo budget. Sources, record IDs, image URLs and SHA-256 hashes are recorded in `imports/brad-listings-2026-10-11.json`. Map and boundary captions identify approximate outlines. Existing archived QA is untouched. Public status remains manually maintained; no MLS syncing is implied.
 
 Added optional property type, lot acres and HTTPS source URL through draft normalization, validation, Studio fields, public cards/details, promotion copy and recovery notes. Missing home counts remain absent for land. Tests cover survival through save/render/export and rejection of negative acreage or unsafe source URLs. Publication and live gallery verification complete this increment; broader launch acceptance remains pending.
+
+## Brad’s supplied headshot - October 11, 2026
+
+Replaced homepage and Meet Brad portrait placeholders with the user-supplied square headshot. Responsive 400px and 800px WebP copies retain the full image without retouching or cropping; the uploaded source remains unchanged. Native srcset/sizes, lazy loading, explicit dimensions and asynchronous decoding keep the portrait efficient and prevent layout shifts. Onboarding and launch records now mark the headshot received; brokerage logo files remain outstanding.
