@@ -78,3 +78,18 @@ Download Working Notes retains current text even for incomplete drafts. It inclu
 Photo uploads reserve the photo name and enforce the 200-upload history cap in one atomic D1 statement before the R2 write; an R2 failure removes the reservation. Request bodies are read with a hard size bound even without `Content-Length`. Storage or unexpected failures now return 500 (logged with the cause) instead of a misleading 400; missing Access configuration returns 503 instead of looking like a sign-in prompt. Draft numeric/boolean fields are type-checked on save. Publishing verifies all photos with one registration query. One unusable published snapshot is skipped rather than failing the collection. The library reports when more than 200 listings exist. The photo size limit lives in `src/listing-model.js` for both browser and server.
 
 `database/cloudflare/002_indexes.sql` adds additive indexes. **It must be applied to the production D1 database** (`wrangler d1 execute hazen-listings --remote --file database/cloudflare/002_indexes.sql`) — deploying code does not migrate. Tests and the runtime check load every file in that directory in order.
+
+## Backup and restore — October 12, 2026
+
+**Back up** (needs `wrangler login` as the Cloudflare account that owns the Hazen resources):
+
+```
+npm run backup                       # writes backups/<date>/ : database.sql, photos/<listing-id>/<file>, manifest.json
+npm run backup -- --verify backups/2026-10-12   # re-hash everything against the manifest
+```
+
+The script exports the D1 database (`wrangler d1 export`), lists every registered photo, downloads each one from R2, checks each size against the database record, and records SHA-256 hashes. It exits non-zero and marks the manifest `complete: false` if any photo is missing or truncated, so a partial copy is never reported as good. `backups/` is git-ignored: backups hold private authorization notes and unpublished drafts, so store them in private storage (never the repository) and keep at least one copy off Cloudflare.
+
+**Restore.** For a database mistake in the last 30 days, prefer D1 Time Travel (`wrangler d1 time-travel restore hazen-listings --timestamp <ISO time>`), which needs no backup file. From a backup file: restore into an empty database with `wrangler d1 execute <new-db> --remote --file backups/<date>/database.sql`, recreate the bucket contents with `wrangler r2 object put hazen-listing-photos/<key> --remote --file backups/<date>/photos/<key> --content-type <type>` for each manifest entry, then point the `DB`/`PHOTOS` bindings at the restored resources and redeploy. Photo object names are immutable UUIDs, so restored photos match the published snapshots without edits.
+
+**Status.** The script's logic is covered by unit tests with a fake downloader. It has not yet been run against the live Cloudflare account or through a full restore: do one backup, one verify and one restore into a scratch database before relying on it (this is the "recovery drill" in the launch checklist).

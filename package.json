@@ -9,6 +9,7 @@
     "check": "node scripts/check.mjs",
     "test": "node --test",
     "test:browser": "playwright test",
+    "backup": "node scripts/backup.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "verify": "npm run format:check && npm test && npm run build && npm run check",
