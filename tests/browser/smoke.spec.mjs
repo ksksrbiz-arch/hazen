@@ -146,3 +146,19 @@ test('Listing Studio script loads and renders the editor with a mocked API', asy
   await expect(page.locator('#listing-counts')).toContainText('Drafts');
   expect(problems).toEqual([]);
 });
+
+test('heading font loads as a small WOFF2 and is preloaded with the matching URL', async ({page}) => {
+  const fonts = [];
+  page.on('response', response => {
+    if (/\.(woff2?|ttf)$/.test(new URL(response.url()).pathname)) fonts.push(response);
+  });
+  await page.goto('/');
+  await page.evaluate(() => document.fonts.ready);
+  expect(await page.evaluate(() => document.fonts.check('500 20px Montserrat'))).toBe(true);
+  expect(fonts.length).toBe(1);
+  expect(fonts[0].status()).toBe(200);
+  expect(new URL(fonts[0].url()).pathname).toMatch(/montserrat-latin\.woff2$/);
+  expect((await fonts[0].body()).length).toBeLessThan(40000);
+  const preload = await page.locator('link[rel="preload"][as="font"]').getAttribute('href');
+  expect(new URL(fonts[0].url()).pathname).toBe(preload);
+});
