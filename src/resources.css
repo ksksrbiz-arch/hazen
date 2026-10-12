@@ -245,3 +245,39 @@
 .related-communities a:hover{border-color:#ba9b54}
 @media(max-width:650px){.faq-section{padding:1.25rem;margin:2rem auto}.faq-heading-row{align-items:flex-start;flex-direction:column;gap:.75rem}.faq-heading-row h2{font-size:24px}.faq-heading-row button{width:100%}.faq-section summary{font-size:13px;padding:.9rem 1rem}.faq-section details p{font-size:13px;padding:0 1rem 1rem}.reading-sections .content-section p{font-size:14px}.related-communities>div{grid-template-columns:1fr}.page-sections{padding:.75rem;gap:.5rem}.page-sections a{flex:1 1 auto;justify-content:center}.page-sections>span{flex-basis:100%}}
 @media print{.faq-heading-row button{display:none!important}.page-sections{display:none!important}.faq-section{background:none;border:0;padding:0}.faq-section details{break-inside:avoid}}
+
+/* Preparation worksheets: visible progress and clear retention actions. */
+.worksheet-toolbar{border:1px solid #dce1e5;border-top:3px solid #ba9b54;border-radius:5px;padding:1.75rem;gap:1.75rem}
+.worksheet-toolbar h2{font-size:clamp(23px,2.6vw,29px);line-height:1.5;color:#182b40}
+.worksheet-toolbar p{font-size:13px;line-height:1.9;color:#59646d}
+.worksheet-actions button{border-radius:3px;min-height:46px;font-size:12px}
+.worksheet-actions [data-download-worksheet]{background:#182b40;color:#fff;border-color:#182b40}
+.worksheet-actions [data-reset-worksheet]{background:none;border-color:transparent;text-decoration:underline;text-underline-offset:4px;color:#59646d}
+.worksheet-progress-panel{padding:1rem 1.25rem;border:1px solid #dce1e5;background:#fbfaf6;border-radius:4px;margin:1.25rem 0}
+.worksheet-progress-panel .worksheet-progress{margin:0 0 .75rem;padding:0;border:0;background:none;font-size:12px;line-height:1.8;color:#182b40}
+.worksheet-progress-panel progress{display:block;width:100%;height:9px;border:0;border-radius:8px;overflow:hidden;accent-color:#936b1c;background:#e6e1d4}
+.worksheet-progress-panel progress::-webkit-progress-bar{background:#e6e1d4;border-radius:8px}
+.worksheet-progress-panel progress::-webkit-progress-value{background:#936b1c;border-radius:8px}
+.worksheet-progress-panel progress::-moz-progress-bar{background:#936b1c;border-radius:8px}
+.worksheet-progress-panel[hidden]{display:none}
+.worksheet-topic-nav{display:flex;flex-wrap:wrap;gap:.5rem;padding:.5rem 0;margin:1rem 0}
+.worksheet-topic-nav a{display:inline-flex;align-items:center;gap:.55rem;min-height:44px;padding:.5rem .75rem;border:1px solid #dce1e5;border-radius:3px;text-decoration:none;color:#182b40;font-size:11px;line-height:1.7;background:#fff}
+.worksheet-topic-nav a span{font-size:10px;color:#75551b}
+.worksheet-topic-nav a:hover{background:#fbf7ee;border-color:#ba9b54}
+.worksheet-card{border-radius:5px;padding:1.5rem;scroll-margin-top:24px;background:#fff}
+.worksheet-card.is-reviewed{border-color:#ba9b54;box-shadow:inset 0 3px #ba9b54}
+.worksheet-card-top{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.worksheet-section-progress{font-size:10px;line-height:1.7;color:#59646d;background:#f5f3ed;border-radius:20px;padding:.25rem .65rem}
+.worksheet-card.is-reviewed .worksheet-section-progress{color:#75551b;background:#fbf1d9}
+.worksheet-section-progress[hidden]{display:none}
+.worksheet-card h3{color:#182b40;font-size:21px;line-height:1.5}
+.worksheet-card label{padding:.65rem .7rem;margin:.3rem -.7rem;border:1px solid transparent;border-radius:4px;min-height:48px;font-size:13px;line-height:1.85}
+.worksheet-card label:hover{background:#f8f9fa}
+.worksheet-card label:has(input:checked){background:#fbf7ee;border-color:#e5d6b3}
+.worksheet-card label:has(input:checked) .worksheet-check-text{color:#182b40}
+.worksheet-note-meta{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.worksheet-note-meta>small{max-width:740px;line-height:1.8}
+.worksheet-note-meta [hidden]{display:none}
+.worksheet-note-meta #worksheet-note-count{white-space:nowrap;color:#59646d}
+@media(max-width:650px){.worksheet-toolbar{padding:1.25rem}.worksheet-actions [data-download-worksheet]{flex-basis:100%}.worksheet-topic-nav a{flex:1 1 130px;justify-content:flex-start}.worksheet-card{padding:1.25rem}.worksheet-card h3{font-size:20px}.worksheet-card label{font-size:14px}.worksheet-progress-panel{padding:.9rem 1rem}}
+@media print{body.worksheet-page .worksheet-progress-panel,body.worksheet-page .worksheet-topic-nav,body.worksheet-page .worksheet-section-progress,body.worksheet-page .resource-next{display:none!important}body.worksheet-page .worksheet-card{box-shadow:none!important;border-radius:0}body.worksheet-page .worksheet-card label{background:none!important;border:0;padding:.15rem 0;margin:0}body.worksheet-page .worksheet-card label:hover{background:none}body.worksheet-page .worksheet-note-meta{display:none!important}}

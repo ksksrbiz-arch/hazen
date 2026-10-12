@@ -192,3 +192,7 @@ Shared public inquiries now show a current details/review stage, field-specific 
 ## Reading and question navigation UI - October 11, 2026
 
 FAQs now use individual disclosure cards with clear plus/minus cues and a JavaScript-enhanced Show/Hide All Answers action. Native question disclosures work without JavaScript. On-page links use larger button-style targets and indicate the selected URL fragment; targets can receive native anchor focus. Long biography/privacy/community sections are left-aligned with a bounded reading width and calmer spacing. Other-community links use consistent full-height grid targets, stacking on narrow screens. Content and inquiry delivery behavior are unchanged.
+
+## Worksheet UX and progress - October 11, 2026
+
+Buyer and seller worksheets now prioritize downloading the completed worksheet, show a native progress bar and per-section reviewed counts, and provide native topic/notes jump links. Selected prompts have clearer highlighting and whole-section review state. Notes show the available character allowance. Overall progress text changes only when the check count changes, reducing repeated screen-reader announcements while typing. Reset clears the download-reminder state, so it does not falsely ask for another download before one has occurred. No entries are persisted or sent. Added controls are excluded from print styles; actual printed output remains a launch check.
