@@ -72,3 +72,9 @@ More actions → Prepare Promotion Kit creates social-post, buyer-email and prop
 ## Interrupted requests and working notes
 
 Download Working Notes retains current text even for incomplete drafts. It includes the internal authorization note and photo descriptions, so keep it private. It does not contain photo bytes, publish/save anything or provide automatic import. Keep original photos separately. Session errors offer sign-in in another tab; Check Connection refreshes the library without replacing the current form/photos. Conflicts require reviewing a newer saved version before reapplying edits. Lost or timed-out requests may already have completed, so the editor never automatically repeats a mutation. Full backup/recovery remains a separate launch requirement.
+
+## Reliability hardening — October 12, 2026
+
+Photo uploads reserve the photo name and enforce the 200-upload history cap in one atomic D1 statement before the R2 write; an R2 failure removes the reservation. Request bodies are read with a hard size bound even without `Content-Length`. Storage or unexpected failures now return 500 (logged with the cause) instead of a misleading 400; missing Access configuration returns 503 instead of looking like a sign-in prompt. Draft numeric/boolean fields are type-checked on save. Publishing verifies all photos with one registration query. One unusable published snapshot is skipped rather than failing the collection. The library reports when more than 200 listings exist. The photo size limit lives in `src/listing-model.js` for both browser and server.
+
+`database/cloudflare/002_indexes.sql` adds additive indexes. **It must be applied to the production D1 database** (`wrangler d1 execute hazen-listings --remote --file database/cloudflare/002_indexes.sql`) — deploying code does not migrate. Tests and the runtime check load every file in that directory in order.

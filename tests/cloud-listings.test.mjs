@@ -1,14 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {DatabaseSync} from 'node:sqlite';
-import {readFileSync} from 'node:fs';
+import {readFileSync,readdirSync} from 'node:fs';
 import {generateKeyPair,SignJWT,createLocalJWKSet,exportJWK} from 'jose';
 import {editor,mutationAllowed} from '../server/auth.js';
 import {cleanDraft,publicListing,change,imageType,publishErrors,rowRecord} from '../server/listings.js';
 import {detail,cards,collection} from '../server/public.js';
 import {onRequest} from '../functions/api/admin/[[path]].js';
 import {onRequest as media} from '../functions/media/[[path]].js';
-function db(){const sqlite=new DatabaseSync(':memory:');sqlite.exec(readFileSync('database/cloudflare/001_listings.sql','utf8'));const prepare=sql=>{let params=[];const stmt={bind(...args){params=args;return stmt;},async first(){return sqlite.prepare(sql).get(...params)||null;},async all(){return {results:sqlite.prepare(sql).all(...params)};},async run(){return {meta:sqlite.prepare(sql).run(...params)};}};return stmt;};return {prepare,async batch(statements){sqlite.exec('BEGIN');try{const results=[];for(const s of statements)results.push(await s.run());sqlite.exec('COMMIT');return results;}catch(e){sqlite.exec('ROLLBACK');throw e;}}};}
+function db(){const sqlite=new DatabaseSync(':memory:');for(const name of readdirSync('database/cloudflare').sort())sqlite.exec(readFileSync('database/cloudflare/'+name,'utf8'));const prepare=sql=>{let params=[];const stmt={bind(...args){params=args;return stmt;},async first(){return sqlite.prepare(sql).get(...params)||null;},async all(){return {results:sqlite.prepare(sql).all(...params)};},async run(){return {meta:sqlite.prepare(sql).run(...params)};}};return stmt;};return {prepare,async batch(statements){sqlite.exec('BEGIN');try{const results=[];for(const s of statements)results.push(await s.run());sqlite.exec('COMMIT');return results;}catch(e){sqlite.exec('ROLLBACK');throw e;}}};}
 const id='8caa1a53-05bd-4212-9c9c-a487cc334550',filename='listing-8caa1a53-05bd-4212-9c9c-a487cc334551.jpg';
 const listing={slug:'test-house',title:'Test <house>',address:'QA only',price:100,status:'Active',description:'Description',attribution:'Brad',permissionNote:'Private permission note',updatedAt:'2026-10-10',images:[{file:filename,alt:'House'}]};
 async function seed(DB){await DB.prepare('INSERT INTO listings(id,draft_json,updated_at,updated_by) VALUES(?,?,?,?)').bind(id,JSON.stringify(listing),'2026-10-10','editor').run();}
@@ -20,7 +20,8 @@ test('Only verified Access identity with matching issuer, audience and email can
  const expired=await new SignJWT({email:'editor@example.com'}).setProtectedHeader({alg:'RS256',kid:'qa'}).setSubject('editor').setIssuer(env.ACCESS_TEAM_DOMAIN).setAudience('hazen').setExpirationTime(1).sign(privateKey);await assert.rejects(editor(new Request(request.url,{headers:{'cf-access-jwt-assertion':expired}}),env,keys));
 });
 test('Admin API fails closed and mutations require same-origin',async()=>{
- assert.equal((await onRequest({request:new Request('https://hazen.example/api/admin/listings'),env:{}})).status,401);
+ assert.equal((await onRequest({request:new Request('https://hazen.example/api/admin/listings'),env:{}})).status,503);
+ assert.equal((await onRequest({request:new Request('https://hazen.example/api/admin/listings'),env:{ACCESS_AUD:'a',ACCESS_TEAM_DOMAIN:'https://t.example',EDITOR_EMAILS:'e@example.com'}})).status,401);
  assert.equal(mutationAllowed(new Request('https://hazen.example/api/admin/listings',{headers:{origin:'https://evil.example'}})),false);
  assert.equal(mutationAllowed(new Request('https://hazen.example/api/admin/listings',{headers:{origin:'https://hazen.example'}})),true);
 });

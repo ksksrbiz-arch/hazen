@@ -1,5 +1,8 @@
 // Shared by the build and draft studio. No credentials or provider calls.
 export const listingStatuses=['Active','Pending','Sold'];
+// Photo limits shared by the browser preparer and the server. Uploads must be strictly smaller.
+export const photoMaxBytes=400000;
+export const photoHistoryLimit=200;
 export function blankListing(){return {published:false,featured:true,slug:'',title:'',address:'',price:null,status:'Active',description:'',attribution:'Brad Hazen · Realty Pro, Inc.',permissionNote:'',updatedAt:new Date().toISOString().slice(0,10),images:[]};}
 export function listingErrors(item){
  const errors=[];

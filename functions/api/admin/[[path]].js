@@ -1,8 +1,8 @@
-import {editor,mutationAllowed} from '../../../server/auth.js';
-import {idPattern,filePattern,cleanDraft,rowRecord,publishErrors,change,imageType} from '../../../server/listings.js';
+import {editor,mutationAllowed,ConfigError} from '../../../server/auth.js';
+import {idPattern,filePattern,cleanDraft,rowRecord,publishErrors,change,imageType,photoMaxBytes,photoHistoryLimit,ListingInputError} from '../../../server/listings.js';
 const json=(data,status=200)=>Response.json(data,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
 export async function onRequest({request,env}){
- let actor;try{actor=await editor(request,env);}catch{return json({error:'Sign in to the listing studio.'},401);}
+ let actor;try{actor=await editor(request,env);}catch(error){if(error instanceof ConfigError){console.error('Editor authentication is not configured');return json({error:'The listing studio is not configured. Contact the developer.'},503);}return json({error:'Sign in to the listing studio.'},401);}
  if(!['GET','HEAD'].includes(request.method)&&!mutationAllowed(request))return json({error:'Same-origin request required'},403);
  if(!env.DB||!env.PHOTOS)return json({error:'Cloud storage unavailable'},503);
  const path=new URL(request.url).pathname.split('/').filter(Boolean).slice(2);
@@ -12,9 +12,10 @@ export async function onRequest({request,env}){
   const id=path[1];
   if(!id&&request.method==='GET'){
    const archived=new URL(request.url).searchParams.get('archived')==='1';
-   const rows=await env.DB.prepare('SELECT * FROM listings WHERE archived=? ORDER BY updated_at DESC LIMIT 200').bind(archived?1:0).all();
+   const rows=await env.DB.prepare('SELECT * FROM listings WHERE archived=? ORDER BY updated_at DESC LIMIT 201').bind(archived?1:0).all();
    const counts=await env.DB.prepare('SELECT count(*) AS total,coalesce(sum(archived=1),0) AS archived,coalesce(sum(archived=0 AND published_json IS NULL),0) AS drafts,coalesce(sum(archived=0 AND published_json IS NOT NULL),0) AS published FROM listings').first();
-   return json({listings:rows.results.map(rowRecord),counts});
+   const hasMore=rows.results.length>200;
+   return json({listings:rows.results.slice(0,200).map(rowRecord),counts,hasMore});
   }
   if(!id&&request.method==='POST'){
    const input=await body(request),listing=cleanDraft(input.listing),newId=crypto.randomUUID(),now=new Date().toISOString();
@@ -30,13 +31,15 @@ export async function onRequest({request,env}){
    if(row.archived)return json({error:'Restore the archived draft before adding photos'},409);
    if(request.method!=='PUT')return json({error:'Method not allowed'},405);
    const existing=await env.DB.prepare('SELECT key FROM photos WHERE key=?').bind(key).first();if(existing)return json({error:'Photo names are immutable. Add the photo with a new name.'},409);
-   if(Number(request.headers.get('content-length'))>=400000)return json({error:'Photo must be under 400 KB'},413);
-   const bytes=await request.arrayBuffer();if(bytes.byteLength>=400000)return json({error:'Photo must be under 400 KB'},413);
+   const bytes=await readLimited(request,photoMaxBytes);if(!bytes)return json({error:'Photo must be under 400 KB'},413);
    const type=imageType(bytes),expected=file.endsWith('.jpg')?'image/jpeg':file.endsWith('.png')?'image/png':'image/webp';
    if(type!==expected||request.headers.get('content-type')!==type)return json({error:'Invalid image file'},400);
-   const count=await env.DB.prepare('SELECT count(*) AS n FROM photos WHERE listing_id=?').bind(id).first();if(count.n>=200)return json({error:'Photo history limit reached. Contact the developer.'},400);
-   await env.PHOTOS.put(key,bytes,{httpMetadata:{contentType:type}});
-   await env.DB.prepare('INSERT INTO photos(key,listing_id,content_type,bytes,uploaded_at) VALUES(?,?,?,?,?)').bind(key,id,type,bytes.byteLength,new Date().toISOString()).run();return json({file});
+   // Reserve the name and enforce the history cap in one atomic statement, then store the bytes.
+   const reserved=await env.DB.prepare('INSERT INTO photos(key,listing_id,content_type,bytes,uploaded_at) SELECT ?,?,?,?,? WHERE NOT EXISTS(SELECT 1 FROM photos WHERE key=?) AND (SELECT count(*) FROM photos WHERE listing_id=?)<?').bind(key,id,type,bytes.byteLength,new Date().toISOString(),key,id,photoHistoryLimit).run();
+   if(reserved.meta.changes!==1){const taken=await env.DB.prepare('SELECT key FROM photos WHERE key=?').bind(key).first();return taken?json({error:'Photo names are immutable. Add the photo with a new name.'},409):json({error:'Photo history limit reached. Contact the developer.'},400);}
+   try{await env.PHOTOS.put(key,bytes,{httpMetadata:{contentType:type}});}
+   catch(error){await env.DB.prepare('DELETE FROM photos WHERE key=?').bind(key).run().catch(()=>{});throw error;}
+   return json({file});
   }
   if(request.method==='GET')return json(rowRecord(row));
   if(request.method!=='POST')return json({error:'Method not allowed'},405);
@@ -48,6 +51,21 @@ export async function onRequest({request,env}){
   let changed;try{changed=await change(env,id,revision,actor,action,listing);}catch(error){if(String(error).includes('UNIQUE'))return json({error:'Another published listing already uses this page slug.'},409);throw error;}
   if(!changed)return json({error:'Listing changed. Reload before saving.'},409);
   if(action==='archive')return json({archived:true});return json(rowRecord(await env.DB.prepare('SELECT * FROM listings WHERE id=?').bind(id).first()));
- }catch(error){console.error('Listing operation failed',error.name);return json({error:error instanceof RangeError?'Request too large':'Unable to process the listing. Check the details and try again.'},400);}
+ }catch(error){
+  if(error instanceof RangeError)return json({error:'Request too large'},400);
+  if(error instanceof ListingInputError||error instanceof SyntaxError)return json({error:'Unable to process the listing. Check the details and try again.'},400);
+  // Storage and unexpected failures are not the editor's mistake: report 500 and log the cause.
+  console.error('Listing operation failed',error?.name,error?.message);
+  return json({error:'The listing service had a problem. Your entries were not lost; try again shortly.'},500);
+ }
 }
 async function body(request){if(Number(request.headers.get('content-length'))>40000)throw new RangeError();const text=await request.text();if(text.length>40000)throw new RangeError();return JSON.parse(text);}
+// Reads at most limit-1 bytes; returns null when the body is that large or larger.
+async function readLimited(request,limit){
+ if(Number(request.headers.get('content-length'))>=limit)return null;
+ if(!request.body)return new ArrayBuffer(0);
+ const reader=request.body.getReader(),chunks=[];let total=0;
+ for(;;){const {done,value}=await reader.read();if(done)break;total+=value.byteLength;if(total>=limit){await reader.cancel();return null;}chunks.push(value);}
+ const out=new Uint8Array(total);let offset=0;for(const chunk of chunks){out.set(chunk,offset);offset+=chunk.byteLength;}
+ return out.buffer;
+}
