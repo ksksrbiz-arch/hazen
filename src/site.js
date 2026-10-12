@@ -172,3 +172,18 @@ if(communityCompare){
  communityCompare.hidden=false;const jump=document.querySelector('[data-compare-jump]');if(jump)jump.hidden=false;
  communityCompare.addEventListener('change',update);clear.addEventListener('click',()=>{choices.forEach(choice=>choice.checked=false);update();choices[0]?.focus();});window.addEventListener('pageshow',update);update();
 }
+
+// Native question disclosures remain usable without JavaScript.
+for(const faqSection of document.querySelectorAll('.faq-section')){
+ const toggle=faqSection.querySelector('[data-toggle-faq]'),answers=[...faqSection.querySelectorAll('#faq-answers details')];
+ if(!toggle||!answers.length)continue;
+ const update=()=>{const label=answers.every(answer=>answer.open)?'Hide All Answers':'Show All Answers';if(toggle.textContent!==label)toggle.textContent=label;};
+ toggle.hidden=false;toggle.addEventListener('click',()=>{const open=!answers.every(answer=>answer.open);answers.forEach(answer=>answer.open=open);update();});answers.forEach(answer=>answer.addEventListener('toggle',update));update();
+}
+
+// Keep the selected on-page link clear and let native anchors handle scrolling.
+for(const sectionNav of document.querySelectorAll('.page-sections[aria-label="On this page"]')){
+ const entries=[...sectionNav.querySelectorAll('a[href^="#"]')].map(link=>({link,target:document.getElementById(link.getAttribute('href').slice(1))})).filter(entry=>entry.target);
+ const update=()=>entries.forEach(({link})=>{if(link.getAttribute('href')===window.location.hash)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');});
+ entries.forEach(({target})=>{if(!target.hasAttribute('tabindex'))target.setAttribute('tabindex','-1');});window.addEventListener('hashchange',update);update();
+}

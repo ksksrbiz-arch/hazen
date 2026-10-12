@@ -211,3 +211,37 @@
 .inquiry-form .draft-actions a,.inquiry-form .draft-actions button{min-height:46px;border-radius:3px}
 .inquiry-form .form-status:empty{display:none}
 @media(max-width:600px){.inquiry-steps{grid-template-columns:1fr;gap:.5rem}.inquiry-steps li{grid-template-columns:27px 1fr;align-items:center;gap:.75rem;padding:.6rem .75rem}.inquiry-form .draft-actions{display:grid;grid-template-columns:1fr}.inquiry-form .draft-actions a,.inquiry-form .draft-actions button{width:100%;box-sizing:border-box;justify-content:center}.inquiry-errors{padding:.85rem 1rem}.inquiry-form .email-backup h3{font-size:20px}}
+
+/* Reading, section navigation and frequently asked questions. */
+.inner-content .reading-sections{max-width:820px;text-align:left}
+.reading-sections .content-section{padding:1.5rem 0 1.75rem;margin:1rem 0;border-bottom:1px solid #dce1e5}
+.reading-sections .content-section h2{font-size:clamp(22px,2.4vw,27px);line-height:1.5;color:#182b40;margin:0 0 .75rem}
+.reading-sections .content-section p{font-size:15px;line-height:1.95;color:#515b63;margin:0;max-width:760px}
+.page-sections{gap:.65rem;border-color:#dce1e5;background:#faf9f6}
+.page-sections a{padding:.45rem .85rem;border:1px solid #dce1e5;border-radius:3px;background:#fff;font-size:12px;text-decoration:none;line-height:1.7;color:#182b40}
+.page-sections a:hover{background:#fbf7ee;border-color:#ba9b54}
+.page-sections a[aria-current=location]{background:#fbf7ee;border-color:#936b1c;box-shadow:inset 0 -2px #936b1c;font-weight:600}
+.faq-section{max-width:900px;background:#f5f3ed;border:1px solid #dce1e5;padding:2rem;border-radius:5px;margin:3rem auto}
+.faq-heading-row{display:flex;justify-content:space-between;align-items:center;gap:1.25rem;margin-bottom:.75rem}
+.faq-heading-row .eyebrow{font-size:10px;letter-spacing:1.2px;color:#75551b;margin:0 0 .5rem}
+.faq-heading-row h2{margin:0;font-size:28px;line-height:1.5;color:#182b40}
+.faq-heading-row button{min-height:44px;font:inherit;font-size:11px;line-height:1.7;color:#182b40;background:#fff;border:1px solid #aab3ba;border-radius:3px;padding:.6rem 1rem;cursor:pointer;flex-shrink:0}
+.faq-heading-row button:hover{background:#fbf7ee;border-color:#936b1c}
+.faq-heading-row button[hidden]{display:none}
+.faq-section .faq-intro{font-size:13px;line-height:1.9;color:#59646d;margin:0 0 1.25rem}
+.faq-section details{border:1px solid #dce1e5;background:#fff;border-radius:4px;margin:.7rem 0;overflow:visible}
+.faq-section details[open]{border-color:#ba9b54}
+.faq-section summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem 1.25rem;min-height:54px;font-size:14px;line-height:1.8;color:#182b40}
+.faq-section summary::-webkit-details-marker{display:none}
+.faq-section .faq-indicator{display:grid;place-items:center;flex-shrink:0;width:26px;height:26px;border:1px solid #d5c496;border-radius:50%;color:#75551b;font-size:18px;font-weight:400;line-height:1}
+.faq-section .faq-indicator:before{content:'+'}
+.faq-section details[open]>summary .faq-indicator{background:#fbf7ee}
+.faq-section details[open]>summary .faq-indicator:before{content:'−'}
+.faq-section details[open]>summary{background:#fdfbf6}
+.faq-section details p{padding:0 1.25rem 1.25rem;margin:.75rem 0 0;font-size:14px;line-height:1.95;color:#515b63}
+.related-communities{max-width:820px}
+.related-communities>div{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.65rem}
+.related-communities a{display:flex;justify-content:space-between;align-items:center;gap:.75rem;background:#fff;border-color:#dce1e5;border-radius:3px;font-size:13px;min-height:48px;line-height:1.8}
+.related-communities a:hover{border-color:#ba9b54}
+@media(max-width:650px){.faq-section{padding:1.25rem;margin:2rem auto}.faq-heading-row{align-items:flex-start;flex-direction:column;gap:.75rem}.faq-heading-row h2{font-size:24px}.faq-heading-row button{width:100%}.faq-section summary{font-size:13px;padding:.9rem 1rem}.faq-section details p{font-size:13px;padding:0 1rem 1rem}.reading-sections .content-section p{font-size:14px}.related-communities>div{grid-template-columns:1fr}.page-sections{padding:.75rem;gap:.5rem}.page-sections a{flex:1 1 auto;justify-content:center}.page-sections>span{flex-basis:100%}}
+@media print{.faq-heading-row button{display:none!important}.page-sections{display:none!important}.faq-section{background:none;border:0;padding:0}.faq-section details{break-inside:avoid}}

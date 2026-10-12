@@ -188,3 +188,7 @@ The homepage now introduces the seller worksheet, buyer worksheet and photo prep
 ## Inquiry UI and validation - October 11, 2026
 
 Shared public inquiries now show a current details/review stage, field-specific validation messages and an error summary with links that focus the affected controls. Required whitespace-only values are rejected; native email validity is retained. ARIA invalid/described-by states connect each error while preserving existing hints. Topic changes update assessment-address requirements and remove irrelevant errors. Valid details still prepare only an email draft; edit retains values and returns to the details stage. Native validation is disabled only after the enhanced handler initializes. Mobile draft actions stack with full-width targets and the step list uses vertical rows. No data is submitted, stored or sent automatically.
+
+## Reading and question navigation UI - October 11, 2026
+
+FAQs now use individual disclosure cards with clear plus/minus cues and a JavaScript-enhanced Show/Hide All Answers action. Native question disclosures work without JavaScript. On-page links use larger button-style targets and indicate the selected URL fragment; targets can receive native anchor focus. Long biography/privacy/community sections are left-aligned with a bounded reading width and calmer spacing. Other-community links use consistent full-height grid targets, stacking on narrow screens. Content and inquiry delivery behavior are unchanged.
