@@ -12,8 +12,9 @@
     "backup": "node scripts/backup.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "verify": "npm run format:check && npm test && npm run build && npm run check",
-    "check:runtime": "wrangler pages functions build --outdir .wrangler/runtime-check && node scripts/check-runtime.mjs"
+    "verify": "npm run format:check && npm test && npm run build && npm run check && npm run check:icm",
+    "check:runtime": "wrangler pages functions build --outdir .wrangler/runtime-check && node scripts/check-runtime.mjs",
+    "check:icm": "node scripts/icm-check.mjs ."
   },
   "engines": {
     "node": ">=22"

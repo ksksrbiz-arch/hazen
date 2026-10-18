@@ -7,3 +7,5 @@ docs/
 src/content.json
 src/*.css
 database/
+context/
+CLAUDE.md

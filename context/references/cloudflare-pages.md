@@ -14,7 +14,7 @@ In Cloudflare dashboard, choose Workers & Pages → Create application → Pages
 
 Save and deploy. Copy the returned pages.dev URL; do not assume the project name or hostname is available. Git integration builds on Cloudflare, not GitHub Actions.
 
-This is a public development preview containing user-supplied business contact information. HTML robots metadata, robots.txt and an X-Robots-Tag header discourage indexing; these are not access controls. Do not store private client data or secrets in public content. Real form delivery remains unfinished. The Cloudflare listing editor is connected; see LISTING_WORKSPACE.md.
+This is a public development preview containing user-supplied business contact information. HTML robots metadata, robots.txt and an X-Robots-Tag header discourage indexing; these are not access controls. Do not store private client data or secrets in public content. Real form delivery remains unfinished. The Cloudflare listing editor is connected; see `context/references/listing-studio.md`.
 
 The current scaffold remains intentionally excluded from indexing. Before final production launch, replace placeholder text, configure verified content/forms, implement the production sitemap and metadata, and remove preview indexing restrictions only from production.
 
