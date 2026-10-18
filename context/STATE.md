@@ -6,7 +6,8 @@ Per-run state. Replace superseded lines instead of stacking them; history belong
 
 - Repository base: merge of PR #6 (2026-10-12). `npm run verify` on the ICM branch: 103 pass, 0 fail, 2 skipped (they skip when `dist/` is absent, which is the case during `npm test`).
 - Production D1 `hazen-listings` already has the three indexes from `002_indexes.sql`, with matching definitions (read-only `sqlite_master` query). No migration was applied.
-- Backup drill NOT run. The cloud session had no authenticated Wrangler and no Cloudflare credentials, and R2 objects cannot be downloaded through the Cloudflare connector. Runbook: `context/workflows/backup-drill/`. It needs a machine where `wrangler whoami` shows the account that owns the Hazen resources.
+- Backup drill PASSED 2026-10-18 on Keith's Windows PC (wrangler logged in as skdev@1commercesolutions.com; account 371afa6149061390a094cfbf8a184aff owns both resources). `npm run backup`: database exported, 9 of 9 photos saved. `--verify`: all files match the manifest, `complete: true`. Scratch restore into a new D1 database and R2 bucket: row counts match production (listings 3, photos 9, listing_events 10, the three 002 indexes present) and all 9 restored photos re-hash to the manifest SHA-256 and size. The backup is on that PC only (`Projects\hazen\backups\2026-10-18`, git-ignored): a second copy off the PC and off Cloudflare is still undecided. Backups are not scheduled. Scratch resources `hazen-restore-drill-20261018` (D1 e6bd0072-cab9-492e-8599-e51c3fd32693 and R2 bucket) are awaiting Keith's approval to delete.
+- Fixed a Windows bug the drill exposed: `scripts/backup.mjs` spawned `npx` and failed with ENOENT on Windows; it now runs wrangler through Node.
 - Repository moved into the ICM layout on branch `claude/icm-restructure` (not merged, not pushed).
 
 ## Open decisions

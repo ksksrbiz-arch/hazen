@@ -160,3 +160,7 @@ Added optional property type, lot acres and HTTPS source URL through draft norma
 ## Brad’s supplied headshot - October 11, 2026
 
 Replaced homepage and Meet Brad portrait placeholders with the user-supplied square headshot. Responsive 400px and 800px WebP copies retain the full image without retouching or cropping; the uploaded source remains unchanged. Native srcset/sizes, lazy loading, explicit dimensions and asynchronous decoding keep the portrait efficient and prevent layout shifts. Onboarding and launch records now mark the headshot received; brokerage logo files remain outstanding.
+
+## Backup drill and Windows fix — October 18, 2026
+
+First real backup, verify and scratch restore against the live Cloudflare account, run from Keith's PC. All passed (details in `context/STATE.md`). The drill exposed that `scripts/backup.mjs` could not spawn `npx` on Windows; fixed by running wrangler's bin through `process.execPath`. The repository was restructured into the ICM layout the same day.

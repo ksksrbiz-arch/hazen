@@ -30,7 +30,7 @@ Produces a signed-off decision on whether the Hazen site can leave design previe
 - [ ] Verify chosen IDX search, links, responsive behavior and provider disclosures once connected.
 - [ ] Check phone and desktop layout, keyboard focus, gallery, menu and contact paths.
 - [ ] Verify actual print/PDF output; print styles alone are not proof of a tested printout.
-- [ ] Run one real backup, verify and restore drill using `npm run backup` (runbook: `context/workflows/backup-drill/`), and confirm retention needs. The backup tool exists; the drill has not been run. Backups run on demand; nothing schedules them automatically yet.
+- [ ] Run one real backup, verify and restore drill using `npm run backup` (runbook: `context/workflows/backup-drill/`), and confirm retention needs. Backups run on demand; nothing schedules them automatically yet.
 - [ ] Verify final domain, redirects, canonical/share URLs and permissions. Enable indexing and sitemap only after launch approval.
 - [ ] Decide analytics/privacy settings; do not add third-party tracking by default.
 - [ ] Remove or update preview notices and placeholders only after approved replacements exist.

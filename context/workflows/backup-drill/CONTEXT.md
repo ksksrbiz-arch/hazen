@@ -27,7 +27,9 @@ Produces proof that the Hazen D1 database and R2 photos can be backed up, verifi
 4. Compare: row counts of `listings`, `photos`, `listing_events` match production; every photo key in the scratch database exists in the scratch bucket with the manifest size and SHA-256.
 5. Record the date, counts, any failure and the retention decision in `context/STATE.md`. Delete the scratch resources once Keith confirms.
 
-Proposed, not yet run: step 4's comparison queries and the scratch-resource names. For a database mistake in the last 30 days, D1 Time Travel (`wrangler d1 time-travel restore hazen-listings --timestamp <ISO time>`) needs no backup file; rehearsing it against production is out of scope for this drill.
+Steps 3 and 4 were run once as written above and passed; the scratch-resource name was `hazen-restore-drill-<yyyymmdd>`. For a database mistake in the last 30 days, D1 Time Travel (`wrangler d1 time-travel restore hazen-listings --timestamp <ISO time>`) needs no backup file; rehearsing it against production is out of scope for this drill.
+
+Notes from the first run (2026-10-18, Windows): the Cloudflare login can see two accounts, so set `CLOUDFLARE_ACCOUNT_ID=371afa6149061390a094cfbf8a184aff` (the skdev account that owns both resources) in the shell before any wrangler command. Photo content type was taken from the key's extension (webp). The restore comparison used row counts for `listings`, `photos`, `listing_events`, the three 002 indexes in `sqlite_master`, and a SHA-256 re-hash of every restored R2 object.
 
 ## Output
 
