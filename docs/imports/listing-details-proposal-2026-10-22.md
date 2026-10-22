@@ -7,6 +7,10 @@ Source: search summaries of the Real Geeks IDX mirrors of RMLS data
 
 Not proposed: days on market, price-change history, school names (assignments change; point visitors to the district).
 
+## Price reductions (confirmed by Keith, 2026-10-22)
+
+Both mirrors showed a price change of $8,000,000, and Keith confirmed it is accurate and happened on the same date for both: E Yacolt Road $10,000,000 to $2,000,000, NE Hazen Avenue $20,000,000 to $12,000,000. Set `originalPrice` (Studio: "Original price if reduced"). The reduction date is not recorded, so none is shown. The earlier "glitch" reading in this file was wrong.
+
 ## E Yacolt Road, MLS 24202394
 
 highlights:

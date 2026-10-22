@@ -2,7 +2,7 @@ import {listingErrors, photoMaxBytes, photoHistoryLimit} from '../src/listing-mo
 export {photoMaxBytes, photoHistoryLimit};
 // Bad editor input (as opposed to infrastructure failures); reported to the editor as a 400.
 export class ListingInputError extends Error {}
-const numberFields = new Set(['price', 'beds', 'baths', 'squareFeet', 'lotAcres']);
+const numberFields = new Set(['price', 'originalPrice', 'beds', 'baths', 'squareFeet', 'lotAcres']);
 export const idPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 export const filePattern = /^listing-[0-9a-f-]{36}\.(jpg|png|webp)$/;
 const fields = [
@@ -11,6 +11,7 @@ const fields = [
   'address',
   'mlsId',
   'price',
+  'originalPrice',
   'status',
   'description',
   'attribution',

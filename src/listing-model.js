@@ -48,6 +48,8 @@ export function listingErrors(item) {
     errors.push('Property: valid update date required');
   if (!listingStatuses.includes(item.status)) errors.push('Property status must be Active, Pending, or Sold');
   if (!Number.isFinite(item.price) || item.price < 0) errors.push('Property price must be a nonnegative number');
+  if (item.originalPrice != null && (!Number.isFinite(item.originalPrice) || !(item.originalPrice > item.price)))
+    errors.push('Invalid originalPrice');
   for (const field of ['beds', 'baths', 'squareFeet', 'lotAcres'])
     if (item[field] != null && (!Number.isFinite(item[field]) || item[field] < 0)) errors.push(`Invalid ${field}`);
   if (!Array.isArray(item.images) || !item.images.length) errors.push('Property needs an authorized image');

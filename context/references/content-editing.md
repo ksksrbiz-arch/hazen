@@ -16,6 +16,7 @@ Add an object to `properties` only after Brad supplies the property details and 
 | `beds` / `baths` / `squareFeet` | Optional numeric facts; leave absent when unknown |
 | `description` | Approved plain text description |
 | `images` | Array of `{ "file": "filename.webp", "alt": "Accurate description" }` |
+| `originalPrice` | Optional earlier asking price, only when Brad confirmed it; must be higher than `price`. Shows "Price reduced · Was $X" (not shown when Sold) |
 | `propertyType` / `lotAcres` | Optional text (80 characters) and acreage |
 | `highlights` | Optional. One short point per line, up to 8 lines of 120 characters. Only facts Brad confirmed |
 | `keyDetails` | Optional. One `Label: value` per line, up to 12 (zoning, parcel number, year built). Rendered in the Property details table |

@@ -58,7 +58,7 @@ function record() {
     'keyDetails'
   ])
     result[name] = field(name).value.trim();
-  for (const name of ['price', 'beds', 'baths', 'squareFeet', 'lotAcres']) {
+  for (const name of ['price', 'originalPrice', 'beds', 'baths', 'squareFeet', 'lotAcres']) {
     const value = field(name).value.trim();
     if (value) result[name] = Number(value);
     else if (name === 'price') result.price = null;
@@ -461,6 +461,7 @@ function publicationIssue(error) {
     [/Image alt/, 'Describe every photo', 'photo-input'],
     [/local asset/, 'Replace the invalid photo', 'photo-input'],
     [/Tour\/video/, 'Use an HTTPS tour or video link', 'videoUrl'],
+    [/^Invalid originalPrice/, 'Original price must be higher than the current price', 'originalPrice'],
     [/^Invalid beds/, 'Check the bedroom count', 'beds'],
     [/^Invalid baths/, 'Check the bathroom count', 'baths'],
     [/^Invalid lotAcres/, 'Check the lot acreage', 'lotAcres'],
