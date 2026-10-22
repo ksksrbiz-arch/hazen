@@ -27,7 +27,7 @@ test('Land facts survive save normalization, rendering, promotion and recovery w
   assert.equal(saved.propertyType, 'Land');
   assert.equal(saved.sourceUrl, land.sourceUrl);
   for (const html of [cards([{id: 'fixture', item: saved}]), propertyBody(saved)]) {
-    assert.match(html, /Land · 11.35 acres/);
+    assert.match(html, /Land<\/li><li>11.35 acres<\/li>|Land · 11.35 acres/);
     assert.doesNotMatch(html, /0 beds|0 baths|0 sq ft/);
     assert.doesNotMatch(html, /Private fixture/);
   }

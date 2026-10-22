@@ -53,7 +53,9 @@ function record() {
     'status',
     'videoUrl',
     'propertyType',
-    'sourceUrl'
+    'sourceUrl',
+    'highlights',
+    'keyDetails'
   ])
     result[name] = field(name).value.trim();
   for (const name of ['price', 'beds', 'baths', 'squareFeet', 'lotAcres']) {
@@ -463,6 +465,8 @@ function publicationIssue(error) {
     [/^Invalid baths/, 'Check the bathroom count', 'baths'],
     [/^Invalid lotAcres/, 'Check the lot acreage', 'lotAcres'],
     [/^Property type/, 'Use a short property type', 'propertyType'],
+    [/^Highlights/, 'Use up to 8 short lines for highlights', 'highlights'],
+    [/^Key details/, 'Write key details as Label: value, one per line', 'keyDetails'],
     [/^Listing source/, 'Use an HTTPS source link', 'sourceUrl'],
     [/^Invalid squareFeet/, 'Check the square footage', 'squareFeet']
   ];

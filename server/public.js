@@ -1,4 +1,5 @@
 import {contact} from '../src/contact.js';
+import {listLines, detailPairs} from '../src/listing-model.js';
 export const escapeHTML = value =>
   String(value ?? '').replace(
     /[&<>"']/g,
@@ -18,8 +19,37 @@ const facts = item =>
     .map(([label, v]) => e(v) + ' ' + label)
     .join(' · ');
 const photo = (id, file) => '/media/' + id + '/' + e(file);
+const number = new Intl.NumberFormat('en-US', {maximumFractionDigits: 2});
+// Calculated from the asking price and recorded size only; never stored, never an appraisal.
+const perAcre = item => (item.lotAcres > 0 && item.price > 0 ? price(Math.round(item.price / item.lotAcres)) : null);
+const perSqft = item =>
+  item.squareFeet > 0 && item.price > 0 ? price(Math.round(item.price / item.squareFeet)) : null;
+const excerpt = text => {
+  const first = String(text ?? '')
+    .split(/\n\s*\n/)[0]
+    .replace(/\s+/g, ' ')
+    .trim();
+  return first.length > 150 ? first.slice(0, 147).replace(/\s+\S*$/, '') + '…' : first;
+};
+const chips = item =>
+  [
+    item.propertyType,
+    item.lotAcres != null && number.format(item.lotAcres) + ' acres',
+    item.beds != null && number.format(item.beds) + ' beds',
+    item.baths != null && number.format(item.baths) + ' baths',
+    item.squareFeet != null && number.format(item.squareFeet) + ' sq ft'
+  ]
+    .filter(Boolean)
+    .map(label => `<li>${e(label)}</li>`)
+    .join('');
+export function cardMarkup({href, src, item, heading = 'h2'}) {
+  const image = item.images[0];
+  const count = item.images.length;
+  const rate = perAcre(item);
+  return `<article class="property-card"><a href="${href}"><div class="property-photo"><img src="${src}" alt="${e(image.alt)}" width="800" height="530" loading="lazy" decoding="async"><span class="property-status" data-status="${e(item.status)}">${e(item.status)}</span>${count > 1 ? `<span class="property-photo-count">${count} photos</span>` : ''}</div><div class="property-card-body"><p class="property-price">${price(item.price)}</p><${heading}>${e(item.title)}</${heading}><p class="property-address">${e(item.address)}</p><ul class="property-chips" aria-label="Key facts">${chips(item)}</ul>${rate ? `<p class="property-rate">About ${rate} per acre</p>` : ''}${excerpt(item.description) ? `<p class="property-excerpt">${e(excerpt(item.description))}</p>` : ''}<span class="property-link">View details <span aria-hidden="true">→</span></span></div></a></article>`;
+}
 export function cards(items, heading = 'h2') {
-  return `<div class="property-grid">${items.map(({id, item}) => `<article class="property-card"><a href="/properties/${e(item.slug)}/"><div class="property-photo"><img src="${photo(id, item.images[0].file)}" alt="${e(item.images[0].alt)}" width="800" height="530" loading="lazy" decoding="async"><span class="property-status">${e(item.status)}</span></div><div class="property-card-body"><p class="property-price">${price(item.price)}</p><${heading}>${e(item.title)}</${heading}><p>${e(item.address)}</p><p class="property-facts">${item.propertyType ? e(item.propertyType) + ' · ' : ''}${facts(item)}</p><span class="property-link">View Property →</span></div></a></article>`).join('')}</div><p class="collection-note">Manually maintained listings. Confirm availability and details with Brad.</p>`;
+  return `<div class="property-grid">${items.map(({id, item}) => cardMarkup({href: '/properties/' + e(item.slug) + '/', src: photo(id, item.images[0].file), item, heading})).join('')}</div><p class="collection-note">Manually maintained listings. Confirm availability and details with Brad.</p>`;
 }
 const sourceLink = item => {
   try {
@@ -29,13 +59,71 @@ const sourceLink = item => {
   } catch {}
   return '';
 };
+const mapLink = item =>
+  item.address
+    ? `<a class="property-map" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(item.address)}" target="_blank" rel="noopener noreferrer">View on map <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>`
+    : '';
+const glance = item => {
+  const tiles = [
+    ['Type', item.propertyType],
+    ['Lot size', item.lotAcres != null && number.format(item.lotAcres) + ' acres'],
+    ['Bedrooms', item.beds != null && number.format(item.beds)],
+    ['Bathrooms', item.baths != null && number.format(item.baths)],
+    ['Interior', item.squareFeet != null && number.format(item.squareFeet) + ' sq ft'],
+    ['Price per acre', perAcre(item)],
+    ['Price per sq ft', perSqft(item)]
+  ].filter(([, value]) => value);
+  return tiles.length
+    ? `<section class="property-glance" aria-labelledby="property-glance-heading"><h2 id="property-glance-heading">At a glance</h2><dl>${tiles.map(([label, value]) => `<div><dt>${e(label)}</dt><dd>${e(value)}</dd></div>`).join('')}</dl>${perAcre(item) || perSqft(item) ? '<p class="property-note">Per-unit prices are calculated from the asking price and are not an appraisal.</p>' : ''}</section>`
+    : '';
+};
+const highlightList = item => {
+  const lines = listLines(item.highlights);
+  return lines.length
+    ? `<section class="property-highlights" aria-labelledby="property-highlights-heading"><h2 id="property-highlights-heading">Highlights</h2><ul>${lines.map(line => `<li>${e(line)}</li>`).join('')}</ul></section>`
+    : '';
+};
+const detailTable = item => {
+  const rows = [
+    ['Status', item.status],
+    ['Asking price', item.price == null ? null : price(item.price)],
+    ['Property type', item.propertyType],
+    ['MLS #', item.mlsId],
+    [
+      'Lot size',
+      item.lotAcres != null &&
+        number.format(item.lotAcres) + ' acres (about ' + number.format(Math.round(item.lotAcres * 43560)) + ' sq ft)'
+    ],
+    ...detailPairs(item.keyDetails).filter(Boolean),
+    ['Details reviewed', item.updatedAt]
+  ].filter(([, value]) => value);
+  return `<section class="property-details" aria-labelledby="property-details-heading"><h2 id="property-details-heading">Property details</h2><dl>${rows.map(([label, value]) => `<div><dt>${e(label)}</dt><dd>${e(value)}</dd></div>`).join('')}</dl></section>`;
+};
+// Paragraphs read as paragraphs; a paragraph that starts "Disclosure:" becomes a visible callout.
+const descriptionBlocks = text => {
+  const blocks = String(text || 'Description to be added')
+    .split(/\n\s*\n/)
+    .map(block => block.trim())
+    .filter(Boolean);
+  return blocks
+    .map(block =>
+      /^disclosure\s*:/i.test(block)
+        ? `<aside class="property-disclosure"><strong>Disclosure</strong><p>${e(block.replace(/^disclosure\s*:\s*/i, ''))}</p></aside>`
+        : `<p>${e(block)}</p>`
+    )
+    .join('');
+};
 export function propertyBody(item, {imageBase = '/assets/', preview = false} = {}) {
   const images = item.images || [];
   let tour = false;
   try {
     tour = new URL(item.videoUrl).protocol === 'https:';
   } catch {}
-  return `<div data-property data-preview="${preview}" class="property-detail"><nav class="property-jumps" aria-label="Property sections"><a href="#property-photos">Photos</a><a href="#property-description">Details</a>${preview ? '' : '<a href="#property-contact">Contact Brad</a>'}</nav>${preview ? '<aside class="private-preview"><strong>Private saved-draft preview · not published</strong><p>This shows the last saved draft. Unsaved editor changes are excluded. Only enrolled editors can open this page.</p><a href="/studio/">Return to Listing Studio</a></aside>' : ''}<div class="property-overview"><div><span class="status-tag">${e(item.status || 'Draft')}</span><p class="property-price">${item.price == null ? 'Price to be added' : price(item.price)}</p><p>${e(item.address || 'Address to be added')}</p>${item.mlsId ? `<p class="property-mls">MLS # ${e(item.mlsId)}</p>` : ''}</div><p class="property-facts">${item.propertyType ? e(item.propertyType) + ' · ' : ''}${facts(item)}</p></div>${!preview && item.status !== 'Active' ? `<p class="availability-note">${item.status === 'Sold' ? 'This property is marked Sold. Ask Brad about similar homes.' : 'This property is marked Pending. Ask Brad about current availability.'}</p>` : ''}${preview ? '' : `<div class="page-actions"><a class="button" data-showing-email href="${contact.emailHref}?subject=${encodeURIComponent((item.status === 'Active' ? 'Showing inquiry: ' : 'Property inquiry: ') + item.address)}">${item.status === 'Active' ? 'Request a Showing by Email' : 'Ask Brad About This Property'}</a><a href="${contact.phoneHref}">Call Brad: ${contact.phone}</a></div>`}<div class="property-tools">${preview ? '' : '<button type="button" data-share-property hidden>Share Listing</button>'}<button type="button" data-print-property hidden>Print Property Sheet</button><p data-share-status role="status" aria-live="polite"></p><label data-share-fallback hidden>Listing link<input readonly aria-label="Listing link"></label></div>${images.length ? `<p class="gallery-note">Select a photo to view it larger.</p><div id="property-photos" class="property-gallery" aria-label="Property photos">${images.map((image, i) => `<figure><a href="${e(imageBase + image.file)}" data-gallery-photo aria-label="View photo ${i + 1}: ${e(image.alt || 'Property photo')}"><img src="${e(imageBase + image.file)}" alt="${e(image.alt)}" width="800" height="530" ${i ? 'loading="lazy"' : 'fetchpriority="high"'} decoding="async"><span class="photo-enlarge" aria-hidden="true">View photo ${i + 1} / ${images.length}</span></a><figcaption>${e(image.alt)}</figcaption></figure>`).join('')}</div>` : '<p id="property-photos" class="empty-state">Listing photos have not been added yet.</p>'}<article id="property-description" class="content-section"><h2>About this property</h2><p class="property-description">${e(item.description || 'Description to be added')}</p></article>${tour ? `<p class="property-tour"><a class="button" href="${e(item.videoUrl)}" target="_blank" rel="noopener noreferrer">View Tour / Video ↗</a></p>` : ''}<aside class="listing-attribution"><p>${e(item.attribution)}</p>${sourceLink(item)}<p>Last reviewed: ${e(item.updatedAt || 'Not recorded')}. Contact Brad to confirm details and availability.</p></aside>${preview ? '' : `<aside id="property-contact" class="property-contact-panel"><div><p class="eyebrow">Your next move</p><h2>Talk with Brad about this property</h2><p>Confirm the details, discuss your plans, or find a time to visit.</p></div><div><a class="button" href="${contact.phoneHref}">Call ${contact.phone}</a><a href="${contact.emailHref}">Email ${contact.email}</a><p>Email links open your email application; you send the message.</p></div></aside>`}<div class="property-print-contact"><strong>Brad Hazen · Realty Pro, Inc.</strong><p>${contact.phone} · ${contact.email}</p></div></div>`;
+  const showing = `<a class="button" data-showing-email href="${contact.emailHref}?subject=${encodeURIComponent((item.status === 'Active' ? 'Showing inquiry: ' : 'Property inquiry: ') + item.address)}">${item.status === 'Active' ? 'Request a Showing by Email' : 'Ask Brad About This Property'}</a>`;
+  const gallery = images.length
+    ? `<p class="gallery-note">Select a photo to view it larger.</p><div id="property-photos" class="property-gallery" aria-label="Property photos">${images.map((image, i) => `<figure><a href="${e(imageBase + image.file)}" data-gallery-photo aria-label="View photo ${i + 1}: ${e(image.alt || 'Property photo')}"><img src="${e(imageBase + image.file)}" alt="${e(image.alt)}" width="800" height="530" ${i ? 'loading="lazy"' : 'fetchpriority="high"'} decoding="async"><span class="photo-enlarge" aria-hidden="true">View photo ${i + 1} / ${images.length}</span></a><figcaption>${e(image.alt)}</figcaption></figure>`).join('')}</div>`
+    : '<p id="property-photos" class="empty-state">Listing photos have not been added yet.</p>';
+  return `<div data-property data-preview="${preview}" class="property-detail"><nav class="property-jumps" aria-label="Property sections"><a href="#property-photos">Photos</a><a href="#property-description">Details</a>${preview ? '' : '<a href="#property-contact">Contact Brad</a>'}</nav>${preview ? '<aside class="private-preview"><strong>Private saved-draft preview · not published</strong><p>This shows the last saved draft. Unsaved editor changes are excluded. Only enrolled editors can open this page.</p><a href="/studio/">Return to Listing Studio</a></aside>' : ''}<div class="property-overview"><div><span class="status-tag" data-status="${e(item.status || 'Draft')}">${e(item.status || 'Draft')}</span><p class="property-price">${item.price == null ? 'Price to be added' : price(item.price)}</p><p class="property-address">${e(item.address || 'Address to be added')}</p><p class="property-meta">${item.mlsId ? `<span class="property-mls">MLS # ${e(item.mlsId)}</span>` : ''}${mapLink(item)}</p></div><p class="property-facts">${item.propertyType ? e(item.propertyType) + ' · ' : ''}${facts(item)}</p></div>${!preview && item.status !== 'Active' ? `<p class="availability-note">${item.status === 'Sold' ? 'This property is marked Sold. Ask Brad about similar homes.' : 'This property is marked Pending. Ask Brad about current availability.'}</p>` : ''}<div class="property-layout"><div class="property-main">${gallery}${glance(item)}${highlightList(item)}<article id="property-description" class="content-section property-description"><h2>About this property</h2>${descriptionBlocks(item.description)}</article>${detailTable(item)}${tour ? `<p class="property-tour"><a class="button" href="${e(item.videoUrl)}" target="_blank" rel="noopener noreferrer">View Tour / Video ↗</a></p>` : ''}<aside class="listing-attribution"><p>${e(item.attribution)}</p>${sourceLink(item)}<p>Last reviewed: ${e(item.updatedAt || 'Not recorded')}. Contact Brad to confirm details and availability.</p></aside></div><aside class="property-side"><div class="property-side-card">${preview ? '' : `<p class="eyebrow">Interested?</p><div class="page-actions">${showing}<a href="${contact.phoneHref}">Call Brad: ${contact.phone}</a></div>`}<div class="property-tools">${preview ? '' : '<button type="button" data-share-property hidden>Share Listing</button>'}<button type="button" data-print-property hidden>Print Property Sheet</button><p data-share-status role="status" aria-live="polite"></p><label data-share-fallback hidden>Listing link<input readonly aria-label="Listing link"></label></div></div></aside></div>${preview ? '' : `<aside id="property-contact" class="property-contact-panel"><div><p class="eyebrow">Your next move</p><h2>Talk with Brad about this property</h2><p>Confirm the details, discuss your plans, or find a time to visit.</p></div><div><a class="button" href="${contact.phoneHref}">Call ${contact.phone}</a><a href="${contact.emailHref}">Email ${contact.email}</a><p>Email links open your email application; you send the message.</p></div></aside>`}<div class="property-print-contact"><strong>Brad Hazen · Realty Pro, Inc.</strong><p>${contact.phone} · ${contact.email}</p></div></div>`;
 }
 export function detail(id, item, {preview = false} = {}) {
   return `<section class="inner-hero"><h1>${e(item.title || 'Untitled listing')}</h1></section><section class="section inner-content"><nav class="breadcrumbs" aria-label="Breadcrumb">${preview ? '<a href="/studio/">Listing Studio</a>' : '<a href="/">Home</a><span>/</span><a href="/properties/">Properties</a>'}</nav>${propertyBody(item, {imageBase: preview ? '/api/admin/listings/' + id + '/photos/' : '/media/' + id + '/', preview})}</section>`;

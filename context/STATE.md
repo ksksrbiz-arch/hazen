@@ -10,6 +10,8 @@ Per-run state. Replace superseded lines instead of stacking them; history belong
 - Fixed a Windows bug the drill exposed: `scripts/backup.mjs` spawned `npx` and failed with ENOENT on Windows; it now runs wrangler through Node.
 - Repository moved into the ICM layout on branch `claude/icm-restructure` (not merged, not pushed).
 
+- Site polish and listing page overhaul on branch `claude/focused-curie-ae96xf` (2026-10-22): see changelog. Existing D1 listings have not been edited; highlights and key details are empty until Brad confirms facts.
+
 ## Open decisions
 
 - MLS/IDX path: waiting on Brad's Ylopo answer (since 2026-10-10). A direct RMLS Broker Specific feed was raised on 2026-10-18; the RMLS process is researched in `context/references/idx-and-mls.md`. Not decided, not started.

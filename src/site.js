@@ -267,6 +267,7 @@ if (property) {
     share.hidden = false;
     share.addEventListener('click', async () => {
       share.disabled = true;
+      share.setAttribute('aria-busy', 'true');
       fallback.hidden = true;
       try {
         if (navigator.share) {
@@ -292,6 +293,11 @@ if (property) {
         }
       } finally {
         share.disabled = false;
+        share.removeAttribute('aria-busy');
+        if (/shared|copied/.test(message.textContent)) {
+          share.dataset.confirmed = '';
+          setTimeout(() => delete share.dataset.confirmed, 1000);
+        }
       }
     });
     const email = property.querySelector('[data-showing-email]');
@@ -632,4 +638,27 @@ for (const sectionNav of document.querySelectorAll('.page-sections[aria-label="O
   });
   window.addEventListener('hashchange', update);
   update();
+}
+
+// Scroll reveal: only blocks that start below the fold are hidden, and only when motion is welcome.
+const revealTargets =
+  '.journey-grid a,.area-card,.inspiration-card,.process-grid article,.resource-card,.seller-feature figure';
+if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const observer = new IntersectionObserver(
+    entries =>
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const block = entry.target;
+        observer.unobserve(block);
+        block.classList.add('is-visible');
+        // Drop the helper classes once settled so hover transforms work again.
+        setTimeout(() => block.classList.remove('reveal', 'is-visible'), 700);
+      }),
+    {rootMargin: '0px 0px -8% 0px'}
+  );
+  document.querySelectorAll(revealTargets).forEach(block => {
+    if (block.getBoundingClientRect().top < window.innerHeight) return;
+    block.classList.add('reveal');
+    observer.observe(block);
+  });
 }

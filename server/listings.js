@@ -23,7 +23,9 @@ const fields = [
   'videoUrl',
   'propertyType',
   'lotAcres',
-  'sourceUrl'
+  'sourceUrl',
+  'highlights',
+  'keyDetails'
 ];
 export function cleanDraft(input) {
   if (!input || typeof input !== 'object' || Array.isArray(input)) throw new ListingInputError('Invalid listing');

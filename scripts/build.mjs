@@ -132,7 +132,11 @@ const css = fingerprint(
     '\n' +
     (await readFile(path.join(root, 'src/resources.css'), 'utf8')) +
     '\n' +
-    (await readFile(path.join(root, 'src/typography.css'), 'utf8'))
+    (await readFile(path.join(root, 'src/typography.css'), 'utf8')) +
+    '\n' +
+    (await readFile(path.join(root, 'src/listings.css'), 'utf8')) +
+    '\n' +
+    (await readFile(path.join(root, 'src/polish.css'), 'utf8'))
 );
 const cssName = 'styles.' + createHash('sha256').update(css).digest('hex').slice(0, 12) + '.css';
 await writeFile(path.join(root, 'dist', cssName), css);

@@ -19,6 +19,20 @@ export function blankListing() {
     images: []
   };
 }
+export const highlightLimit = 8;
+export const detailLimit = 12;
+export const listLines = text =>
+  String(text ?? '')
+    .split(/\r?\n/)
+    .map(line => line.trim())
+    .filter(Boolean);
+// "Label: value" lines; a line without a label and a value comes back as null so validation can report it.
+export const detailPairs = text =>
+  listLines(text).map(line => {
+    const at = line.indexOf(':');
+    const pair = at > 0 ? [line.slice(0, at).trim(), line.slice(at + 1).trim()] : null;
+    return pair && pair[0] && pair[1] ? pair : null;
+  });
 export function listingErrors(item) {
   const errors = [];
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.slug || ''))
@@ -44,6 +58,20 @@ export function listingErrors(item) {
   }
   if (item.propertyType != null && (typeof item.propertyType !== 'string' || item.propertyType.length > 80))
     errors.push('Property type must be text under 80 characters');
+  if (item.highlights != null) {
+    const lines = typeof item.highlights === 'string' ? listLines(item.highlights) : null;
+    if (!lines || lines.length > highlightLimit || lines.some(line => line.length > 120))
+      errors.push(`Highlights: up to ${highlightLimit} lines of 120 characters or fewer`);
+  }
+  if (item.keyDetails != null) {
+    const pairs = typeof item.keyDetails === 'string' ? detailPairs(item.keyDetails) : null;
+    if (
+      !pairs ||
+      pairs.length > detailLimit ||
+      pairs.some(pair => !pair || pair[0].length > 40 || pair[1].length > 120)
+    )
+      errors.push(`Key details: up to ${detailLimit} lines written as Label: value`);
+  }
   if (item.sourceUrl) {
     try {
       const url = new URL(item.sourceUrl);
