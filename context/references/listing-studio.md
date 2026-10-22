@@ -52,3 +52,7 @@ Download Working Notes retains current text even for incomplete drafts. It inclu
 ## Verify
 
 `npm test` and `npm run check:runtime`. Brad runs the handoff session in `context/workflows/launch-check/`.
+
+## Highlights and key details (2026-10-22)
+
+Two optional textareas under the description. `highlights`: one point per line, max 8 x 120 characters. `keyDetails`: `Label: value` per line, max 12 (label 40, value 120). Parsed by `listLines` and `detailPairs` in `src/listing-model.js`, validated in `listingErrors`, whitelisted in `server/listings.js`, rendered by `server/public.js`. Enter only facts Brad has confirmed; the page never fills gaps.

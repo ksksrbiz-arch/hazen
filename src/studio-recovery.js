@@ -72,6 +72,8 @@ export function listingWorkingNotes(item = {}) {
     ['Listing source URL', 'sourceUrl', 500],
     ['Public attribution', 'attribution', 300],
     ['Description', 'description', 6000],
+    ['Highlights', 'highlights', 1200],
+    ['Key details', 'keyDetails', 1500],
     ['Internal authorization note', 'permissionNote', 500]
   ];
   const photos = Array.isArray(item.images) ? item.images.slice(0, 20) : [];

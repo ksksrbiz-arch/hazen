@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {propertyBody} from '../server/public.js';
+import {propertyBody, cardMarkup} from '../server/public.js';
 import {listingErrors} from '../src/listing-model.js';
 export const escapeHTML = value =>
   String(value).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'})[c]);
@@ -25,25 +25,12 @@ export const priceLabel = value =>
 export function propertyCards(items, heading = 'h2') {
   assert(['h2', 'h3'].includes(heading));
   return `<div class="property-grid">${items
-    .map(
-      item =>
-        `<article class="property-card"><a href="/properties/${item.slug}/"><div class="property-photo"><img src="/assets/${escapeHTML(item.images[0].file)}" alt="${escapeHTML(item.images[0].alt)}" width="800" height="530" loading="lazy" decoding="async"><span class="property-status">${escapeHTML(item.status)}</span></div><div class="property-card-body"><p class="property-price">${priceLabel(item.price)}</p><${heading}>${escapeHTML(item.title)}</${heading}><p>${escapeHTML(item.address)}</p><p class="property-facts">${item.propertyType ? escapeHTML(item.propertyType) + ' · ' : ''}${facts(
-          item
-        )
-          .map(([label, value]) => `${escapeHTML(value)} ${label}`)
-          .join(' · ')}</p><span class="property-link">View Property →</span></div></a></article>`
+    .map(item =>
+      cardMarkup({href: `/properties/${item.slug}/`, src: `/assets/${escapeHTML(item.images[0].file)}`, item, heading})
     )
     .join(
       ''
     )}</div><p class="collection-note">Manually maintained featured properties. Availability and details may change; confirm with Brad.</p>`;
-}
-function facts(item) {
-  return [
-    ['beds', item.beds],
-    ['baths', item.baths],
-    ['sq ft', item.squareFeet],
-    ['acres', item.lotAcres]
-  ].filter(([, value]) => value != null);
 }
 export function propertyDetail(item) {
   return propertyBody(item);

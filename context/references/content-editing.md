@@ -16,11 +16,14 @@ Add an object to `properties` only after Brad supplies the property details and 
 | `beds` / `baths` / `squareFeet` | Optional numeric facts; leave absent when unknown |
 | `description` | Approved plain text description |
 | `images` | Array of `{ "file": "filename.webp", "alt": "Accurate description" }` |
+| `propertyType` / `lotAcres` | Optional text (80 characters) and acreage |
+| `highlights` | Optional. One short point per line, up to 8 lines of 120 characters. Only facts Brad confirmed |
+| `keyDetails` | Optional. One `Label: value` per line, up to 12 (zoning, parcel number, year built). Rendered in the Property details table |
 | `attribution` | Approved public listing/brokerage attribution |
 | `permissionNote` | Internal record of Brad’s authorization and image rights; not rendered |
 | `updatedAt` | Date the details were reviewed, in `YYYY-MM-DD` format |
 
-Place authorized image files in `src/assets/`; use the filename only in the JSON. Optimize images below 400 KB before publishing. Build creates `/properties/[slug]/`, property cards, a gallery, status/price/facts, attribution, and an inquiry prefilled with the address. Published properties are separate from any future MLS search. Update status and review date when Brad confirms changes; set `published` to `false` to unpublish. Rebuilding removes the old output directory, so unpublished property routes are not retained.
+Place authorized image files in `src/assets/`; use the filename only in the JSON. Optimize images below 400 KB before publishing. The page also shows an At a glance grid, price per acre and per sq ft (calculated from the asking price and size, labelled as not an appraisal, never stored), a map link, and a paragraph starting `Disclosure:` as a callout. Nothing is shown for fields left empty. Build creates `/properties/[slug]/`, property cards, a gallery, status/price/facts, attribution, and an inquiry prefilled with the address. Published properties are separate from any future MLS search. Update status and review date when Brad confirms changes; set `published` to `false` to unpublish. Rebuilding removes the old output directory, so unpublished property routes are not retained.
 
 ## Testimonials
 
