@@ -88,6 +88,7 @@ export function listingWorkingNotes(item = {}) {
         ['Bedrooms', 'beds'],
         ['Bathrooms', 'baths'],
         ['Square feet', 'squareFeet'],
+        ['Original price (if reduced)', 'originalPrice'],
         ['Lot size in acres', 'lotAcres']
       ].map(([label, key]) => label + ': ' + number(key)),
       'Feature on homepage: ' + (item.featured === true ? 'Yes' : 'No'),

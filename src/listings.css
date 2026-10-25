@@ -76,3 +76,5 @@
  .property-glance dl>div,.property-disclosure{break-inside:avoid}
  .property-gallery{display:block}
 }
+.property-reduced{margin:0 0 .5rem;font-size:14px;color:#46515b}.property-reduced s{color:#5d6770}.reduced-tag{display:inline-block;margin-right:.35rem;padding:.15rem .55rem;border-radius:3px;background:#fff1d6;color:#6b4a00;font-weight:600;font-size:12px;letter-spacing:.05em;text-transform:uppercase}
+.property-overview .property-reduced{font-size:16px}

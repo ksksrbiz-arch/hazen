@@ -76,3 +76,13 @@ test('Cards show chips, photo count, a calculated rate and a trimmed excerpt', (
   assert.match(html, /About \$1,333,333 per acre/);
   assert.match(html, /property-excerpt">Word[^<]*…</);
 });
+test('A confirmed higher earlier price shows as a reduction, and never on a sold or invalid listing', () => {
+  const reduced = {...base, price: 2000000, originalPrice: 10000000};
+  assert.deepEqual(listingErrors(reduced), []);
+  assert.match(propertyBody(reduced), /Price reduced<\/span> Was <s>\$10,000,000<\/s> · down \$8,000,000/);
+  assert.match(cards([{id: 'x', item: reduced}]), /Price reduced<\/span> Was <s>\$10,000,000/);
+  assert.doesNotMatch(propertyBody({...reduced, status: 'Sold'}), /Price reduced/);
+  assert.doesNotMatch(propertyBody(base), /Price reduced/);
+  assert.match(listingErrors({...base, originalPrice: 1}).join(' '), /originalPrice/);
+  assert.equal(cleanDraft(reduced).originalPrice, 10000000);
+});
