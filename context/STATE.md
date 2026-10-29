@@ -4,10 +4,14 @@ Per-run state. Replace superseded lines instead of stacking them; history belong
 
 ## Current work — October 29, 2026
 
+- Keith purchased bradhazen.com and authorized domain activation on October 29. Cloudflare Pages custom domains apex/www and proxied CNAMEs are configured; a 301 rule preserves paths/queries and chooses HTTPS apex. Existing Access editor policy/audience retained and destinations extended to apex/www studio/admin.
+- Domain release: canonical/share URLs use bradhazen.com; production marketing HTML is indexable with a sitemap. Preview hosts, private pages, widget, legacy manual listings and empty testimonials remain noindex. Blog drafts remain unpublished. Required local checks passed; live activation verification is pending deployment.
+- This records technical domain activation, not completion of Brad's personal editor training, print/device review, content/licensing signoff or maintenance agreement. FUB lead assignment still awaits access; inquiries still prepare email drafts.
+
 - Listing navigation: homepage journey card and static/dynamic detail breadcrumbs lead to the Ylopo gallery at /brads-listings/. Legacy detail URLs remain available.
 
 - Community SEO pass: six researched guides in scripts/community-guides.mjs, official section citations, review dates, navigation, FAQs and buyer/search links. Page title and sharing metadata are centralized in scripts/seo.mjs.
-- Two researched blog drafts are in src/posts.json and docs/editorial/BLOG-DRAFTS-2026-10-29.md; neither is approved or published. Brad’s recorded perspective and exact-text approval remain required. Preview noindex remains in place.
+- Two researched blog drafts are in src/posts.json and docs/editorial/BLOG-DRAFTS-2026-10-29.md; neither is approved or published. Brad’s recorded perspective and exact-text approval remain required. Preview-host noindex remains in place.
 - Outlook checked October 29 during this pass: no reply to the 2:47 p.m. Pacific Ylopo technical-support email. Earlier forwarded questionnaire/training messages are not that reply.
 
 - PR #9 merged and verified on hazen-ci5.pages.dev: MLS-selected gallery, full-market search navigation, approval-gated blog framework.
@@ -44,7 +48,7 @@ Per-run state. Replace superseded lines instead of stacking them; history belong
 - [ ] Approved brokerage brand files and usage guidance.
 - [ ] Approved bio, license details, brokerage disclosures and service areas.
 - [ ] Confirm public contact details and receiving inbox.
-- [ ] Domain ownership and access through supported roles.
+- [x] Domain ownership and Cloudflare access verified for bradhazen.com (October 29).
 - [ ] IDX/Ylopo provider, approved agent search or embed, MLS coverage and developer invitation.
 - [ ] Required provider/brokerage website-display approvals and disclosures.
 - [ ] First listing with approved facts, status, attribution and authorized photos.

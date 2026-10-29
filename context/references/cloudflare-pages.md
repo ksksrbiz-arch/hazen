@@ -1,6 +1,6 @@
-# Cloudflare Pages preview setup
+# Cloudflare Pages deployment
 
-Repository: ksksrbiz-arch/hazen. No domain changes required.
+Repository: ksksrbiz-arch/hazen. Production: https://bradhazen.com/ (Keith authorized October 29, 2026). Preview: https://hazen-ci5.pages.dev/.
 
 In Cloudflare dashboard, choose Workers & Pages → Create application → Pages → Connect to Git (labels may vary). Select the hazen repository.
 
@@ -36,3 +36,12 @@ Actual project: `hazen`; hostname: `hazen-ci5.pages.dev`. Production bindings:
 Access application ID: `42cdfe69-6542-4f3c-9831-64c121968575`. Its destinations protect `/studio` and `/api/admin`; policy grants only the initial editor. Updating destinations for a custom domain also requires redeploying any changed runtime configuration. Preview has no production backend bindings. Both environments set `fail_open=false`.
 
 The deployment bundles `/functions`, `/server`, and `jose`. `dist/_routes.json` limits dynamic invocation to home, property, studio, admin and media routes. Marketing pages/assets remain static. The schema was applied through the Cloudflare D1 API. Keep migrations additive and reviewed; `npm run build` does not migrate databases.
+
+
+## Custom domain — October 29, 2026
+
+Zone fd52f5881b3ce7ff29bcf82b9bbb3c07 is active in account 371afa6149061390a094cfbf8a184aff. Pages project hazen has bradhazen.com and www.bradhazen.com attached, with proxied CNAMEs to hazen-ci5.pages.dev. Zone redirect ruleset 4997ca589f534d20ab5f79193d0f3185 selects HTTPS apex with 301, preserving path/query. Access destinations now include studio and api/admin on both new hosts as well as the original preview. Identity provider, editor membership and audience are unchanged.
+
+Static build HTML stays noindex as a safe default. Functions now cover HTML/robots/sitemap on all hosts; immutable assets bypass them. Only successful public marketing HTML on https://bradhazen.com receives index/follow at runtime. Preview robots disallow all and its sitemap returns 404. Legacy properties, empty testimonials, agent login, widget, studio and API stay excluded. Generated sitemap contains only eligible published marketing pages; unapproved blog posts never enter it. This supersedes the preview-only indexing/routing notes above.
+
+Ylopo still uses bradhazen.realtypronw.net for full search, accounts and listing details. New domain activation does not prove Follow Up Boss assignment. No mailboxes or email sending service have been provisioned for bradhazen.com. Forms still use visitors' email applications.

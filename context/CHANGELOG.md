@@ -203,3 +203,8 @@ Reviewed PR #10 and the server/functions code. Fixed: with JavaScript off the ga
 ## 2026-10-29 — Consistent listing navigation
 
 - Homepage journey card 03 and public property-detail breadcrumbs now lead to /brads-listings/. Legacy detail URLs and private Studio previews remain available.
+
+
+## October 29, 2026 — bradhazen.com activation
+
+Keith authorized connecting his purchased domain and putting the existing site live. Added hostname-aware production indexing, canonical/share URLs, public sitemap, preview/private exclusions and canonical redirect fallback. Cloudflare apex/www custom domains and DNS point to hazen-ci5.pages.dev; a zone rule redirects HTTP/www to HTTPS apex while preserving path/query. Extended the existing Access application's destinations without changing editor membership, JWT audience or provider. Updated the private guide's links and provider status. No D1/R2 changes, new tracking, email delivery or blog publication. Local verify (128 tests and 28 generated pages) and compiled runtime checks passed, including production-versus-preview robots/metadata, sitemap exclusions, redirect and anonymous protection. Browser and hosted verification recorded in the release handoff.
