@@ -683,3 +683,11 @@ window.addEventListener('message', event => {
     frame.closest('.listing-experience').querySelector('details').open = true;
   }
 });
+
+// Search controls live in their own sandbox; only its exact window may resize this frame.
+window.addEventListener('message', event => {
+  if (event.data?.type !== 'brad-property-search') return;
+  const frame = document.querySelector('.property-search-frame');
+  if (!frame || event.source !== frame.contentWindow || !Number.isFinite(event.data.height)) return;
+  frame.style.height = Math.min(24000, Math.max(400, event.data.height)) + 'px';
+});

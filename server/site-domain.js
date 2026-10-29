@@ -2,7 +2,9 @@ export const siteOrigin = 'https://bradhazen.com';
 
 // Legacy manual listings remain available, but the Ylopo gallery is the public listing destination.
 export function publicSearchPath(pathname) {
-  return !/^\/(?:studio|api|media|agent-login|listing-widget|properties|testimonials)(?:\/|$)/.test(pathname);
+  return !/^\/(?:studio|api|media|agent-login|search-widget|listing-widget|properties|testimonials)(?:\/|$)/.test(
+    pathname
+  );
 }
 
 export async function domainResponse(request, response) {

@@ -195,6 +195,13 @@ const pages = [
   resourcesPage,
   searchPage,
   {
+    slug: 'search-widget',
+    title: 'Property search',
+    intro: 'Open Brad’s full property search.',
+    sections: [],
+    customBody: '<a href="https://bradhazen.realtypronw.net/">Open full search</a>'
+  },
+  {
     slug: 'listing-widget',
     title: 'Brad’s property listings',
     intro: 'Open Brad’s Realty Pro search site to view current property details.',
