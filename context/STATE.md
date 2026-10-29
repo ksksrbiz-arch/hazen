@@ -4,8 +4,8 @@ Per-run state. Replace superseded lines instead of stacking them; history belong
 
 ## Current work — October 29, 2026
 
-- Keith purchased bradhazen.com and authorized domain activation on October 29. Cloudflare Pages custom domains apex/www and proxied CNAMEs are configured; a 301 rule preserves paths/queries and chooses HTTPS apex. Existing Access editor policy/audience retained and destinations extended to apex/www studio/admin.
-- Domain release: canonical/share URLs use bradhazen.com; production marketing HTML is indexable with a sitemap. Preview hosts, private pages, widget, legacy manual listings and empty testimonials remain noindex. Blog drafts remain unpublished. Required local checks passed; live activation verification is pending deployment.
+- Keith purchased bradhazen.com and authorized domain activation on October 29. Cloudflare Pages apex custom domain and proxied CNAME are configured; www is a dedicated proxied redirect hostname; a 301 rule preserves paths/queries and chooses HTTPS apex. Existing Access editor policy/audience retained and destinations extended to apex/www studio/admin.
+- Domain release: canonical/share URLs use bradhazen.com; production marketing HTML is indexable with a sitemap. Preview hosts, private pages, widget, legacy manual listings and empty testimonials remain noindex. Blog drafts remain unpublished. PR #15 merged (034fe32) and deployed successfully. Live HTTPS, path/query-preserving HTTP/www redirects, canonical/share image, production/preview robots and sitemap, Ylopo gallery, provider search link and anonymous studio/admin protection verified. Local verify (128 tests), runtime checks and 73 browser tests passed.
 - This records technical domain activation, not completion of Brad's personal editor training, print/device review, content/licensing signoff or maintenance agreement. FUB lead assignment still awaits access; inquiries still prepare email drafts.
 
 - Listing navigation: homepage journey card and static/dynamic detail breadcrumbs lead to the Ylopo gallery at /brads-listings/. Legacy detail URLs remain available.

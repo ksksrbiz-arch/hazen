@@ -208,3 +208,8 @@ Reviewed PR #10 and the server/functions code. Fixed: with JavaScript off the ga
 ## October 29, 2026 — bradhazen.com activation
 
 Keith authorized connecting his purchased domain and putting the existing site live. Added hostname-aware production indexing, canonical/share URLs, public sitemap, preview/private exclusions and canonical redirect fallback. Cloudflare apex/www custom domains and DNS point to hazen-ci5.pages.dev; a zone rule redirects HTTP/www to HTTPS apex while preserving path/query. Extended the existing Access application's destinations without changing editor membership, JWT audience or provider. Updated the private guide's links and provider status. No D1/R2 changes, new tracking, email delivery or blog publication. Local verify (128 tests and 28 generated pages) and compiled runtime checks passed, including production-versus-preview robots/metadata, sitemap exclusions, redirect and anonymous protection. Browser and hosted verification recorded in the release handoff.
+
+
+## October 29, 2026 — domain live verification
+
+PR #15 deployed as 034fe32, Cloudflare deployment 8f4a6a3d-fd90-4bcc-a1c9-ce637509e0a7. Verified HTTPS apex, 301 HTTP/www paths and queries, canonical/share image, indexable marketing pages, excluded previews/private/legacy pages, public-only sitemap and Access redirects. Desktop/mobile browser checks loaded both Ylopo listings without page errors; search still opens Brad's provider account. All 73 local browser tests passed. Simplified www to a dedicated proxied redirect A record (192.0.2.1) and removed the unnecessary pending Pages association; HTTPS redirect rechecked successfully. Provider/FUB assignment and signed-in new-origin editing remain separate unverified items.
