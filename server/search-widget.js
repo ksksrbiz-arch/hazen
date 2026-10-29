@@ -41,7 +41,7 @@ export function searchWidgetResponse() {
   <div class="result-actions"><button id="search-more" class="primary" hidden>Show more properties</button><button id="search-retry" hidden>Try again</button></div>
   <div class="provider-links"><a href="https://bradhazen.realtypronw.net/" target="_blank" rel="noopener">Open full map search &amp; account tools ↗</a><p class="provider-note">Property details, saved searches and registration open on Brad’s Realty Pro search site in a new tab. Listing information and brokerage attribution are supplied by Realty Pro.</p></div>
   <noscript><p>Enable JavaScript to use these filters, or open the full-search link above.</p></noscript>
-  <script>(${searchWidgetClient.toString()})();</script><script defer src="https://bradhazen.realtypronw.net/build/js/widgets-1.0.0.js"></script></body></html>`,
+  <script>${searchWidgetClient}</script><script defer src="https://bradhazen.realtypronw.net/build/js/widgets-1.0.0.js"></script></body></html>`,
     {headers: galleryResponse().headers}
   );
 }

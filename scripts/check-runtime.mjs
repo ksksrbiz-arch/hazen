@@ -51,12 +51,29 @@ const mf = new Miniflare(
   })
 );
 try {
-  const liveHome = await mf.dispatchFetch('https://bradhazen.com/');
   const searchWidget = await mf.dispatchFetch('https://bradhazen.com/search-widget/');
   assert.equal(searchWidget.status, 200);
   assert.equal(searchWidget.headers.get('x-robots-tag'), 'noindex, nofollow');
   assert.equal(searchWidget.headers.get('x-frame-options'), 'SAMEORIGIN');
-  assert.ok((await searchWidget.text()).includes('search-filters'));
+  const searchHTML = await searchWidget.text();
+  assert.ok(searchHTML.includes('search-filters'));
+  const {chromium} = await import('@playwright/test');
+  const browser = await chromium.launch();
+  try {
+    const page = await browser.newPage();
+    const errors = [];
+    page.on('pageerror', error => errors.push(error.message));
+    await page.route('https://bradhazen.realtypronw.net/**', route => route.abort());
+    await page.route('https://bradhazen.com/search-widget/', route =>
+      route.fulfill({contentType: 'text/html', body: searchHTML})
+    );
+    await page.goto('https://bradhazen.com/search-widget/');
+    assert.equal(await page.evaluate(() => window.YLOPO_WIDGETS.domain), 'bradhazen.realtypronw.net');
+    assert.deepEqual(errors, []);
+  } finally {
+    await browser.close();
+  }
+  const liveHome = await mf.dispatchFetch('https://bradhazen.com/');
   assert.equal(liveHome.headers.get('x-robots-tag'), 'index, follow');
   const liveHTML = await liveHome.text();
   assert.ok(liveHTML.includes('content="index,follow"'));

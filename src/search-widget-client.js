@@ -1,5 +1,5 @@
-// Serialized into the isolated provider frame; keep this function self-contained.
-export function searchWidgetClient() {
+// Literal browser source: bundler helpers must not leak into the isolated frame.
+export const searchWidgetClient = `(function searchWidgetClient() {
   const form = document.querySelector('#search-filters');
   const results = document.querySelector('#search-results');
   const status = document.querySelector('#search-status');
@@ -37,9 +37,9 @@ export function searchWidgetClient() {
       const address = card.querySelector('.gallery-card-b-address-block');
       if (!link || !address) continue;
       const label = address.textContent.trim();
-      link.setAttribute('aria-label', `View ${label} details (opens in a new tab)`);
+      link.setAttribute('aria-label', \`View \${label} details (opens in a new tab)\`);
       const map = card.querySelector('button.card-icon');
-      if (map) map.setAttribute('aria-label', `Switch photo and map for ${label}`);
+      if (map) map.setAttribute('aria-label', \`Switch photo and map for \${label}\`);
       if (!card.querySelector('.gallery-detail-link')) {
         const detail = document.createElement('a');
         detail.href = link.href;
@@ -67,8 +67,8 @@ export function searchWidgetClient() {
       retry.hidden = true;
       const city = current.locations[0].city;
       status.textContent = listings.length
-        ? `Showing ${listings.length} matching ${listings.length === 1 ? 'property' : 'properties'} in ${city}.`
-        : `No matching properties returned in ${city}. Try a wider price range or fewer filters.`;
+        ? \`Showing \${listings.length} matching \${listings.length === 1 ? 'property' : 'properties'} in \${city}.\`
+        : \`No matching properties returned in \${city}. Try a wider price range or fewer filters.\`;
       summary.textContent =
         listings.length === current.limit
           ? current.limit < 24
@@ -139,4 +139,4 @@ export function searchWidgetClient() {
     true
   );
   loading();
-}
+})();`;
