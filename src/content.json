@@ -189,7 +189,7 @@
     {
       "slug": "privacy",
       "title": "Privacy information",
-      "intro": "This preview has no visitor accounts, MLS search, or website inquiry storage. Inquiry forms prepare a message in your email application; you choose whether to send it.",
+      "intro": "This website displays selected listings through Realty Pro’s Ylopo service and links to Brad’s property-search site. Our inquiry forms prepare a message in your email application; you choose whether to send it.",
       "sections": [
         [
           "Email inquiries",
@@ -197,7 +197,11 @@
         ],
         [
           "Hosting",
-          "Cloudflare hosts this preview and may process request information to operate and secure the website. A final privacy notice will reflect any future inquiry delivery, analytics, or listing integrations."
+          "Cloudflare hosts this preview and may process request information to operate and secure the website. The listing gallery also requests content, images and fonts from Ylopo and its service providers. Those requests share technical information such as your IP address and browser details with the providers."
+        ],
+        [
+          "Property search and registration",
+          "Property details, full-market search, saved searches and registration open on Brad’s Realty Pro search site. Review that site’s privacy notice and contact choices before registering. Its account and inquiry handling is separate from the email-draft forms on this website."
         ],
         [
           "Private listing workspace",

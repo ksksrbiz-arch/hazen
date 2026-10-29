@@ -183,7 +183,7 @@ try {
   const resilientHome = await mf.dispatchFetch('https://qa.example/'),
     resilientHTML = await resilientHome.text();
   assert.equal(resilientHome.status, 200);
-  assert.ok(resilientHTML.includes('SELL YOUR HOME WITH BRAD HAZEN'));
+  assert.ok(resilientHTML.includes('Your next move deserves a clear plan.'));
   assert.ok(resilientHTML.includes('id="brad-mls-listings"'));
   assert.ok(resilientHTML.includes('/listing-widget/'));
   assert.ok(!resilientHTML.includes('QA house'));

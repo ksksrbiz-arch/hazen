@@ -151,7 +151,8 @@ test('Listing Studio script loads and renders the editor with a mocked API', asy
 test('heading font loads as a small WOFF2 and is preloaded with the matching URL', async ({page}) => {
   const fonts = [];
   page.on('response', response => {
-    if (/\.(woff2?|ttf)$/.test(new URL(response.url()).pathname)) fonts.push(response);
+    if (response.frame() === page.mainFrame() && /\.(woff2?|ttf)$/.test(new URL(response.url()).pathname))
+      fonts.push(response);
   });
   await page.goto('/');
   await page.evaluate(() => document.fonts.ready);

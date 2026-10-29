@@ -4,6 +4,10 @@ Per-run state. Replace superseded lines instead of stacking them; history belong
 
 ## Current work — October 29, 2026
 
+- PR #9 merged and verified on hazen-ci5.pages.dev: MLS-selected gallery, full-market search navigation, approval-gated blog framework.
+- Quality pass implemented: cohesive hero and gallery styling, responsive card sizing, preserved RMLS attribution, accessible detail links, bounded frame messages, loading/outage fallbacks. FUB assignment still awaits access; full search remains on Brad’s provider domain.
+
+
 - Branch codex/site-search-blog starts from current main b7f4e38, preserving newer listing presentation and price changes. Local worktree: C:/Users/keith/Projects/hazen-site-next.
 - Built full-market search navigation/page, prominent Brad listings and an approval-gated blog framework; no articles or empty blog published. First interview kit is in docs/editorial/FIRST-INTERVIEW.md.
 - Verified Ylopo gallery selection by the two approved MLS numbers, including land. agentId=HAZENB combined with featured returns other agents' properties and is not a valid filter. See context/references/search-and-blog-implementation.md.

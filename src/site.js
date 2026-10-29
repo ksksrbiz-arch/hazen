@@ -662,3 +662,22 @@ if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: re
     observer.observe(block);
   });
 }
+
+// Sandboxed provider frames have an opaque origin. Match the actual frame window,
+// then accept only bounded layout data; never accept HTML or navigation commands.
+window.addEventListener('message', event => {
+  if (event.data?.type !== 'brad-listing-gallery') return;
+  const frame = [...document.querySelectorAll('.brad-listings-frame')].find(
+    item => item.contentWindow === event.source
+  );
+  if (!frame || !Number.isFinite(event.data.height)) return;
+  frame.style.height = Math.min(5000, Math.max(180, event.data.height + 8)) + 'px';
+  const status = frame.closest('.listing-experience').querySelector('[data-gallery-status]');
+  if (event.data.state === 'ready') status.hidden = true;
+  else if (event.data.state === 'unavailable') {
+    status.hidden = false;
+    status.textContent =
+      'The listing service is taking longer than expected. Open the direct listing links below, or contact Brad.';
+    frame.closest('.listing-experience').querySelector('details').open = true;
+  }
+});
