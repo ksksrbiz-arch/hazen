@@ -26,3 +26,8 @@ test('homepage serves the static gallery shell without reading D1', async () => 
   assert.equal(response.headers.get('cache-control'), 'no-store');
   assert.ok((await response.text()).includes('brad-mls-listings'));
 });
+test('gallery loading note starts hidden and the no-script text points to the visible fallback links', async () => {
+  const {galleryMarkup} = await import('../server/ylopo-gallery.js');
+  assert.match(galleryMarkup, /data-gallery-status hidden>/);
+  assert.match(galleryMarkup, /<noscript>.*Having trouble viewing the listings\?.*<\/noscript>/);
+});

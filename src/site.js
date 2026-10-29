@@ -665,6 +665,8 @@ if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: re
 
 // Sandboxed provider frames have an opaque origin. Match the actual frame window,
 // then accept only bounded layout data; never accept HTML or navigation commands.
+// The loading note is hidden in the markup so it never claims progress when scripts are off.
+document.querySelectorAll('[data-gallery-status]').forEach(note => (note.hidden = false));
 window.addEventListener('message', event => {
   if (event.data?.type !== 'brad-listing-gallery') return;
   const frame = [...document.querySelectorAll('.brad-listings-frame')].find(

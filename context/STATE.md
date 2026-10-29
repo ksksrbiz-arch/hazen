@@ -13,7 +13,7 @@ Per-run state. Replace superseded lines instead of stacking them; history belong
 - Verified Ylopo gallery selection by the two approved MLS numbers, including land. agentId=HAZENB combined with featured returns other agents' properties and is not a valid filter. See context/references/search-and-blog-implementation.md.
 - Ylopo support email sent; FUB access still pending. Actual lead routing and automatic agent-wide inventory remain unverified. MLS-selected gallery authorized for preview deployment; no shared account changes.
 
-- Bug sweep 2026-10-29 (merged to main on Keith's instruction): blog date validation, homepage note heading level, article breadcrumb, and a dead `#featured-listings` homepage rewrite fixed; homepage no longer reads D1. See changelog. Open: the RMLS Broker Specific feed ($50/month, reply from Jeff Duman 2026-10-28) is on hold while the Ylopo route is tested; it would conflict with non-negotiable 5 (no automatic MLS sync) and is separate scope from the $1,500 build.
+- Bug sweep 2026-10-29 (merged to main on Keith's instruction; second pass: gallery no-JavaScript note and dev-dependency audit): blog date validation, homepage note heading level, article breadcrumb, and a dead `#featured-listings` homepage rewrite fixed; homepage no longer reads D1. See changelog. Open: the RMLS Broker Specific feed ($50/month, reply from Jeff Duman 2026-10-28) is on hold while the Ylopo route is tested; it would conflict with non-negotiable 5 (no automatic MLS sync) and is separate scope from the $1,500 build.
 
 ## Observed 2026-10-18
 
