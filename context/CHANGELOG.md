@@ -187,3 +187,9 @@ Built Search Properties page/navigation and moved Brad's featured section ahead 
 - Compared the public Realty Pro profile with the custom site; the profile currently shows a broad brokerage gallery. Lead-routing verification and Brad-approved blog content remain pending.
 
 - Updated the privacy explanation to describe provider listing requests, external search/accounts, and the separate local email-draft forms. Verification: 119 unit checks, 28 pages, compiled runtime; browser checks include provider outage and spoofed resize protection.
+
+## 2026-10-29 — Community SEO and blog preparation
+
+- Replaced repetitive community copy with six distinct, primary-source guides, linked citations, review date, guide navigation, FAQs and search/buyer links.
+- Added intent-specific page titles and community descriptions, matching sharing titles and per-page Open Graph URLs. No indexing or production-domain change.
+- Wrote two unpublished article drafts with source notes and Brad interview prompts. Added checks that unapproved drafts stay out of the public build.
