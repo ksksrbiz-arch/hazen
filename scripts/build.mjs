@@ -1,3 +1,4 @@
+import {siteOrigin, publicSearchPath} from '../server/site-domain.js';
 import {communityGuides} from './community-guides.mjs';
 import {pageSeo} from './seo.mjs';
 import {galleryMarkup} from '../server/ylopo-gallery.js';
@@ -233,7 +234,7 @@ for (const page of pages) {
   const body = isHome
     ? home
     : `<section class="inner-hero"><h1>${e(page.title)}</h1></section><section class="section inner-content ${page.slug === 'contact' ? 'contact-page' : ''}">${breadcrumbs(page)}<p class="section-lead">${e(page.slug === 'properties' && properties.length ? 'Explore Brad’s featured properties. Contact him to confirm details or ask about a showing.' : page.slug === 'testimonials' && testimonials.length ? 'Read experiences shared by Brad’s clients.' : page.intro)}</p>${pageLinks(page)}${page.slug === 'listing-marketing' ? `<div class="page-actions">${button('#inquiry', 'Discuss My Listing Plan')}<a href="/home-valuation/">Request a Home Assessment</a></div>` : ''}${page.slug === 'about' ? profile : ''}${['buy', 'sell', 'home-valuation'].includes(page.slug) ? `<div class="page-actions">${button('#inquiry', page.slug === 'home-valuation' ? 'Request an Assessment' : 'Start a Conversation')}${page.slug === 'buy' ? '<a href="/search/">Search Properties</a><a href="/buyer-checklist/">Prepare With the Buyer Checklist</a><a href="/communities/">Explore Communities</a>' : page.slug === 'sell' ? '<a href="/home-valuation/">Request a Home Assessment</a>' : page.slug === 'home-valuation' ? '<a href="/seller-checklist/">Organize Your Property Details</a>' : ''}</div>` : ''}${page.slug === 'communities' ? '<div class="page-actions"><a href="#compare" data-compare-jump hidden>Compare Communities →</a></div>' + areaGrid + communityCompare(content.communities) + '<p class="collection-note">Not sure where to start? Compare the places you visit every day, your preferred home features, and your moving timeline.</p>' : ''}${page.slug === 'properties' && properties.length ? propertyCards(properties) : ''}${page.property ? propertyDetail(page.property) : ''}${page.slug === 'properties' && !properties.length ? `<div class="empty-state"><p class="eyebrow">Your property search</p><h2>Let’s talk about the homes on your mind</h2><p>Share a property address or listing link with Brad, or tell him what you are looking for.</p>${button('/contact/#inquiry', 'Ask About a Property')}<a href="/communities/">Explore Local Communities</a></div>` : ''}${page.slug === 'testimonials' && testimonials.length ? reviewCards(testimonials) : ''}${page.slug === 'testimonials' && !testimonials.length ? `<div class="empty-state"><p class="eyebrow">Get to know Brad</p><h2>A conversation is a good place to start</h2><p>Read Brad’s introduction and bring your questions about your next move.</p>${button('/about/', 'Meet Brad')}</div>` : ''}${page.image ? `<figure class="community-figure"><img loading="lazy" class="community-hero" src="/assets/${e(page.image)}" alt="Illustrative Pacific Northwest scene" width="600" height="338" decoding="async"><figcaption class="imagery-note">AI-generated illustration of a Pacific Northwest setting, not a photograph of ${e(page.title)}.</figcaption></figure>` : ''}${['sell', 'listing-marketing'].includes(page.slug) ? sellerConversationChoices() : ''}${page.slug === 'seller-checklist' ? sellerWorksheet() : page.slug === 'buyer-checklist' ? buyerWorksheet() : ''}${page.slug === 'listing-photos' ? photoGuide() : ''}${page.slug === 'resources' ? resourceHub() : ''}${page.customBody || ''}${page.reviewedOn ? `<div class="community-guide-tools"><p>Local resources reviewed <time datetime="${page.reviewedOn}">October 29, 2026</time></p><nav aria-label="In this community guide">${page.sections.map(([title], i) => `<a href="#guide-section-${i + 1}">${e(title)}</a>`).join('')}</nav></div>` : ''}${pageSections(page)}${page.reviewedOn ? '<aside class="community-next-step"><h2>Put your community research to work</h2><p>Compare your shortlisted areas, organize your questions, and explore current properties.</p><div class="page-actions"><a class="button" href="/search/">Open Property Search</a><a href="/buyer-checklist/">Use the buyer checklist</a><a href="/communities/">Compare communities</a></div></aside>' : ''}${page.slug === 'about' ? publicProfileLinks : ''}${page.slug === 'sell' ? `<aside class="seller-marketing-link"><p class="eyebrow">Your listing presentation</p><h2>See how a property page fits into the plan.</h2><p>Explore the presentation, outreach questions, and decisions to discuss before launching your listing.</p>${button('/listing-marketing/', 'Explore the Listing Approach')}</aside>` + sellerPreparation() : page.slug === 'listing-marketing' ? sellerMarketingPage() : ''}${page.sources ? `<aside class="community-resources"><h2>Explore official local resources</h2>${page.sources.map(([label, url]) => `<a href="${e(url)}" target="_blank" rel="noopener noreferrer">${e(label)} ↗</a>`).join('')}<p>Community information is a starting point. Check official sources for current access and amenities.</p></aside>` : ''}${communityLinks(page)}${faqs(page)}${relatedResources(page)}${['seller-checklist', 'buyer-checklist', 'listing-photos', 'resources'].includes(page.slug) ? '' : page.property ? inquiry('property', page.property) : ['contact', 'buy', 'sell', 'home-valuation', 'listing-marketing'].includes(page.slug) ? inquiry(page.slug === 'home-valuation' ? 'assessment' : page.slug === 'listing-marketing' ? 'sell' : page.slug) : button('/contact/', 'Talk With Brad')}</section>${['contact', 'seller-checklist', 'buyer-checklist', 'listing-photos', 'resources'].includes(page.slug) ? '' : contact}`;
-  let html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>${e(seo.title)}</title><meta name="description" content="${e(seo.description)}"><link rel="preload" href="/assets/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#182b40"><meta property="og:type" content="website"><meta property="og:url" content="${e(seo.url)}"><meta name="twitter:card" content="summary_large_image"><meta property="og:title" content="${e(seo.title)}"><meta property="og:description" content="${e(seo.description)}"><meta property="og:image" content="https://hazen-ci5.pages.dev/assets/river-hero.webp"><link rel="stylesheet" href="/${cssName}"></head><body${['seller-checklist', 'buyer-checklist'].includes(page.slug) ? ' class="worksheet-page"' : page.slug === 'listing-photos' ? ' class="photo-guide-page"' : ''}>${header(page.slug)}<main id="main">${body}</main>${footer}${mobileContact}<script src="/${jsName}" defer></script></body></html>`;
+  let html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>${e(seo.title)}</title><link rel="canonical" href="${e(seo.url)}"><meta name="description" content="${e(seo.description)}"><link rel="preload" href="/assets/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#182b40"><meta property="og:type" content="website"><meta property="og:url" content="${e(seo.url)}"><meta name="twitter:card" content="summary_large_image"><meta property="og:title" content="${e(seo.title)}"><meta property="og:description" content="${e(seo.description)}"><meta property="og:image" content="https://bradhazen.com/assets/river-hero.webp"><link rel="stylesheet" href="/${cssName}"></head><body${['seller-checklist', 'buyer-checklist'].includes(page.slug) ? ' class="worksheet-page"' : page.slug === 'listing-photos' ? ' class="photo-guide-page"' : ''}>${header(page.slug)}<main id="main">${body}</main>${footer}${mobileContact}<script src="/${jsName}" defer></script></body></html>`;
   const dir = path.join(root, 'dist', page.slug);
   await mkdir(dir, {recursive: true});
   await writeFile(path.join(dir, 'index.html'), fingerprint(html));
@@ -297,22 +298,21 @@ await writeFile(path.join(root, 'dist/studio/guide/index.html'), studioGuide(css
 await writeFile(path.join(root, 'dist/studio/guide/listing-studio-guide.txt'), studioGuideText);
 await mkdir(path.join(root, 'dist/agent-login'), {recursive: true});
 await writeFile(path.join(root, 'dist/agent-login/index.html'), fingerprint(agentLogin(cssName)));
-// Restrict Function invocation to dynamic routes; marketing assets remain static.
+// HTML uses hostname-aware indexing; immutable assets continue to bypass Functions.
 await writeFile(
   path.join(root, 'dist/_routes.json'),
   JSON.stringify({
     version: 1,
-    include: [
-      '/listing-widget',
-      '/listing-widget/*',
-      '/',
-      '/properties',
-      '/properties/*',
-      '/studio',
-      '/studio/*',
-      '/api/admin/*',
-      '/media/*'
-    ],
-    exclude: []
+    include: ['/*'],
+    exclude: ['/assets/*', '/' + cssName, '/' + jsName, '/favicon.svg']
   })
+);
+await writeFile(
+  path.join(root, 'dist/sitemap.xml'),
+  '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
+    pages
+      .filter(page => publicSearchPath('/' + page.slug + '/'))
+      .map(page => `<url><loc>${siteOrigin}/${e(page.slug)}${page.slug ? '/' : ''}</loc></url>`)
+      .join('') +
+    '</urlset>'
 );

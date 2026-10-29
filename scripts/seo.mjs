@@ -23,7 +23,6 @@ export function pageSeo(page, description) {
     description: community
       ? `Explore ${page.title}, Washington: local places, property-search questions and official resources. Plan your next move with Brad Hazen.`
       : description,
-    // This is the verified preview host, not an invented production domain.
-    url: `https://hazen-ci5.pages.dev/${page.slug}${page.slug ? '/' : ''}`
+    url: `https://bradhazen.com/${page.slug}${page.slug ? '/' : ''}`
   };
 }
