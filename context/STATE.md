@@ -4,6 +4,8 @@ Per-run state. Replace superseded lines instead of stacking them; history belong
 
 ## Current work — October 29, 2026
 
+- Keith authorized publishing on-site filtered results. /search/ now embeds an isolated /search-widget/ with city, min/max price, type, bedrooms, reset, retry and show-more (6 up to 24). Details/map/accounts continue on Brad's provider subdomain in new tabs. Sandbox keeps provider permissions out of marketing/editor pages; widget stays noindex. Live vendor local-browser controls, more/empty/reset and mobile overflow checks passed; release verification follows deployment.
+
 - Automatic Ylopo gallery filter found and browser-verified: numeric agentId 24820243 plus featured=t and explicit propertyTypes=[] returns Brad's land and commercial listings without MLS selection. Three active MLS records currently match (two are apparent alternative land/commercial entries for East Yacolt). Gallery capped at six; secondary co-listings/provider support and FUB routing remain unverified. See search-and-blog-implementation.md for controls and evidence.
 
 - Keith purchased bradhazen.com and authorized domain activation on October 29. Cloudflare Pages apex custom domain and proxied CNAME are configured; www is a dedicated proxied redirect hostname; a 301 rule preserves paths/queries and chooses HTTPS apex. Existing Access editor policy/audience retained and destinations extended to apex/www studio/admin.

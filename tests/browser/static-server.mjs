@@ -1,4 +1,5 @@
 import {galleryResponse} from '../../server/ylopo-gallery.js';
+import {searchWidgetResponse} from '../../server/search-widget.js';
 // Minimal static server for dist/ with directory indexes and the generated 404 page.
 import http from 'node:http';
 import {readFile, stat} from 'node:fs/promises';
@@ -36,6 +37,12 @@ async function find(url) {
 }
 http
   .createServer(async (request, response) => {
+    if (request.url.split('?')[0].replace(/\/$/, '') === '/search-widget') {
+      const widget = searchWidgetResponse();
+      response.writeHead(200, Object.fromEntries(widget.headers));
+      response.end(await widget.text());
+      return;
+    }
     if (request.url.split('?')[0].replace(/\/$/, '') === '/listing-widget') {
       const widget = galleryResponse();
       response.writeHead(200, Object.fromEntries(widget.headers));

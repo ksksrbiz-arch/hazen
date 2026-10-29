@@ -206,7 +206,11 @@ test('search separates full market from Brad listings and no empty blog is expos
     'href',
     '/brads-listings/'
   );
-  await expect(page.locator('iframe')).toHaveCount(0);
+  await expect(page.locator('.property-search-frame')).toHaveAttribute('src', '/search-widget/');
+  await expect(page.locator('.property-search-frame')).toHaveAttribute(
+    'sandbox',
+    'allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox'
+  );
   await expect(page.locator('a[href="/blog/"]')).toHaveCount(0);
   const response = await page.goto('/blog/');
   expect(response.status()).toBe(404);

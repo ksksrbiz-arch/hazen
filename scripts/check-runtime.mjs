@@ -52,6 +52,11 @@ const mf = new Miniflare(
 );
 try {
   const liveHome = await mf.dispatchFetch('https://bradhazen.com/');
+  const searchWidget = await mf.dispatchFetch('https://bradhazen.com/search-widget/');
+  assert.equal(searchWidget.status, 200);
+  assert.equal(searchWidget.headers.get('x-robots-tag'), 'noindex, nofollow');
+  assert.equal(searchWidget.headers.get('x-frame-options'), 'SAMEORIGIN');
+  assert.ok((await searchWidget.text()).includes('search-filters'));
   assert.equal(liveHome.headers.get('x-robots-tag'), 'index, follow');
   const liveHTML = await liveHome.text();
   assert.ok(liveHTML.includes('content="index,follow"'));

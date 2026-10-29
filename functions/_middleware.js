@@ -1,4 +1,5 @@
 import {galleryResponse} from '../server/ylopo-gallery.js';
+import {searchWidgetResponse} from '../server/search-widget.js';
 import {publicRecoveryResponse} from '../server/public-recovery.js';
 import {editor, ConfigError} from '../server/auth.js';
 import {detail, published, collection} from '../server/public.js';
@@ -13,7 +14,7 @@ export async function onRequest(context) {
   if (url.pathname === '/robots.txt') {
     return new Response(
       url.origin === siteOrigin
-        ? `User-agent: *\nAllow: /\nDisallow: /studio\nDisallow: /api/\nDisallow: /agent-login\nDisallow: /listing-widget\nDisallow: /properties\nDisallow: /testimonials\nSitemap: ${siteOrigin}/sitemap.xml\n`
+        ? `User-agent: *\nAllow: /\nDisallow: /studio\nDisallow: /api/\nDisallow: /agent-login\nDisallow: /listing-widget\nDisallow: /search-widget\nDisallow: /properties\nDisallow: /testimonials\nSitemap: ${siteOrigin}/sitemap.xml\n`
         : 'User-agent: *\nDisallow: /\n',
       {headers: {'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store'}}
     );
@@ -22,6 +23,7 @@ export async function onRequest(context) {
     return new Response('Not found', {status: 404, headers: {'X-Robots-Tag': 'noindex'}});
   }
   if (url.pathname.replace(/\/$/, '') === '/listing-widget') return galleryResponse();
+  if (url.pathname.replace(/\/$/, '') === '/search-widget') return searchWidgetResponse();
   return secureResponse(await domainResponse(context.request, await handleRequest(context)));
 }
 async function handleRequest(context) {
