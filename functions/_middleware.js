@@ -4,9 +4,25 @@ import {editor, ConfigError} from '../server/auth.js';
 import {detail, published, collection} from '../server/public.js';
 import {idPattern} from '../server/listings.js';
 import {secureResponse} from '../server/response-security.js';
+import {domainResponse, siteOrigin} from '../server/site-domain.js';
 export async function onRequest(context) {
-  if (new URL(context.request.url).pathname.replace(/\/$/, '') === '/listing-widget') return galleryResponse();
-  return secureResponse(await handleRequest(context));
+  const url = new URL(context.request.url);
+  if (url.hostname === 'www.bradhazen.com' || (url.hostname === 'bradhazen.com' && url.protocol !== 'https:')) {
+    return Response.redirect(siteOrigin + url.pathname + url.search, 301);
+  }
+  if (url.pathname === '/robots.txt') {
+    return new Response(
+      url.origin === siteOrigin
+        ? `User-agent: *\nAllow: /\nDisallow: /studio\nDisallow: /api/\nDisallow: /agent-login\nDisallow: /listing-widget\nDisallow: /properties\nDisallow: /testimonials\nSitemap: ${siteOrigin}/sitemap.xml\n`
+        : 'User-agent: *\nDisallow: /\n',
+      {headers: {'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store'}}
+    );
+  }
+  if (url.pathname === '/sitemap.xml' && url.origin !== siteOrigin) {
+    return new Response('Not found', {status: 404, headers: {'X-Robots-Tag': 'noindex'}});
+  }
+  if (url.pathname.replace(/\/$/, '') === '/listing-widget') return galleryResponse();
+  return secureResponse(await domainResponse(context.request, await handleRequest(context)));
 }
 async function handleRequest(context) {
   const {request, env} = context,

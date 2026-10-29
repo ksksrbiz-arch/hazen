@@ -51,6 +51,38 @@ const mf = new Miniflare(
   })
 );
 try {
+  const liveHome = await mf.dispatchFetch('https://bradhazen.com/');
+  assert.equal(liveHome.headers.get('x-robots-tag'), 'index, follow');
+  const liveHTML = await liveHome.text();
+  assert.ok(liveHTML.includes('content="index,follow"'));
+  assert.ok(liveHTML.includes('rel="canonical" href="https://bradhazen.com/"'));
+  assert.ok(!liveHTML.includes('Design preview'));
+  const previewHome = await mf.dispatchFetch('https://hazen-ci5.pages.dev/');
+  assert.equal(previewHome.headers.get('x-robots-tag'), 'noindex, nofollow');
+  assert.ok((await previewHome.text()).includes('content="noindex,nofollow"'));
+  const liveCommunity = await mf.dispatchFetch('https://bradhazen.com/communities/camas/');
+  assert.equal(liveCommunity.status, 200);
+  assert.equal(liveCommunity.headers.get('x-robots-tag'), 'index, follow');
+  for (const host of ['bradhazen.com', 'hazen-ci5.pages.dev']) {
+    const robots = await (await mf.dispatchFetch(`https://${host}/robots.txt`)).text();
+    assert.equal(robots.includes('Sitemap:'), host === 'bradhazen.com');
+    const sitemap = await mf.dispatchFetch(`https://${host}/sitemap.xml`);
+    assert.equal(sitemap.status, host === 'bradhazen.com' ? 200 : 404);
+    if (host === 'bradhazen.com') {
+      const xml = await sitemap.text();
+      assert.ok(xml.includes('https://bradhazen.com/brads-listings/'));
+      for (const excluded of ['/studio/', '/properties/', '/listing-widget/', '/agent-login/', '/blog/'])
+        assert.ok(!xml.includes(excluded));
+    }
+  }
+  const www = await mf.dispatchFetch('https://www.bradhazen.com/search/?source=test', {redirect: 'manual'});
+  assert.equal(www.status, 301);
+  assert.equal(www.headers.get('location'), 'https://bradhazen.com/search/?source=test');
+  for (const route of ['/studio/', '/api/admin/listings', '/missing-page/']) {
+    const privatePage = await mf.dispatchFetch('https://bradhazen.com' + route);
+    assert.notEqual(privatePage.headers.get('x-robots-tag'), 'index, follow');
+    assert.ok(privatePage.status >= 400);
+  }
   const DB = await mf.getD1Database('DB');
   for (const name of readdirSync(path.join(root, 'database/cloudflare')).sort())
     for (const sql of readFileSync(path.join(root, 'database/cloudflare', name), 'utf8')
