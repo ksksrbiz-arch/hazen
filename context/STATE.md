@@ -4,6 +4,8 @@ Per-run state. Replace superseded lines instead of stacking them; history belong
 
 ## Current work — October 29, 2026
 
+- Listing navigation: homepage journey card and static/dynamic detail breadcrumbs lead to the Ylopo gallery at /brads-listings/. Legacy detail URLs remain available.
+
 - Community SEO pass: six researched guides in scripts/community-guides.mjs, official section citations, review dates, navigation, FAQs and buyer/search links. Page title and sharing metadata are centralized in scripts/seo.mjs.
 - Two researched blog drafts are in src/posts.json and docs/editorial/BLOG-DRAFTS-2026-10-29.md; neither is approved or published. Brad’s recorded perspective and exact-text approval remain required. Preview noindex remains in place.
 - Outlook checked October 29 during this pass: no reply to the 2:47 p.m. Pacific Ylopo technical-support email. Earlier forwarded questionnaire/training messages are not that reply.

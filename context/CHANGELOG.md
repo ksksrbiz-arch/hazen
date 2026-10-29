@@ -199,3 +199,7 @@ Reviewed PR #9 and the repo with the blog path exercised by a temporary publishe
 ## Bug sweep, second pass (2026-10-29)
 Reviewed PR #10 and the server/functions code. Fixed: with JavaScript off the gallery showed "Loading selected listings…" forever and the no-script note pointed at links hidden inside a closed details element; the note now starts hidden (revealed by `src/site.js`) and the no-script text names the fallback links. Ran `npm audit fix` (no force): the three dev-only findings (undici via miniflare and wrangler, used by `check:runtime`) are cleared; `jose` and the shipped runtime were unaffected. Verified: `npm run verify` 123 pass, 0 skipped; `check:runtime` passes; Playwright 73 pass, including a new no-JavaScript test. Reviewed and left alone: empty catches in `server/public.js` (deliberate URL validation), media content type (uploads always set it).
 
+
+## 2026-10-29 — Consistent listing navigation
+
+- Homepage journey card 03 and public property-detail breadcrumbs now lead to /brads-listings/. Legacy detail URLs and private Studio previews remain available.
