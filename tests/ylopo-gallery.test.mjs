@@ -16,3 +16,18 @@ test('selected MLS gallery is isolated from the site and private editor policy',
   assert.equal(securityHeaders['X-Frame-Options'], 'DENY');
   assert.equal(galleryResponse().status, 200);
 });
+test('homepage serves the static gallery shell without reading D1', async () => {
+  const response = await onRequest({
+    request: new Request('https://qa.example/'),
+    env: {},
+    next: async () => new Response('<main id="brad-mls-listings"></main>', {headers: {'Cache-Control': 'public'}})
+  });
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get('cache-control'), 'no-store');
+  assert.ok((await response.text()).includes('brad-mls-listings'));
+});
+test('gallery loading note starts hidden and the no-script text points to the visible fallback links', async () => {
+  const {galleryMarkup} = await import('../server/ylopo-gallery.js');
+  assert.match(galleryMarkup, /data-gallery-status hidden>/);
+  assert.match(galleryMarkup, /<noscript>.*Having trouble viewing the listings\?.*<\/noscript>/);
+});

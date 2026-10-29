@@ -19,3 +19,13 @@ test('unrelated windows cannot resize the provider frame or claim it is ready', 
   await expect(page.locator('[data-gallery-status]')).toBeVisible();
   await expect(page.locator('iframe')).not.toHaveAttribute('style', /9999/);
 });
+test.describe('without JavaScript', () => {
+  test.use({javaScriptEnabled: false});
+  test('the loading note stays hidden and fallback links remain available', async ({page}) => {
+    await page.goto('/brads-listings/', {waitUntil: 'domcontentloaded'});
+    await expect(page.locator('[data-gallery-status]')).toBeHidden();
+    await expect(page.locator('noscript').first()).toBeAttached();
+    await page.locator('.listing-footnote summary').click();
+    await expect(page.getByRole('link', {name: 'NE Hazen Avenue · MLS 24434415'})).toBeVisible();
+  });
+});
