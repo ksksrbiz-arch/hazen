@@ -40,3 +40,14 @@ Ylopo support email was sent October 29 from skdev@1commerce.online. FUB access 
 ## Verification
 
 npm run verify passed: 119 tests, 28 generated-page checks and ICM validation. Existing browser suite passed 64 checks; two added search routing/empty-blog/accessibility checks passed afterward. Live Chrome visual review confirmed the search page layout. No physical-phone, screen-reader or deployed-production verification in this pass. npm audit --omit=dev reported zero production dependency vulnerabilities; existing dev-tool advisories were not changed.
+
+
+## October 29 follow-up — automatic agent filter verified
+
+Supersedes the explicit-MLS interim recommendation above. Public widget request supports numeric agentId=24820243, Brad's listingAgent.id on both approved records. Numeric ID is not RMLS HAZENB or agentMui 40433. Use {featured:'t', agentId:24820243, propertyTypes:[], limit:6}. Explicit empty propertyTypes removes the default residential selection. Omission returned zero Brad records; unrecognized property-type labels also removed restrictions and must not be treated as valid type filters.
+
+Observed controls via the widget's public /api/1.0/listings request: featured alone, agentId='HAZENB' and a nonnumeric invalid ID all returned other agents' listings (ignored strings). Numeric James ID 24507698 selected James; numeric nonexistent ID 999999999 returned none. Brad's numeric ID plus propertyTypes:[] returned three ACTIVE records, all listingAgent.id=24820243: 24397685 (NE East Yacolt Road, CommercialSale), 24202394 (East Yacolt Road, Land), and 24434415 (NE Hazen Ave, Land). Two Yacolt entries appear to be alternate commercial/land MLS listings of the same property; retain provider records, do not invent deduplication.
+
+The actual vendor widget rendered all three in an isolated browser test on the production origin with no mlsId in its request. Links remained on Brad's provider subdomain. Gallery now uses that query and displays up to six matching records; existing direct links remain emergency fallbacks. No MLS scraping job, database import or scheduled sync is added. Each widget load requests Ylopo's current results. Secondary co-listing matching, future inventory/status changes and external-domain contractual support remain unverified. Do not claim every possible co-listing or unlimited inventory is covered.
+
+Support's October 29 reply did not answer external-site embedding approval, exact Brad/FUB routing, integration method or fees. Keith authorized a clarification reply, which was sent in the same Outlook thread. Do not resend while waiting.
