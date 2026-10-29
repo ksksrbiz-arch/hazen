@@ -7,7 +7,7 @@ Per-run state. Replace superseded lines instead of stacking them; history belong
 - Branch codex/site-search-blog starts from current main b7f4e38, preserving newer listing presentation and price changes. Local worktree: C:/Users/keith/Projects/hazen-site-next.
 - Built full-market search navigation/page, prominent Brad listings and an approval-gated blog framework; no articles or empty blog published. First interview kit is in docs/editorial/FIRST-INTERVIEW.md.
 - Verified Ylopo gallery selection by the two approved MLS numbers, including land. agentId=HAZENB combined with featured returns other agents' properties and is not a valid filter. See context/references/search-and-blog-implementation.md.
-- Ylopo support email sent; FUB access still pending. Actual lead routing and automatic agent-wide inventory remain unverified. No deployment or shared account changes.
+- Ylopo support email sent; FUB access still pending. Actual lead routing and automatic agent-wide inventory remain unverified. MLS-selected gallery authorized for preview deployment; no shared account changes.
 
 ## Observed 2026-10-18
 

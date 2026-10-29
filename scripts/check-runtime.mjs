@@ -85,7 +85,7 @@ try {
     const response = await mf.dispatchFetch('https://qa.example' + route),
       html = await response.text();
     assert.equal(response.status, 200);
-    assert.ok(html.includes('QA house &lt;test&gt;'));
+    assert.ok(html.includes(route === '/' ? 'id="brad-mls-listings"' : 'QA house &lt;test&gt;'));
     assert.ok(!html.includes('INTERNAL_QA_NOTE'));
     assert.equal(response.headers.get('cache-control'), 'no-store');
     assert.equal(response.headers.get('x-frame-options'), 'DENY');
@@ -184,7 +184,8 @@ try {
     resilientHTML = await resilientHome.text();
   assert.equal(resilientHome.status, 200);
   assert.ok(resilientHTML.includes('SELL YOUR HOME WITH BRAD HAZEN'));
-  assert.ok(resilientHTML.includes('Listings could not load right now.'));
+  assert.ok(resilientHTML.includes('id="brad-mls-listings"'));
+  assert.ok(resilientHTML.includes('/listing-widget/'));
   assert.ok(!resilientHTML.includes('QA house'));
   assert.equal(resilientHome.headers.get('cache-control'), 'no-store');
   const unavailable = await mf.dispatchFetch('https://qa.example/properties/');

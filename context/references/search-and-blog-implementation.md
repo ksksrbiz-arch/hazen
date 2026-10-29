@@ -1,11 +1,11 @@
 # Search and blog implementation — October 29, 2026
 
-Branch codex/site-search-blog, worktree C:/Users/keith/Projects/hazen-site-next, based on current origin/main b7f4e38. Existing work in C:/Users/keith/Projects/hazen is preserved separately. No merge, push or deployment.
+Branch codex/site-search-blog, worktree C:/Users/keith/Projects/hazen-site-next, based on current origin/main b7f4e38. Existing work in C:/Users/keith/Projects/hazen is preserved separately. Preview merge authorized by Keith on October 29.
 
 ## Implemented
 
 - /search/ explains full-market search versus Brad's listings, uses his verified personal search domain, offers direct contact without registration, and preserves the current site's strict CSP.
-- Main navigation, homepage action and buyer page link to search. Homepage features Brad's listings before seller marketing. Existing D1/manual listing system is untouched.
+- Main navigation, homepage action and buyer page link to search. Homepage features Brad's listings before seller marketing. Legacy D1/manual collection and detail pages remain available; home and main navigation now feature the MLS-selected gallery.
 - Blog build framework with index, article routes and latest-posts section. No posts means no blog route/nav/empty section. Published entries require sourceReference, approvedByBrad=true, valid approval/publication dates and complete text sections. Future-dated posts remain excluded. Editorial metadata is not rendered; content is escaped.
 - src/posts.json starts empty; no invented Brad articles. docs/editorial/FIRST-INTERVIEW.md includes source prompts, proof questions and a draft schema.
 - Fixed Windows file-URL conversion in scripts/check.mjs so route validation works on Keith's machine.
@@ -23,7 +23,7 @@ Working interim option: explicitly select approved MLS numbers; Ylopo supplies c
 
 The current profile's residential propertyTypes list excludes land. Do not reuse it for Brad's gallery. Use no residential restriction in the explicit-MLS test.
 
-Home and search responses send SAMEORIGIN; full-page framing is blocked. Strict site CSP also disallows the vendor scripts/styles/requests. Keep widgets in the lab while provider production support, least-required CSP and CRM assignment are verified. Normal site uses direct search navigation without weakening security headers.
+Home and search responses send SAMEORIGIN; full-page framing is blocked. Strict site CSP also disallows the vendor scripts/styles/requests. The approved gallery uses a sandboxed local /listing-widget/ frame with vendor permissions confined to that response. The parent and Studio retain their strict policies. Provider cards open the Brad-domain detail in a new tab; direct fallback links remain outside the frame. Full-market search uses direct navigation. CRM assignment is still unverified.
 
 ## Research sources
 
@@ -39,4 +39,4 @@ Ylopo support email was sent October 29 from skdev@1commerce.online. FUB access 
 
 ## Verification
 
-npm run verify passed: 117 tests, 26 generated-page checks and ICM validation. Existing browser suite passed 64 checks; two added search routing/empty-blog/accessibility checks passed afterward. Live Chrome visual review confirmed the search page layout. No physical-phone, screen-reader or deployed-production verification in this pass. npm audit --omit=dev reported zero production dependency vulnerabilities; existing dev-tool advisories were not changed.
+npm run verify passed: 119 tests, 28 generated-page checks and ICM validation. Existing browser suite passed 64 checks; two added search routing/empty-blog/accessibility checks passed afterward. Live Chrome visual review confirmed the search page layout. No physical-phone, screen-reader or deployed-production verification in this pass. npm audit --omit=dev reported zero production dependency vulnerabilities; existing dev-tool advisories were not changed.

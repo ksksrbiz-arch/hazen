@@ -1,9 +1,11 @@
+import {galleryResponse} from '../server/ylopo-gallery.js';
 import {publicRecoveryResponse, homepageListingFallback} from '../server/public-recovery.js';
 import {editor, ConfigError} from '../server/auth.js';
 import {cards, detail, published, collection} from '../server/public.js';
 import {idPattern} from '../server/listings.js';
 import {secureResponse} from '../server/response-security.js';
 export async function onRequest(context) {
+  if (new URL(context.request.url).pathname.replace(/\/$/, '') === '/listing-widget') return galleryResponse();
   return secureResponse(await handleRequest(context));
 }
 async function handleRequest(context) {

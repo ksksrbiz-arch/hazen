@@ -172,7 +172,7 @@ test('search separates full market from Brad listings and no empty blog is expos
   );
   await expect(page.getByRole('link', {name: /View Brad.s Listings/, exact: true})).toHaveAttribute(
     'href',
-    '/properties/'
+    '/brads-listings/'
   );
   await expect(page.locator('iframe')).toHaveCount(0);
   await expect(page.locator('a[href="/blog/"]')).toHaveCount(0);

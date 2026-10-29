@@ -1,3 +1,4 @@
+import {galleryMarkup} from '../server/ylopo-gallery.js';
 import {publishedPosts, blogPages, latestNotes} from './blog.mjs';
 import {searchPage, searchOverview} from './property-search.mjs';
 import {contact as agentContact} from '../src/contact.js';
@@ -36,7 +37,7 @@ const navigation = [
   ['sell', 'Sell'],
   ['communities', 'Communities'],
   ['search', 'Search'],
-  ['properties', 'Brad’s Listings'],
+  ['brads-listings', 'Brad’s Listings'],
   ...(posts.length ? [['blog', 'Notes']] : []),
   ['testimonials', 'Testimonials'],
   ['about', 'Meet Brad'],
@@ -90,7 +91,7 @@ const pageLinks = page =>
         ? `<div class="page-actions community-actions"><a class="button" href="/contact/?community=${e(page.slug.split('/')[1])}#inquiry">Talk About This Community</a><a href="/communities/">View All Communities</a></div>`
         : '';
 const featured = properties.filter(item => item.featured !== false && item.status !== 'Sold').slice(0, 4);
-const featuredSection = `<section class="section featured-listings" id="featured-listings"><p class="eyebrow">Presented by Brad Hazen</p><h2>FEATURED LISTINGS</h2>${featured.length ? propertyCards(featured, 'h3') : `<div class="listing-start"><h3>Your next property conversation starts here</h3><p>Brad’s listings will appear here as they are added. Ask about current opportunities or discuss a plan for selling your home.</p><div class="page-actions">${button('/properties/', 'Explore Properties')}${button('/sell/', 'List Your Home With Brad')}</div></div>`}${featured.length ? button('/properties/', 'View All Properties') : ''}</section>`;
+const featuredSection = `<section class="section featured-listings" id="brad-mls-listings"><p class="eyebrow">Presented by Brad Hazen</p><h2>FEATURED LISTINGS</h2>${galleryMarkup}</section>`;
 const home = `<section class="hero"><picture class="hero-image"><source media="(max-width: 600px)" srcset="/assets/river-hero-mobile.webp"><img src="/assets/river-hero.webp" alt="" width="1500" height="668" fetchpriority="high" decoding="async"></picture><div class="hero-content"><h1>SELL YOUR HOME WITH BRAD HAZEN</h1><p>PERSONAL GUIDANCE FOR YOUR HOME SALE AND NEXT MOVE</p><div class="hero-panel"><span>What’s your next move?</span><div class="hero-actions">${button('/sell/', 'List My Home With Brad')}${button('/search/', 'Search Properties')}${button('/home-valuation/', 'What’s My Home Worth?')}</div></div><div class="hero-chips"><a href="/communities/">Explore Communities</a><a href="/about/">Meet Brad</a><a href="${agentContact.phoneHref}">${agentContact.phone}</a></div></div></section><section class="intro-band"><p><strong>Brad Hazen brings personal guidance to your real estate decisions.</strong></p><p>From your first conversation to your next move, start with your goals. Learn about buying and selling, explore local communities, and connect directly with Brad.</p></section>${searchOverview}${featuredSection}${sellerHomepage()}${latestNotes(posts)}<section class="section listings"><h2>YOUR REAL ESTATE JOURNEY</h2><p class="section-lead">Choose where you’d like to begin.</p><div class="journey-grid"><a href="/buy/"><span>01</span><h3>Find Your Next Home</h3><p>Talk through your priorities and plan your purchase.</p></a><a href="/sell/"><span>02</span><h3>Plan Your Home Sale</h3><p>Discuss your property, timing, and next steps.</p></a><a href="/properties/"><span>03</span><h3>Featured Properties</h3><p>Ask about current listings and homes you are considering.</p></a></div></section>${resourceOverview()}<section class="inspiration"><div class="inspiration-grid">${[
   [
     'buyer-thumbnail.webp',
@@ -173,6 +174,20 @@ const pages = [
   ...content.pages,
   resourcesPage,
   searchPage,
+  {
+    slug: 'listing-widget',
+    title: 'Brad’s property listings',
+    intro: 'Open Brad’s Realty Pro search site to view current property details.',
+    sections: [],
+    customBody: '<a href="https://bradhazen.realtypronw.net/" target="_blank" rel="noopener">Open Property Search</a>'
+  },
+  {
+    slug: 'brads-listings',
+    title: 'Brad’s listings',
+    intro: 'Explore selected listings presented by Brad Hazen.',
+    sections: [],
+    customBody: galleryMarkup
+  },
   ...blogPages(posts),
   buyerWorksheetPage,
   ...content.communities,
@@ -266,7 +281,17 @@ await writeFile(
   path.join(root, 'dist/_routes.json'),
   JSON.stringify({
     version: 1,
-    include: ['/', '/properties', '/properties/*', '/studio', '/studio/*', '/api/admin/*', '/media/*'],
+    include: [
+      '/listing-widget',
+      '/listing-widget/*',
+      '/',
+      '/properties',
+      '/properties/*',
+      '/studio',
+      '/studio/*',
+      '/api/admin/*',
+      '/media/*'
+    ],
     exclude: []
   })
 );
