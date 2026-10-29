@@ -1,6 +1,10 @@
 const escape = value =>
   String(value).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'})[c]);
-const dateOK = value => /^\d{4}-\d{2}-\d{2}$/.test(value || '') && new Date(value).toISOString().slice(0, 10) === value;
+const dateOK = value => {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value || '')) return false;
+  const date = new Date(value);
+  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
+};
 export function publishedPosts(posts, today = new Date().toISOString().slice(0, 10)) {
   const seen = new Set();
   return posts
@@ -35,8 +39,8 @@ export function publishedPosts(posts, today = new Date().toISOString().slice(0, 
     })
     .sort((a, b) => b.publishedOn.localeCompare(a.publishedOn));
 }
-export function blogCards(posts) {
-  return `<div class="notes-grid">${posts.map(post => `<article><p class="eyebrow"><time datetime="${escape(post.publishedOn)}">${escape(post.publishedOn)}</time></p><h2><a href="/blog/${escape(post.slug)}/">${escape(post.title)}</a></h2><p>${escape(post.summary)}</p></article>`).join('')}</div>`;
+export function blogCards(posts, heading = 'h2') {
+  return `<div class="notes-grid">${posts.map(post => `<article><p class="eyebrow"><time datetime="${escape(post.publishedOn)}">${escape(post.publishedOn)}</time></p><${heading}><a href="/blog/${escape(post.slug)}/">${escape(post.title)}</a></${heading}><p>${escape(post.summary)}</p></article>`).join('')}</div>`;
 }
 export function blogPages(posts) {
   if (!posts.length) return [];
@@ -59,5 +63,5 @@ export function blogPages(posts) {
 }
 export const latestNotes = posts =>
   posts.length
-    ? `<section class="section"><p class="eyebrow">From Brad</p><h2>Real estate notes</h2>${blogCards(posts.slice(0, 2))}</section>`
+    ? `<section class="section"><p class="eyebrow">From Brad</p><h2>Real estate notes</h2>${blogCards(posts.slice(0, 2), 'h3')}</section>`
     : '';

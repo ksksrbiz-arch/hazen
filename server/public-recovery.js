@@ -30,9 +30,6 @@ export function publicRecoveryContent(kind = 'page') {
   const s = state(kind);
   return `<section class="section recovery-page" aria-labelledby="recovery-heading"><p class="eyebrow">${s.eyebrow}</p><h1 id="recovery-heading">${s.title}</h1><p class="recovery-description">${s.description}</p><div class="recovery-actions"><a class="button" href="${s.primary[0]}">${s.primary[1]}</a><a href="/contact/#inquiry">Talk With Brad →</a></div><nav class="recovery-paths" aria-label="Places to continue"><a href="/buy/"><span>Planning a purchase</span><strong>Explore Buying</strong><small>Clarify your priorities and next steps →</small></a><a href="/sell/"><span>Considering a sale</span><strong>Plan Your Listing</strong><small>Learn about the listing approach →</small></a><a href="/resources/"><span>Preparing your questions</span><strong>Guides and Tools</strong><small>Find checklists and local guides →</small></a></nav><aside class="recovery-contact"><p>Prefer to connect directly?</p><a href="${contact.phoneHref}">Call ${contact.phone}</a><a href="${contact.emailHref}">Email Brad</a><small>Email links open your email application; you send the message.</small></aside></section>`;
 }
-export function homepageListingFallback() {
-  return '<p class="eyebrow">Presented by Brad Hazen</p><h2>FEATURED LISTINGS</h2><div class="listing-start"><p class="collection-availability" role="status">Listings could not load right now.</p><p>You can still explore the website or contact Brad to ask about current opportunities.</p><div class="page-actions"><a class="button" href="/contact/#inquiry">Ask About a Property</a><a href="/sell/">Plan Your Home Sale →</a></div></div>';
-}
 export async function publicRecoveryResponse(context, kind) {
   const s = state(kind),
     headers = {

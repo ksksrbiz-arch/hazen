@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {publicRecoveryContent, publicRecoveryResponse, homepageListingFallback} from '../server/public-recovery.js';
+import {publicRecoveryContent, publicRecoveryResponse} from '../server/public-recovery.js';
 test('Recovery states offer direct navigation and never echo arbitrary URLs or private details', () => {
   const html = publicRecoveryContent('<script>private-request-path</script>');
   assert.doesNotMatch(html, /<script|private-request-path/);
@@ -9,7 +9,6 @@ test('Recovery states offer direct navigation and never echo arbitrary URLs or p
   for (const href of ['/buy/', '/sell/', '/resources/', '/contact/#inquiry', 'tel:+13609219484'])
     assert.ok(html.includes(href));
   assert.ok(publicRecoveryContent('property').includes('Property page unavailable'));
-  assert.ok(homepageListingFallback().includes('could not load'));
 });
 test('Unstyled fallback retains truthful statuses and useful links if assets fail', async () => {
   for (const [kind, status] of [
