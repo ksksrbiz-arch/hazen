@@ -179,3 +179,7 @@ Built Search Properties page/navigation and moved Brad's featured section ahead 
 
 - Featured MLS 24202394 and 24434415 through the Ylopo widget on home and /brads-listings/. New listings require adding their MLS numbers.
 - Isolated vendor permissions to /listing-widget/; private editor security and legacy property pages remain intact. Direct property links remain available if the widget cannot load.
+
+## Bug sweep (2026-10-29)
+Reviewed PR #9 and the repo with the blog path exercised by a temporary published post (reverted). Fixed four defects: (1) `scripts/blog.mjs` threw a bare RangeError for out-of-range dates such as 2026-13-01; it now raises the intended publication error; (2) homepage note cards used h2 under the section's h2, now h3; (3) article breadcrumbs skipped the Real estate notes parent; (4) `functions/_middleware.js` still rewrote `#featured-listings`, which no longer exists after the homepage became the static Ylopo gallery (`#brad-mls-listings`), so every homepage request ran a D1 query that changed nothing. The homepage now serves the static shell with `Cache-Control: no-store` and does not read D1; the unused `homepageListingFallback` was removed. Verified: `npm run verify` 122 pass, 0 fail, 0 skipped; `npm run check:runtime` passes; Playwright 70 pass (axe included); build with a temporary published post passes `npm run check`. Not changed: D1 listings are reachable only via /properties/ and the journey card since Properties left the navigation (VERIFY with Keith that this is intended).
+
