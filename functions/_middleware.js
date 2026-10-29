@@ -1,5 +1,5 @@
 import {galleryResponse} from '../server/ylopo-gallery.js';
-import {publicRecoveryResponse, homepageListingFallback} from '../server/public-recovery.js';
+import {publicRecoveryResponse} from '../server/public-recovery.js';
 import {editor, ConfigError} from '../server/auth.js';
 import {cards, detail, published, collection} from '../server/public.js';
 import {idPattern} from '../server/listings.js';
@@ -93,41 +93,22 @@ async function handleRequest(context) {
   }
   if (path !== '/' && path !== '/properties' && !path.startsWith('/properties/')) return context.next();
   if (request.method !== 'GET' && request.method !== 'HEAD') return new Response('Method not allowed', {status: 405});
+  if (path === '/') {
+    // The homepage featured section is the static Ylopo gallery (#brad-mls-listings) and no longer reads D1.
+    const shell = await context.next(),
+      headers = new Headers(shell.headers);
+    headers.set('Cache-Control', 'no-store');
+    return new Response(shell.body, {status: shell.status, headers});
+  }
   let items;
   try {
     items = await published(env);
   } catch {
-    if (path === '/') {
-      const shell = await context.next(),
-        headers = new Headers(shell.headers);
-      headers.set('Cache-Control', 'no-store');
-      return new HTMLRewriter()
-        .on('#featured-listings', {
-          element(el) {
-            el.setInnerContent(homepageListingFallback(), {html: true});
-          }
-        })
-        .transform(new Response(shell.body, {status: shell.status, headers}));
-    }
     return publicRecoveryResponse(context, 'listings');
   }
   let response,
     rewriter = new HTMLRewriter();
-  if (path === '/') {
-    response = await context.next();
-    const featured = items.filter(({item}) => item.featured !== false && item.status !== 'Sold').slice(0, 4);
-    if (featured.length)
-      rewriter.on('#featured-listings', {
-        element(el) {
-          el.setInnerContent(
-            '<p class="eyebrow">Presented by Brad Hazen</p><h2>FEATURED LISTINGS</h2>' +
-              cards(featured, 'h3') +
-              '<a class="button" href="/properties/">View All Properties</a>',
-            {html: true}
-          );
-        }
-      });
-  } else if (path === '/properties/' || path === '/properties') {
+  if (path === '/properties/' || path === '/properties') {
     response = await context.next();
     rewriter.on('.inner-content', {
       element(el) {
