@@ -218,3 +218,10 @@ Keith authorized connecting his purchased domain and putting the existing site l
 ## October 29, 2026 — domain live verification
 
 PR #15 deployed as 034fe32, Cloudflare deployment 8f4a6a3d-fd90-4bcc-a1c9-ce637509e0a7. Verified HTTPS apex, 301 HTTP/www paths and queries, canonical/share image, indexable marketing pages, excluded previews/private/legacy pages, public-only sitemap and Access redirects. Desktop/mobile browser checks loaded both Ylopo listings without page errors; search still opens Brad's provider account. All 73 local browser tests passed. Simplified www to a dedicated proxied redirect A record (192.0.2.1) and removed the unnecessary pending Pages association; HTTPS redirect rechecked successfully. Provider/FUB assignment and signed-in new-origin editing remain separate unverified items.
+
+
+## October 29, 2026 — automatic Ylopo agent gallery
+
+Replaced fixed MLS selection with the vendor's numeric agentId filter and explicit empty propertyTypes. Positive/negative remote controls distinguish valid filtering from silently ignored parameters. Actual widget browser test returned three Brad-attributed active records, including a commercial record absent from the previous selection. Both Yacolt MLS representations retained. Uses existing vendor display only, without a scrape/sync/import job. Keeps sandbox/security, provider links, fallback links and six-card display cap. External-domain approval, secondary co-listings and FUB routing are not claimed verified.
+
+Validation: npm run verify passed (128 tests, 28 generated pages), compiled runtime checks passed, and all 75 Playwright browser tests passed. Live vendor widget test rendered three Brad-attributed records with no mlsId in its request.
