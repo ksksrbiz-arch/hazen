@@ -14,11 +14,11 @@ if (menu) {
       menu.open = false;
     })
   );
-  menu.addEventListener('focusout', () =>
-    queueMicrotask(() => {
-      if (!menu.contains(document.activeElement)) menu.open = false;
-    })
-  );
+  // Close only when focus is moving to a known element outside the menu. During a mouse press on a menu
+  // link the browser reports no destination yet, and closing then would hide the link before the click lands.
+  menu.addEventListener('focusout', event => {
+    if (event.relatedTarget && !menu.contains(event.relatedTarget)) menu.open = false;
+  });
   window.matchMedia('(min-width: 1151px)').addEventListener('change', event => {
     if (event.matches) menu.open = false;
   });

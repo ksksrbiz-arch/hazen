@@ -1,7 +1,7 @@
 import {galleryResponse} from '../server/ylopo-gallery.js';
 import {publicRecoveryResponse} from '../server/public-recovery.js';
 import {editor, ConfigError} from '../server/auth.js';
-import {cards, detail, published, collection} from '../server/public.js';
+import {detail, published, collection} from '../server/public.js';
 import {idPattern} from '../server/listings.js';
 import {secureResponse} from '../server/response-security.js';
 import {domainResponse, siteOrigin} from '../server/site-domain.js';

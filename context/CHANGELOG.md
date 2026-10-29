@@ -204,6 +204,11 @@ Reviewed PR #10 and the server/functions code. Fixed: with JavaScript off the ga
 
 - Homepage journey card 03 and public property-detail breadcrumbs now lead to /brads-listings/. Legacy detail URLs and private Studio previews remain available.
 
+## Bug sweep, third pass (2026-10-29)
+Fixed the header menu: clicking a menu link with the mouse did nothing. The `focusout` handler in `src/site.js` closed the menu in a microtask while focus was still moving from the Menu button to the link, so the link was hidden before the click landed and the click hit the page underneath. It now closes only when focus moves to a known element outside the menu (Escape and outside-click handling are unchanged). Added Playwright tests for mouse navigation from the menu and for closing on outside click and on keyboard focus leaving; the navigation test fails on the old handler.
+
+Reviewed PRs #13 and #14 and ran a throwaway ESLint pass (undefined names, unused code, duplicate keys, unreachable code) over `functions/`, `server/`, `scripts/`, `src/`, `tests/` and `tools/`. Removed dead code left by the homepage change: the unused `cards` import in `functions/_middleware.js`, the unused `featured` list in `scripts/build.mjs`, and an unused import in `tests/browser/smoke.spec.mjs`. Remaining lint findings are false positives (`site.js` shares scope with files the build concatenates before it; `DOMException` is a browser global; `permissionNote` is destructured on purpose to keep it out of public output). Probed and found sound: listing validation (`src/listing-model.js`), draft cleaning and publish checks (`server/listings.js`), inquiry draft building (field limits match `maxlength`), community and SEO additions, and the unapproved blog drafts (none can publish). Verified: `npm run verify`, `check:runtime` and Playwright pass.
+
 
 ## October 29, 2026 — bradhazen.com activation
 

@@ -1,5 +1,5 @@
 import {test, expect} from '@playwright/test';
-import {readdirSync, statSync, readFileSync} from 'node:fs';
+import {readdirSync, statSync} from 'node:fs';
 import path from 'node:path';
 import {contact} from '../../src/contact.js';
 const dist = path.resolve('dist');
@@ -53,6 +53,37 @@ test('mobile menu opens, closes on Escape and returns focus', async ({page}) => 
   await page.keyboard.press('Escape');
   await expect(menu).toHaveJSProperty('open', false);
   await expect(menu.locator('summary')).toBeFocused();
+});
+
+test('mobile menu links navigate when clicked with the mouse', async ({page}) => {
+  await page.setViewportSize({width: 390, height: 800});
+  for (const [label, path] of [
+    ['Contact Us', '/contact/'],
+    ['Brad’s Listings', '/brads-listings/'],
+    ['Search', '/search/']
+  ]) {
+    await page.goto('/');
+    await page.locator('details.mobile-nav summary').click();
+    await page.locator('details.mobile-nav nav').getByRole('link', {name: label, exact: true}).click();
+    await expect(page).toHaveURL(new RegExp(path + '$'));
+  }
+});
+
+test('mobile menu closes on outside click and when keyboard focus leaves it', async ({page}) => {
+  await page.setViewportSize({width: 390, height: 800});
+  await page.goto('/');
+  const menu = page.locator('details.mobile-nav');
+  await menu.locator('summary').click();
+  await page.mouse.click(20, 700);
+  await expect(menu).toHaveJSProperty('open', false);
+  await menu.locator('summary').focus();
+  await page.keyboard.press('Enter');
+  await expect(menu).toHaveJSProperty('open', true);
+  const links = await menu.locator('nav a').count();
+  for (let i = 0; i < links; i++) await page.keyboard.press('Tab');
+  await expect(menu).toHaveJSProperty('open', true);
+  await page.keyboard.press('Tab');
+  await expect(menu).toHaveJSProperty('open', false);
 });
 
 test('inquiry form: validation, reviewed draft, edit; nothing is sent', async ({page}) => {
