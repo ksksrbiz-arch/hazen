@@ -188,6 +188,11 @@ Built Search Properties page/navigation and moved Brad's featured section ahead 
 
 - Updated the privacy explanation to describe provider listing requests, external search/accounts, and the separate local email-draft forms. Verification: 119 unit checks, 28 pages, compiled runtime; browser checks include provider outage and spoofed resize protection.
 
+## 2026-10-29 — Community SEO and blog preparation
+
+- Replaced repetitive community copy with six distinct, primary-source guides, linked citations, review date, guide navigation, FAQs and search/buyer links.
+- Added intent-specific page titles and community descriptions, matching sharing titles and per-page Open Graph URLs. No indexing or production-domain change.
+- Wrote two unpublished article drafts with source notes and Brad interview prompts. Added checks that unapproved drafts stay out of the public build.
 ## Bug sweep (2026-10-29)
 Reviewed PR #9 and the repo with the blog path exercised by a temporary published post (reverted). Fixed four defects: (1) `scripts/blog.mjs` threw a bare RangeError for out-of-range dates such as 2026-13-01; it now raises the intended publication error; (2) homepage note cards used h2 under the section's h2, now h3; (3) article breadcrumbs skipped the Real estate notes parent; (4) `functions/_middleware.js` still rewrote `#featured-listings`, which no longer exists after the homepage became the static Ylopo gallery (`#brad-mls-listings`), so every homepage request ran a D1 query that changed nothing. The homepage now serves the static shell with `Cache-Control: no-store` and does not read D1; the unused `homepageListingFallback` was removed. Verified: `npm run verify` 122 pass, 0 fail, 0 skipped; `npm run check:runtime` passes; Playwright 70 pass (axe included); build with a temporary published post passes `npm run check`. Not changed: D1 listings are reachable only via /properties/ and the journey card since Properties left the navigation (VERIFY with Keith that this is intended).
 

@@ -4,6 +4,10 @@ Per-run state. Replace superseded lines instead of stacking them; history belong
 
 ## Current work — October 29, 2026
 
+- Community SEO pass: six researched guides in scripts/community-guides.mjs, official section citations, review dates, navigation, FAQs and buyer/search links. Page title and sharing metadata are centralized in scripts/seo.mjs.
+- Two researched blog drafts are in src/posts.json and docs/editorial/BLOG-DRAFTS-2026-10-29.md; neither is approved or published. Brad’s recorded perspective and exact-text approval remain required. Preview noindex remains in place.
+- Outlook checked October 29 during this pass: no reply to the 2:47 p.m. Pacific Ylopo technical-support email. Earlier forwarded questionnaire/training messages are not that reply.
+
 - PR #9 merged and verified on hazen-ci5.pages.dev: MLS-selected gallery, full-market search navigation, approval-gated blog framework.
 - Quality pass implemented: cohesive hero and gallery styling, responsive card sizing, preserved RMLS attribution, accessible detail links, bounded frame messages, loading/outage fallbacks. FUB assignment still awaits access; full search remains on Brad’s provider domain.
 
