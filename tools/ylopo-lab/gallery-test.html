@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" /><meta name="robots" content="noindex,nofollow" /><meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  /><title>Brad — private Ylopo integration test</title
+  ><style>
+    body {
+      font: 18px system-ui;
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 24px;
+      background: #f8f7f2;
+      color: #172b32;
+    }
+    section {
+      background: white;
+      padding: 28px;
+      margin: 24px 0;
+      border: 1px solid #ddd;
+    }
+    a {
+      color: #17566c;
+    }
+    #status {
+      padding: 12px;
+      background: #fff0c8;
+    }
+  </style>
+  <h1>Brad’s property search — private test</h1>
+  <p>Local technical preview. No lead submission or production changes.</p>
+  <section>
+    <h2>Search the full market</h2>
+    <div class="YLOPO_searchWidget"></div>
+    <p><a href="https://bradhazen.realtypronw.net/">Open Brad’s full property search</a></p>
+    <p id="status">Waiting for provider search widget…</p>
+  </section>
+  <section>
+    <h2>Experimental agent-filter test</h2>
+    <p>Unverified filter; inspect attribution before use. These are not certified as Brad’s listings.</p>
+    <div class="YLOPO_resultsWidget" data-search='{"agentId":"HAZENB","limit":3}'></div>
+  </section>
+  <section>
+    <h2>Brokerage featured gallery — control test</h2>
+    <p>This reproduces the existing profile filter, not a Brad-only filter.</p>
+    <div
+      class="YLOPO_resultsWidget"
+      data-search='{"propertyTypes":["house","condo","townhouse","manuf","apt"],"featured":"t","limit":3}'
+    ></div>
+  </section>
+  <section>
+    <h2>Brad’s featured listings</h2>
+    <p>Agent-only filter still being verified. Generic brokerage listings are deliberately not labelled as Brad’s.</p>
+  </section>
+  <script>
+    window.YLOPO_WIDGETS = {domain: 'bradhazen.realtypronw.net', openInNewTab: false};
+    const host = document.querySelector('.YLOPO_searchWidget');
+    new MutationObserver(() => {
+      if (host.querySelector('input'))
+        document.querySelector('#status').textContent =
+          'Provider search input rendered on this local site. Lead delivery is not yet verified.';
+    }).observe(host, {childList: true, subtree: true});
+  </script>
+  <script defer src="https://bradhazen.realtypronw.net/build/js/widgets-1.0.0.js"></script>
+</html>

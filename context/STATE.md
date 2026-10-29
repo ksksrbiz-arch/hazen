@@ -1,6 +1,13 @@
-# State — updated 2026-10-18
+# State - updated 2026-10-29
 
 Per-run state. Replace superseded lines instead of stacking them; history belongs in `context/CHANGELOG.md`. Each line says when it was observed.
+
+## Current work — October 29, 2026
+
+- Branch codex/site-search-blog starts from current main b7f4e38, preserving newer listing presentation and price changes. Local worktree: C:/Users/keith/Projects/hazen-site-next.
+- Built full-market search navigation/page, prominent Brad listings and an approval-gated blog framework; no articles or empty blog published. First interview kit is in docs/editorial/FIRST-INTERVIEW.md.
+- Verified Ylopo gallery selection by the two approved MLS numbers, including land. agentId=HAZENB combined with featured returns other agents' properties and is not a valid filter. See context/references/search-and-blog-implementation.md.
+- Ylopo support email sent; FUB access still pending. Actual lead routing and automatic agent-wide inventory remain unverified. No deployment or shared account changes.
 
 ## Observed 2026-10-18
 

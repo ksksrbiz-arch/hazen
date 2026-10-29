@@ -115,7 +115,8 @@ test.describe('accessibility', () => {
     '/resources/',
     '/properties/',
     '/seller-checklist/',
-    '/buyer-checklist/'
+    '/buyer-checklist/',
+    '/search/'
   ]) {
     test(`axe: no WCAG A/AA violations: ${route}`, async ({page}) => {
       await page.goto(route);
@@ -161,4 +162,20 @@ test('heading font loads as a small WOFF2 and is preloaded with the matching URL
   expect((await fonts[0].body()).length).toBeLessThan(40000);
   const preload = await page.locator('link[rel="preload"][as="font"]').getAttribute('href');
   expect(new URL(fonts[0].url()).pathname).toBe(preload);
+});
+
+test('search separates full market from Brad listings and no empty blog is exposed', async ({page}) => {
+  await page.goto('/search/');
+  await expect(page.getByRole('link', {name: 'Open Property Search', exact: true})).toHaveAttribute(
+    'href',
+    'https://bradhazen.realtypronw.net/'
+  );
+  await expect(page.getByRole('link', {name: /View Brad.s Listings/, exact: true})).toHaveAttribute(
+    'href',
+    '/properties/'
+  );
+  await expect(page.locator('iframe')).toHaveCount(0);
+  await expect(page.locator('a[href="/blog/"]')).toHaveCount(0);
+  const response = await page.goto('/blog/');
+  expect(response.status()).toBe(404);
 });
