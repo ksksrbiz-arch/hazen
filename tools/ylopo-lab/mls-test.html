@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Brad — private Ylopo integration test</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font: 18px/1.5 system-ui;
+        max-width: 1000px;
+        margin: 32px auto;
+        padding: 20px;
+        background: #f8f7f2;
+        color: #172b32;
+      }
+      section {
+        background: white;
+        padding: 28px;
+        margin: 24px 0;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+      }
+      a {
+        color: #17566c;
+        overflow-wrap: anywhere;
+      }
+      a:focus-visible {
+        outline: 3px solid #a36d00;
+        outline-offset: 5px;
+      }
+      .search-link {
+        display: inline-block;
+        padding: 12px 18px;
+        background: #17566c;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        min-height: 48px;
+      }
+      #status {
+        padding: 12px;
+        background: #fff0c8;
+      }
+      h1 {
+        font-size: clamp(26px, 5vw, 38px);
+      }
+      .YLOPO_searchWidget {
+        min-height: 54px;
+        max-width: 100%;
+      }
+      @media (max-width: 480px) {
+        body {
+          padding: 12px;
+          margin: 12px auto;
+        }
+        section {
+          padding: 16px;
+        }
+        .search-link {
+          display: block;
+          text-align: center;
+        }
+      }
+    </style>
+    <script src="search-loader.js" defer></script>
+  </head>
+  <body>
+    <h1>Brad’s property search — private test</h1>
+    <p>Local technical preview. No lead submission or production changes.</p>
+    <section aria-labelledby="search-title">
+      <h2 id="search-title">Search the full market</h2>
+      <div class="YLOPO_searchWidget"></div>
+      <p><a class="search-link" href="https://bradhazen.realtypronw.net/">Open Brad’s full property search</a></p>
+      <p id="status" role="status" aria-live="polite">Loading property search… You can also use the button above.</p>
+      <noscript><p>Use the button above to open property search. The embedded search needs JavaScript.</p></noscript>
+    </section>
+    <section>
+      <h2>Brad’s known MLS numbers — verification</h2>
+      <p>
+        MLS 24202394 and 24434415 from the previously approved listing records. Explicit selection; not automatic
+        discovery of new listings.
+      </p>
+      <div class="YLOPO_resultsWidget" data-search='{"mlsId":["24202394","24434415"],"limit":6}'></div>
+    </section>
+    <section>
+      <h2>Brad’s featured listings</h2>
+      <p>Agent-only filter still being verified. No unverified listings are presented as Brad’s.</p>
+    </section>
+    <details>
+      <summary>Technical checks</summary>
+      <p>
+        <a href="?simulate=blocked">Simulate blocked widget</a> · <a href="?simulate=timeout">Simulate slow widget</a> ·
+        <a href="./">Normal mode</a> · <a href="gallery-test.html">Gallery diagnostic</a>
+      </p>
+      <p>Local test only. CRM assignment, alerts and production-domain behavior remain unverified.</p>
+    </details>
+  </body>
+</html>

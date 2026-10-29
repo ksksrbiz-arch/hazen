@@ -1,8 +1,9 @@
 import {contact as agentContact} from '../src/contact.js';
 import {readFile, readdir, stat} from 'node:fs/promises';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
-const root = new URL('../dist/', import.meta.url).pathname;
+const root = fileURLToPath(new URL('../dist/', import.meta.url));
 async function files(dir) {
   const entries = await readdir(dir, {withFileTypes: true});
   return (

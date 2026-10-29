@@ -1,3 +1,4 @@
+import {galleryResponse} from '../../server/ylopo-gallery.js';
 // Minimal static server for dist/ with directory indexes and the generated 404 page.
 import http from 'node:http';
 import {readFile, stat} from 'node:fs/promises';
@@ -35,6 +36,12 @@ async function find(url) {
 }
 http
   .createServer(async (request, response) => {
+    if (request.url.split('?')[0].replace(/\/$/, '') === '/listing-widget') {
+      const widget = galleryResponse();
+      response.writeHead(200, Object.fromEntries(widget.headers));
+      response.end(await widget.text());
+      return;
+    }
     const file = await find(request.url),
       status = file ? 200 : 404,
       body = await readFile(file || path.join(root, '404.html'));

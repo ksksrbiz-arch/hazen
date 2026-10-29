@@ -1,3 +1,6 @@
+import {galleryMarkup} from '../server/ylopo-gallery.js';
+import {publishedPosts, blogPages, latestNotes} from './blog.mjs';
+import {searchPage, searchOverview} from './property-search.mjs';
 import {contact as agentContact} from '../src/contact.js';
 import {securityHeaders} from '../server/response-security.js';
 import {publicRecoveryContent} from '../server/public-recovery.js';
@@ -25,6 +28,7 @@ import {
 const root = fileURLToPath(new URL('../', import.meta.url));
 const content = JSON.parse(await readFile(path.join(root, 'src/content.json'), 'utf8'));
 const {properties, testimonials} = getCollections(content);
+const posts = publishedPosts(JSON.parse(await readFile(path.join(root, 'src/posts.json'), 'utf8')));
 const e = s =>
   String(s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'})[c]);
 const button = (href, text) => `<a class="button" href="${href}">${text}</a>`;
@@ -32,7 +36,9 @@ const navigation = [
   ['buy', 'Buy'],
   ['sell', 'Sell'],
   ['communities', 'Communities'],
-  ['properties', 'Properties'],
+  ['search', 'Search'],
+  ['brads-listings', 'Brad’s Listings'],
+  ...(posts.length ? [['blog', 'Notes']] : []),
   ['testimonials', 'Testimonials'],
   ['about', 'Meet Brad'],
   ['contact', 'Contact Us']
@@ -85,8 +91,8 @@ const pageLinks = page =>
         ? `<div class="page-actions community-actions"><a class="button" href="/contact/?community=${e(page.slug.split('/')[1])}#inquiry">Talk About This Community</a><a href="/communities/">View All Communities</a></div>`
         : '';
 const featured = properties.filter(item => item.featured !== false && item.status !== 'Sold').slice(0, 4);
-const featuredSection = `<section class="section featured-listings" id="featured-listings"><p class="eyebrow">Presented by Brad Hazen</p><h2>FEATURED LISTINGS</h2>${featured.length ? propertyCards(featured, 'h3') : `<div class="listing-start"><h3>Your next property conversation starts here</h3><p>Brad’s listings will appear here as they are added. Ask about current opportunities or discuss a plan for selling your home.</p><div class="page-actions">${button('/properties/', 'Explore Properties')}${button('/sell/', 'List Your Home With Brad')}</div></div>`}${featured.length ? button('/properties/', 'View All Properties') : ''}</section>`;
-const home = `<section class="hero"><picture class="hero-image"><source media="(max-width: 600px)" srcset="/assets/river-hero-mobile.webp"><img src="/assets/river-hero.webp" alt="" width="1500" height="668" fetchpriority="high" decoding="async"></picture><div class="hero-content"><h1>SELL YOUR HOME WITH BRAD HAZEN</h1><p>PERSONAL GUIDANCE FOR YOUR HOME SALE AND NEXT MOVE</p><div class="hero-panel"><span>What’s your next move?</span><div class="hero-actions">${button('/sell/', 'List My Home With Brad')}${button('/properties/', 'Explore Properties')}${button('/home-valuation/', 'What’s My Home Worth?')}</div></div><div class="hero-chips"><a href="/communities/">Explore Communities</a><a href="/about/">Meet Brad</a><a href="${agentContact.phoneHref}">${agentContact.phone}</a></div></div></section><section class="intro-band"><p><strong>Brad Hazen brings personal guidance to your real estate decisions.</strong></p><p>From your first conversation to your next move, start with your goals. Learn about buying and selling, explore local communities, and connect directly with Brad.</p></section>${sellerHomepage()}${featuredSection}<section class="section listings"><h2>YOUR REAL ESTATE JOURNEY</h2><p class="section-lead">Choose where you’d like to begin.</p><div class="journey-grid"><a href="/buy/"><span>01</span><h3>Find Your Next Home</h3><p>Talk through your priorities and plan your purchase.</p></a><a href="/sell/"><span>02</span><h3>Plan Your Home Sale</h3><p>Discuss your property, timing, and next steps.</p></a><a href="/properties/"><span>03</span><h3>Featured Properties</h3><p>Ask about current listings and homes you are considering.</p></a></div></section>${resourceOverview()}<section class="inspiration"><div class="inspiration-grid">${[
+const featuredSection = `<section class="section featured-listings" id="brad-mls-listings"><p class="eyebrow">Presented by Brad Hazen</p><h2>FEATURED LISTINGS</h2>${galleryMarkup}</section>`;
+const home = `<section class="hero"><picture class="hero-image"><source media="(max-width: 600px)" srcset="/assets/river-hero-mobile.webp"><img src="/assets/river-hero.webp" alt="" width="1500" height="668" fetchpriority="high" decoding="async"></picture><div class="hero-content"><h1>SELL YOUR HOME WITH BRAD HAZEN</h1><p>PERSONAL GUIDANCE FOR YOUR HOME SALE AND NEXT MOVE</p><div class="hero-panel"><span>What’s your next move?</span><div class="hero-actions">${button('/sell/', 'List My Home With Brad')}${button('/search/', 'Search Properties')}${button('/home-valuation/', 'What’s My Home Worth?')}</div></div><div class="hero-chips"><a href="/communities/">Explore Communities</a><a href="/about/">Meet Brad</a><a href="${agentContact.phoneHref}">${agentContact.phone}</a></div></div></section><section class="intro-band"><p><strong>Brad Hazen brings personal guidance to your real estate decisions.</strong></p><p>From your first conversation to your next move, start with your goals. Learn about buying and selling, explore local communities, and connect directly with Brad.</p></section>${searchOverview}${featuredSection}${sellerHomepage()}${latestNotes(posts)}<section class="section listings"><h2>YOUR REAL ESTATE JOURNEY</h2><p class="section-lead">Choose where you’d like to begin.</p><div class="journey-grid"><a href="/buy/"><span>01</span><h3>Find Your Next Home</h3><p>Talk through your priorities and plan your purchase.</p></a><a href="/sell/"><span>02</span><h3>Plan Your Home Sale</h3><p>Discuss your property, timing, and next steps.</p></a><a href="/properties/"><span>03</span><h3>Featured Properties</h3><p>Ask about current listings and homes you are considering.</p></a></div></section>${resourceOverview()}<section class="inspiration"><div class="inspiration-grid">${[
   [
     'buyer-thumbnail.webp',
     'Buying a Home?',
@@ -136,7 +142,9 @@ const css = fingerprint(
     '\n' +
     (await readFile(path.join(root, 'src/listings.css'), 'utf8')) +
     '\n' +
-    (await readFile(path.join(root, 'src/polish.css'), 'utf8'))
+    (await readFile(path.join(root, 'src/polish.css'), 'utf8')) +
+    '\n' +
+    (await readFile(path.join(root, 'src/editorial.css'), 'utf8'))
 );
 const cssName = 'styles.' + createHash('sha256').update(css).digest('hex').slice(0, 12) + '.css';
 await writeFile(path.join(root, 'dist', cssName), css);
@@ -165,6 +173,22 @@ await writeFile(
 const pages = [
   ...content.pages,
   resourcesPage,
+  searchPage,
+  {
+    slug: 'listing-widget',
+    title: 'Brad’s property listings',
+    intro: 'Open Brad’s Realty Pro search site to view current property details.',
+    sections: [],
+    customBody: '<a href="https://bradhazen.realtypronw.net/" target="_blank" rel="noopener">Open Property Search</a>'
+  },
+  {
+    slug: 'brads-listings',
+    title: 'Brad’s listings',
+    intro: 'Explore selected listings presented by Brad Hazen.',
+    sections: [],
+    customBody: galleryMarkup
+  },
+  ...blogPages(posts),
   buyerWorksheetPage,
   ...content.communities,
   ...properties.map(property => ({
@@ -187,7 +211,7 @@ for (const page of pages) {
         : page.intro;
   const body = isHome
     ? home
-    : `<section class="inner-hero"><h1>${e(page.title)}</h1></section><section class="section inner-content ${page.slug === 'contact' ? 'contact-page' : ''}">${breadcrumbs(page)}<p class="section-lead">${e(page.slug === 'properties' && properties.length ? 'Explore Brad’s featured properties. Contact him to confirm details or ask about a showing.' : page.slug === 'testimonials' && testimonials.length ? 'Read experiences shared by Brad’s clients.' : page.intro)}</p>${pageLinks(page)}${page.slug === 'listing-marketing' ? `<div class="page-actions">${button('#inquiry', 'Discuss My Listing Plan')}<a href="/home-valuation/">Request a Home Assessment</a></div>` : ''}${page.slug === 'about' ? profile : ''}${['buy', 'sell', 'home-valuation'].includes(page.slug) ? `<div class="page-actions">${button('#inquiry', page.slug === 'home-valuation' ? 'Request an Assessment' : 'Start a Conversation')}${page.slug === 'buy' ? '<a href="/buyer-checklist/">Prepare With the Buyer Checklist</a><a href="/communities/">Explore Communities</a>' : page.slug === 'sell' ? '<a href="/home-valuation/">Request a Home Assessment</a>' : page.slug === 'home-valuation' ? '<a href="/seller-checklist/">Organize Your Property Details</a>' : ''}</div>` : ''}${page.slug === 'communities' ? '<div class="page-actions"><a href="#compare" data-compare-jump hidden>Compare Communities →</a></div>' + areaGrid + communityCompare(content.communities) + '<p class="collection-note">Not sure where to start? Compare the places you visit every day, your preferred home features, and your moving timeline.</p>' : ''}${page.slug === 'properties' && properties.length ? propertyCards(properties) : ''}${page.property ? propertyDetail(page.property) : ''}${page.slug === 'properties' && !properties.length ? `<div class="empty-state"><p class="eyebrow">Your property search</p><h2>Let’s talk about the homes on your mind</h2><p>Share a property address or listing link with Brad, or tell him what you are looking for.</p>${button('/contact/#inquiry', 'Ask About a Property')}<a href="/communities/">Explore Local Communities</a></div>` : ''}${page.slug === 'testimonials' && testimonials.length ? reviewCards(testimonials) : ''}${page.slug === 'testimonials' && !testimonials.length ? `<div class="empty-state"><p class="eyebrow">Get to know Brad</p><h2>A conversation is a good place to start</h2><p>Read Brad’s introduction and bring your questions about your next move.</p>${button('/about/', 'Meet Brad')}</div>` : ''}${page.image ? `<figure class="community-figure"><img loading="lazy" class="community-hero" src="/assets/${e(page.image)}" alt="Illustrative Pacific Northwest scene" width="600" height="338" decoding="async"><figcaption class="imagery-note">AI-generated illustration of a Pacific Northwest setting, not a photograph of ${e(page.title)}.</figcaption></figure>` : ''}${['sell', 'listing-marketing'].includes(page.slug) ? sellerConversationChoices() : ''}${page.slug === 'seller-checklist' ? sellerWorksheet() : page.slug === 'buyer-checklist' ? buyerWorksheet() : ''}${page.slug === 'listing-photos' ? photoGuide() : ''}${page.slug === 'resources' ? resourceHub() : ''}${pageSections(page)}${page.slug === 'about' ? publicProfileLinks : ''}${page.slug === 'sell' ? `<aside class="seller-marketing-link"><p class="eyebrow">Your listing presentation</p><h2>See how a property page fits into the plan.</h2><p>Explore the presentation, outreach questions, and decisions to discuss before launching your listing.</p>${button('/listing-marketing/', 'Explore the Listing Approach')}</aside>` + sellerPreparation() : page.slug === 'listing-marketing' ? sellerMarketingPage() : ''}${page.sources ? `<aside class="community-resources"><h2>Explore official local resources</h2>${page.sources.map(([label, url]) => `<a href="${e(url)}" target="_blank" rel="noopener noreferrer">${e(label)} ↗</a>`).join('')}<p>Community information is a starting point. Check official sources for current access and amenities.</p></aside>` : ''}${communityLinks(page)}${faqs(page)}${relatedResources(page)}${['seller-checklist', 'buyer-checklist', 'listing-photos', 'resources'].includes(page.slug) ? '' : page.property ? inquiry('property', page.property) : ['contact', 'buy', 'sell', 'home-valuation', 'listing-marketing'].includes(page.slug) ? inquiry(page.slug === 'home-valuation' ? 'assessment' : page.slug === 'listing-marketing' ? 'sell' : page.slug) : button('/contact/', 'Talk With Brad')}</section>${['contact', 'seller-checklist', 'buyer-checklist', 'listing-photos', 'resources'].includes(page.slug) ? '' : contact}`;
+    : `<section class="inner-hero"><h1>${e(page.title)}</h1></section><section class="section inner-content ${page.slug === 'contact' ? 'contact-page' : ''}">${breadcrumbs(page)}<p class="section-lead">${e(page.slug === 'properties' && properties.length ? 'Explore Brad’s featured properties. Contact him to confirm details or ask about a showing.' : page.slug === 'testimonials' && testimonials.length ? 'Read experiences shared by Brad’s clients.' : page.intro)}</p>${pageLinks(page)}${page.slug === 'listing-marketing' ? `<div class="page-actions">${button('#inquiry', 'Discuss My Listing Plan')}<a href="/home-valuation/">Request a Home Assessment</a></div>` : ''}${page.slug === 'about' ? profile : ''}${['buy', 'sell', 'home-valuation'].includes(page.slug) ? `<div class="page-actions">${button('#inquiry', page.slug === 'home-valuation' ? 'Request an Assessment' : 'Start a Conversation')}${page.slug === 'buy' ? '<a href="/search/">Search Properties</a><a href="/buyer-checklist/">Prepare With the Buyer Checklist</a><a href="/communities/">Explore Communities</a>' : page.slug === 'sell' ? '<a href="/home-valuation/">Request a Home Assessment</a>' : page.slug === 'home-valuation' ? '<a href="/seller-checklist/">Organize Your Property Details</a>' : ''}</div>` : ''}${page.slug === 'communities' ? '<div class="page-actions"><a href="#compare" data-compare-jump hidden>Compare Communities →</a></div>' + areaGrid + communityCompare(content.communities) + '<p class="collection-note">Not sure where to start? Compare the places you visit every day, your preferred home features, and your moving timeline.</p>' : ''}${page.slug === 'properties' && properties.length ? propertyCards(properties) : ''}${page.property ? propertyDetail(page.property) : ''}${page.slug === 'properties' && !properties.length ? `<div class="empty-state"><p class="eyebrow">Your property search</p><h2>Let’s talk about the homes on your mind</h2><p>Share a property address or listing link with Brad, or tell him what you are looking for.</p>${button('/contact/#inquiry', 'Ask About a Property')}<a href="/communities/">Explore Local Communities</a></div>` : ''}${page.slug === 'testimonials' && testimonials.length ? reviewCards(testimonials) : ''}${page.slug === 'testimonials' && !testimonials.length ? `<div class="empty-state"><p class="eyebrow">Get to know Brad</p><h2>A conversation is a good place to start</h2><p>Read Brad’s introduction and bring your questions about your next move.</p>${button('/about/', 'Meet Brad')}</div>` : ''}${page.image ? `<figure class="community-figure"><img loading="lazy" class="community-hero" src="/assets/${e(page.image)}" alt="Illustrative Pacific Northwest scene" width="600" height="338" decoding="async"><figcaption class="imagery-note">AI-generated illustration of a Pacific Northwest setting, not a photograph of ${e(page.title)}.</figcaption></figure>` : ''}${['sell', 'listing-marketing'].includes(page.slug) ? sellerConversationChoices() : ''}${page.slug === 'seller-checklist' ? sellerWorksheet() : page.slug === 'buyer-checklist' ? buyerWorksheet() : ''}${page.slug === 'listing-photos' ? photoGuide() : ''}${page.slug === 'resources' ? resourceHub() : ''}${page.customBody || ''}${pageSections(page)}${page.slug === 'about' ? publicProfileLinks : ''}${page.slug === 'sell' ? `<aside class="seller-marketing-link"><p class="eyebrow">Your listing presentation</p><h2>See how a property page fits into the plan.</h2><p>Explore the presentation, outreach questions, and decisions to discuss before launching your listing.</p>${button('/listing-marketing/', 'Explore the Listing Approach')}</aside>` + sellerPreparation() : page.slug === 'listing-marketing' ? sellerMarketingPage() : ''}${page.sources ? `<aside class="community-resources"><h2>Explore official local resources</h2>${page.sources.map(([label, url]) => `<a href="${e(url)}" target="_blank" rel="noopener noreferrer">${e(label)} ↗</a>`).join('')}<p>Community information is a starting point. Check official sources for current access and amenities.</p></aside>` : ''}${communityLinks(page)}${faqs(page)}${relatedResources(page)}${['seller-checklist', 'buyer-checklist', 'listing-photos', 'resources'].includes(page.slug) ? '' : page.property ? inquiry('property', page.property) : ['contact', 'buy', 'sell', 'home-valuation', 'listing-marketing'].includes(page.slug) ? inquiry(page.slug === 'home-valuation' ? 'assessment' : page.slug === 'listing-marketing' ? 'sell' : page.slug) : button('/contact/', 'Talk With Brad')}</section>${['contact', 'seller-checklist', 'buyer-checklist', 'listing-photos', 'resources'].includes(page.slug) ? '' : contact}`;
   let html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>${isHome ? 'Brad Hazen | Real Estate Broker' : e(page.title) + ' | Brad Hazen'}</title><meta name="description" content="${e(description)}"><link rel="preload" href="/assets/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#182b40"><meta property="og:type" content="website"><meta property="og:title" content="${isHome ? 'Brad Hazen | Real Estate Broker' : e(page.title) + ' | Brad Hazen'}"><meta property="og:description" content="${e(description)}"><meta property="og:image" content="https://hazen-ci5.pages.dev/assets/river-hero.webp"><link rel="stylesheet" href="/${cssName}"></head><body${['seller-checklist', 'buyer-checklist'].includes(page.slug) ? ' class="worksheet-page"' : page.slug === 'listing-photos' ? ' class="photo-guide-page"' : ''}>${header(page.slug)}<main id="main">${body}</main>${footer}${mobileContact}<script src="/${jsName}" defer></script></body></html>`;
   const dir = path.join(root, 'dist', page.slug);
   await mkdir(dir, {recursive: true});
@@ -257,7 +281,17 @@ await writeFile(
   path.join(root, 'dist/_routes.json'),
   JSON.stringify({
     version: 1,
-    include: ['/', '/properties', '/properties/*', '/studio', '/studio/*', '/api/admin/*', '/media/*'],
+    include: [
+      '/listing-widget',
+      '/listing-widget/*',
+      '/',
+      '/properties',
+      '/properties/*',
+      '/studio',
+      '/studio/*',
+      '/api/admin/*',
+      '/media/*'
+    ],
     exclude: []
   })
 );

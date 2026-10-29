@@ -171,3 +171,11 @@ Audited the live build before changing it: images were already WebP, assets alre
 
 ## Price reduction field — October 22, 2026
 Added optional `originalPrice` (model validation, server whitelist, Studio field, recovery export). Cards and detail pages show "Price reduced · Was $X" (and the drop on detail) for Active or Pending listings, never for Sold. Keith confirmed the two imported listings were reduced by $8,000,000 on the same date (Yacolt $10M to $2M, Hazen $20M to $12M); the date is not recorded and is not shown. Listing data in D1 is not yet updated; that write still needs approval.
+
+## Search and blog preparation — October 29, 2026
+Built Search Properties page/navigation and moved Brad's featured section ahead of seller marketing. Added source/approval/date-gated blog rendering and private interview kit, with no empty public blog. Fixed Windows route-check file URL. Researched and verified explicit MLS gallery selection for Brad's two parcels; disproved agentId=HAZENB as a sufficient filter even with featured. Strict CSP unchanged; widgets remain isolated. No runtime account changes or deployment. See search-and-blog-implementation.md for evidence and remaining work.
+
+## 2026-10-29 — MLS-selected preview gallery
+
+- Featured MLS 24202394 and 24434415 through the Ylopo widget on home and /brads-listings/. New listings require adding their MLS numbers.
+- Isolated vendor permissions to /listing-widget/; private editor security and legacy property pages remain intact. Direct property links remain available if the widget cannot load.
