@@ -179,3 +179,11 @@ Built Search Properties page/navigation and moved Brad's featured section ahead 
 
 - Featured MLS 24202394 and 24434415 through the Ylopo widget on home and /brads-listings/. New listings require adding their MLS numbers.
 - Isolated vendor permissions to /listing-widget/; private editor security and legacy property pages remain intact. Direct property links remain available if the widget cannot load.
+
+## 2026-10-29 — Listing experience quality pass
+
+- Refined homepage hierarchy, mobile actions and search presentation. Restyled provider cards while retaining RMLS logos and brokerage attribution.
+- Added accessible detail links, automatic bounded frame sizing, loading status and direct-link outage fallback. Parent checks the sending frame before accepting layout messages.
+- Compared the public Realty Pro profile with the custom site; the profile currently shows a broad brokerage gallery. Lead-routing verification and Brad-approved blog content remain pending.
+
+- Updated the privacy explanation to describe provider listing requests, external search/accounts, and the separate local email-draft forms. Verification: 119 unit checks, 28 pages, compiled runtime; browser checks include provider outage and spoofed resize protection.
