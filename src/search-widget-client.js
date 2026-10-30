@@ -1,5 +1,7 @@
+import {listingAnalyticsClient} from './listing-analytics.js';
 // Literal browser source: bundler helpers must not leak into the isolated frame.
 export const searchWidgetClient = `(function searchWidgetClient() {
+  ${listingAnalyticsClient}
   const form = document.querySelector('#search-filters');
   const results = document.querySelector('#search-results');
   const status = document.querySelector('#search-status');
@@ -13,6 +15,7 @@ export const searchWidgetClient = `(function searchWidgetClient() {
   new ResizeObserver(notify).observe(document.body);
   const failed = () => {
     if (settled) return;
+    measureListing('search_error');
     status.textContent = 'Property search is taking longer than expected. Try again or open Brad’s full search below.';
     results.hidden = true;
     results.setAttribute('aria-busy', 'false');
@@ -60,6 +63,8 @@ export const searchWidgetClient = `(function searchWidgetClient() {
     remountable: {},
     widgetOnloadCallback(type, listings, props) {
       if (type !== 'listings' || JSON.stringify(props.search) !== JSON.stringify(current)) return;
+      rememberListingAttribution(listings);
+      if (!settled) measureListing('search_results', {count: listings.length});
       settled = true;
       clearTimeout(timer);
       results.hidden = false;
@@ -96,6 +101,7 @@ export const searchWidgetClient = `(function searchWidgetClient() {
     const maxField = form.elements.namedItem('max');
     maxField.setCustomValidity(max && min > max ? 'Maximum price must be at least the minimum price.' : '');
     if (!form.reportValidity()) return;
+    measureListing('property_search');
     current = {
       locations: [{city: fields.get('city'), state: 'WA'}],
       propertyTypes: fields.get('type') ? [fields.get('type')] : [],
@@ -108,10 +114,12 @@ export const searchWidgetClient = `(function searchWidgetClient() {
   });
   form.addEventListener('input', () => form.elements.namedItem('max').setCustomValidity(''));
   form.addEventListener('reset', () => {
+    measureListing('search_reset');
     form.elements.namedItem('max').setCustomValidity('');
     setTimeout(() => form.requestSubmit(), 0);
   });
   more.addEventListener('click', () => {
+    measureListing('search_more');
     current = {...current, limit: Math.min(24, current.limit + 6)};
     run();
   });
@@ -124,6 +132,8 @@ export const searchWidgetClient = `(function searchWidgetClient() {
     event => {
       const link = event.target.closest('a[href]');
       if (link && new URL(link.href).hostname === 'bradhazen.realtypronw.net') {
+        const details = listingClickDetails(link.href);
+        if (details) measureListing('listing_click', details);
         event.preventDefault();
         event.stopImmediatePropagation();
         window.open(link.href, '_blank', 'noopener');

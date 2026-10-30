@@ -197,7 +197,11 @@
         ],
         [
           "Hosting",
-          "Cloudflare hosts this preview and may process request information to operate and secure the website. The listing gallery also requests content, images and fonts from Ylopo and its service providers. Those requests share technical information such as your IP address and browser details with the providers."
+          "Cloudflare hosts this website and may process request information to operate and secure the website. The listing gallery also requests content, images and fonts from Ylopo and its service providers. Those requests share technical information such as your IP address and browser details with the providers."
+        ],
+        [
+          "Optional website analytics",
+          "If you allow analytics, Google Analytics 4, loaded through Google Tag Manager, helps measure visits, page engagement, searches, listing-detail clicks, guide downloads and contact actions. Listing activity can distinguish Brad’s listings from other agents’ listings when provider attribution is available. We do not send your inquiry text, names, email addresses, phone numbers or worksheet notes to Google Analytics. Advertising personalization and advertising user-data collection are disabled. Your choice is stored in this browser for up to 180 days. Use Cookie choices in the footer to change it; Global Privacy Control disables optional analytics. Blocking cookies or declining analytics does not prevent you from using this site. An email-draft action is not confirmation that an inquiry was sent."
         ],
         [
           "Property search and registration",

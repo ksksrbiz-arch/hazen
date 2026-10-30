@@ -6,9 +6,20 @@ export const securityHeaders = {
   'Content-Security-Policy':
     "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
 };
-export function secureResponse(response) {
+export const analyticsCsp = securityHeaders['Content-Security-Policy']
+  .replace("script-src 'self'", "script-src 'self' https://www.googletagmanager.com")
+  .replace(
+    "connect-src 'self'",
+    "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://www.googletagmanager.com"
+  )
+  .replace(
+    "img-src 'self' blob:",
+    "img-src 'self' blob: https://www.google-analytics.com https://www.googletagmanager.com"
+  );
+export function secureResponse(response, {analytics = false} = {}) {
   const headers = new Headers(response.headers);
   for (const [name, value] of Object.entries(securityHeaders)) headers.set(name, value);
+  if (analytics) headers.set('Content-Security-Policy', analyticsCsp);
   if (!headers.has('Referrer-Policy')) headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   return new Response(response.body, {status: response.status, statusText: response.statusText, headers});
 }

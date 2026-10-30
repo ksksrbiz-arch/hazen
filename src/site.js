@@ -199,11 +199,13 @@ document.querySelectorAll('[data-inquiry]').forEach(form => {
     validationAttempted = true;
     const issues = renderInquiryErrors();
     if (issues.length) {
+      window.bradTrack?.('inquiry_validation_error', {count: issues.length});
       status.textContent = 'Review the highlighted fields to prepare your draft. Nothing has been sent.';
       issues[0].field.focus();
       return;
     }
     setInquiryStage(2);
+    window.bradTrack?.('email_draft_ready');
     const data = new FormData(form);
     const value = key => String(data.get(key) || '').trim();
     const body = inquiryDraftBody(data);
@@ -239,6 +241,7 @@ document.querySelectorAll('[data-inquiry]').forEach(form => {
     const field = form.querySelector('.email-backup textarea');
     try {
       await navigator.clipboard.writeText(field.value);
+      window.bradTrack?.('inquiry_copy');
       form.querySelector('.form-status').textContent =
         'Message copied. Paste it into an email to ' + contact.email + ' and send it.';
     } catch {
@@ -478,6 +481,7 @@ if (worksheet) {
             })),
             notes: notes.value
           }).save('brad-hazen-seller-checklist.pdf');
+          window.bradTrack?.('worksheet_download', {action: 'pdf'});
           worksheetExported = true;
           feedback.textContent = 'Your PDF was downloaded with your checks and notes. Nothing was sent to Brad.';
         } catch {
@@ -502,6 +506,7 @@ if (worksheet) {
       link.download =
         (window.location.pathname.includes('buyer-checklist') ? 'buyer' : 'seller') + '-conversation-worksheet.txt';
       link.click();
+      window.bradTrack?.('worksheet_download', {action: 'txt'});
       setTimeout(() => URL.revokeObjectURL(url), 1000);
       worksheetExported = true;
       feedback.textContent =
