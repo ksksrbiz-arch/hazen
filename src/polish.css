@@ -58,3 +58,99 @@ footer .analytics-settings{background:transparent;color:inherit;font-size:13px}
 .analytics-choice button:focus-visible,footer .analytics-settings:focus-visible{outline:3px solid #967323;outline-offset:4px}
 @media(max-width:700px){.analytics-choice{bottom:76px;padding:16px}.analytics-choice p{font-size:13px;line-height:1.5}.analytics-choice button{flex:1}}
 @media print{.analytics-choice,footer .analytics-settings{display:none!important}}
+
+/* Public-site finish: a consistent, quiet material palette and clearer reading rhythm.
+   Screen-only rules leave the purpose-built printable preparation layouts intact. */
+@media screen {
+ :root{--surface-warm:#f7f6f0;--surface-line:#dbe2dc;--brand-deep:#173f47;--card-shadow:0 12px 32px #173f470b}
+ body:not(.studio-body){color:#243b40}
+ body>header:not(.studio-header):not(.agent-login-header):not(.recovery-header){border-bottom:1px solid #ffffff26;background:linear-gradient(180deg,#102932e8,#10293288)}
+ .desktop-nav a{font-size:13px;letter-spacing:.025em}
+ .desktop-nav a[aria-current]{color:#f2cf7c;border-bottom:2px solid #f2cf7c}
+ .mobile-nav nav a[aria-current]{background:#f5eddc;color:#173f47;font-weight:700}
+ .mobile-nav summary{border-radius:6px;background:#102e3655}
+ .mobile-nav nav{border-radius:10px;margin-top:10px;border:1px solid #dbe2dc}
+ main .hero{min-height:720px;height:auto;max-height:none;padding:175px 5% 76px}
+ main .hero:after{background:linear-gradient(90deg,#102932d9 0%,#1029329c 55%,#10293238 100%)}
+ main .hero .hero-content{width:min(1180px,100%);padding-top:0}
+ main .hero h1{max-width:870px;font-size:clamp(38px,4.7vw,66px);line-height:1.14;text-wrap:balance}
+ main .hero h1:before{content:"";display:block;width:64px;height:3px;background:#e3b957;margin-bottom:28px}
+ main .hero .hero-content>p{max-width:640px;margin-bottom:28px;font-size:clamp(17px,1.6vw,21px)}
+ main .hero .hero-panel{margin-top:28px;padding:22px;border:1px solid #fff9;background:#fffaf2f5;box-shadow:0 18px 44px #10293224}
+ main .hero .hero-panel>span{font-size:16px;font-weight:600;margin-bottom:14px}
+ main .hero .hero-actions .button{min-height:52px}
+ main .hero .hero-chips{gap:12px;margin-top:20px}
+ main .hero .hero-chips a{font-size:15px;line-height:1.5;padding:8px 14px;background:#102e36c9}
+ .intro-band{padding-block:34px;border-top:1px solid #ffffff24}
+ .intro-band p{max-width:860px;line-height:1.75}
+ .intro-band p:last-child{margin-bottom:0;color:#e4ece8}
+ .section>h2,.home-preparation-heading h2,.inner-hero h1{text-wrap:balance}
+ .inner-hero{background:linear-gradient(110deg,#102932e0,#10293286),url('/assets/river-hero.webp') center/cover;padding:170px 24px 66px;border-bottom:4px solid #baa16c}
+ .inner-hero h1{font-size:clamp(32px,4vw,48px);line-height:1.22;max-width:950px}
+ .inner-content>.section-lead{max-width:760px;margin-bottom:30px}
+ .breadcrumbs{font-size:13px;color:#55666a}
+ .journey-grid{gap:24px;text-align:left}
+ .journey-grid a{display:flex;flex-direction:column;padding:30px;border:1px solid var(--surface-line);border-top:3px solid #a68a4d;border-radius:14px;box-shadow:var(--card-shadow);background:linear-gradient(145deg,#fff,#f7f6f0)}
+ .journey-grid span{font:400 44px/1.2 Georgia,serif;color:#83682f}
+ .journey-grid h3{font-size:23px;line-height:1.35;margin:20px 0 14px;color:var(--brand-deep)}
+ .journey-grid p{margin:0}
+ .journey-grid a:after{content:"→";font-size:24px;line-height:1;padding-top:24px;margin-top:auto;color:#806326}
+ .area-grid{gap:24px;max-width:1180px}
+ .area-card{border:1px solid var(--surface-line);border-radius:16px;box-shadow:var(--card-shadow);background:#fff;text-align:left}
+ .area-card img{display:block;height:auto;aspect-ratio:1.55;object-fit:cover}
+ .area-card span{padding:22px 24px;color:var(--brand-deep);font-size:22px;font-weight:500;text-transform:none;line-height:1.4}
+ .area-card small{display:flex;justify-content:space-between;gap:12px;margin-top:10px;font:500 14px/1.6 var(--font-body);color:#526269;letter-spacing:0;text-transform:none}
+ .area-card small b{color:#806326;font-size:19px;font-weight:400}
+ .inspiration-card{border-radius:16px;box-shadow:var(--card-shadow)}
+ .inspiration-card .button{border-radius:0 0 15px 15px}
+ .round-icon{box-shadow:0 0 0 6px #ffffffd9,0 10px 24px #173f471a}
+ .meet{background:var(--surface-warm)}
+ .agent-card{gap:40px}
+ .agent-card img{border-radius:14px;box-shadow:var(--card-shadow)}
+ .contact-banner>div{padding:30px;border:1px solid #ffffff9c;border-radius:16px;background:#fffffff0;box-shadow:var(--card-shadow)}
+ .contact-banner h2{font-size:clamp(26px,3vw,36px);color:var(--brand-deep);text-wrap:balance}
+ .contact-banner p{color:#46585d}
+ .inquiry-panel{border:1px solid var(--surface-line);border-top:3px solid #a68a4d;border-radius:18px;background:var(--surface-warm);box-shadow:var(--card-shadow)}
+ .inquiry-form input,.inquiry-form select,.inquiry-form textarea{border-radius:7px;border-color:#aebbb5}
+ .faq-section details{border:1px solid var(--surface-line);border-radius:10px;background:#fff;margin:12px 0;padding:0 20px}
+ .faq-section summary{padding:18px 0;font-size:16px;color:var(--brand-deep)}
+ .faq-section details[open]{background:#f7f8f4;border-color:#a7b8ac}
+ .faq-section details p{padding:0 0 18px;margin-bottom:0}
+ .community-guide-tools,.community-next-step,.community-resources,.related-communities{border-radius:14px}
+ .community-guide-tools nav a,.related-communities a{background:#fff;border:1px solid var(--surface-line);padding:9px 14px;border-radius:7px;text-decoration:none}
+ .community-guide-tools nav a:hover,.related-communities a:hover{border-color:#a68a4d;background:#fbf7ee}
+ .reading-sections .content-section h2{color:var(--brand-deep);line-height:1.35}
+ .home-preparation-grid>a,.resource-card{border-color:var(--surface-line);box-shadow:var(--card-shadow)}
+ .home-preparation-grid .preparation-number{color:#806326}
+ .home-preparation-grid h3{font-family:Georgia,serif;font-size:28px;line-height:1.25;font-weight:400}
+ footer{background:#f1f3ed;border-top:1px solid #dbe2dc}
+ .footer-grid h3{color:var(--brand-deep);font-size:22px}
+ .footer-grid>div>a:not(.button){color:#40575b}
+ .footer-grid>div>a:not(.button):hover{text-decoration:underline;text-underline-offset:4px}
+ footer .footer-bottom .builder-credit:hover{color:#fff;background:#173f47;border-color:#173f47}
+}
+@media screen and (max-width:700px){
+ main .hero{min-height:0;padding:142px 24px 48px}
+ main .hero .hero-content{width:100%;padding:0}
+ main .hero h1{font-size:clamp(35px,7.7vw,48px);letter-spacing:-.035em;max-width:600px}
+ main .hero h1:before{width:48px;margin-bottom:22px}
+ main .hero .hero-content>p{font-size:17px;line-height:1.65;margin-bottom:24px}
+ main .hero .hero-panel{padding:18px;margin-top:24px}
+ main .hero .hero-chips{gap:8px}
+ main .hero .hero-chips a{font-size:13px;padding:8px 12px}
+ .inner-hero{padding:142px 24px 48px}
+ .intro-band{padding:28px 24px;font-size:16px}
+ .journey-grid a{padding:24px}
+ .journey-grid h3{font-size:22px}
+ .area-card span{padding:20px;font-size:22px}
+ .contact-banner>div{padding:24px}
+ .faq-section details{padding:0 16px}
+ .community-guide-tools{padding:20px}
+ .community-guide-tools nav{gap:10px}
+}
+@media screen and (prefers-reduced-motion:no-preference){
+ .journey-grid a:hover,.area-card:hover{transform:translateY(-3px);box-shadow:0 16px 36px #173f471a}
+
+}
+
+@media screen{.area-card:focus-visible,.resource-card:focus-visible,.home-preparation-grid>a:focus-visible{outline:3px solid #936b1c;outline-offset:5px}}

@@ -34,6 +34,8 @@ Current implementation and last verified release facts. Historical passes belong
 
 ## Validation baseline
 
+- October 30 batch audit: warmer consistent card surfaces, clearer hero/inner-page hierarchy, community cards, inquiry/FAQ and footer polish. Nested-guide navigation and keyboard skip focus corrected; community social previews use their licensed local photos. Legacy malformed snapshots are isolated and recovery links lead to automatic listings. Inquiry analytics now retain form type; closing cookie choices returns keyboard focus. Validation: 138 Node tests, 91 browser checks and compiled runtime passed; six homepage/navigation checks passed again after the final hero adjustment. Physical-device and screen-reader review remain separate. Deployment verification follows release.
+
 - PR #21: 130 Node tests and 84 browser tests including automated WCAG checks and 320px widths; compiled runtime passed.
 - PR #22: 131 Node tests, four targeted preparation/browser tests, build/route/asset/ICM checks and compiled runtime passed. Both PDF checklist pages visually reviewed; filled notes extracted; live download verified. These counts are release evidence, not permanent expected counts.
 - No live test lead, email or CRM mutation was sent in these release checks.

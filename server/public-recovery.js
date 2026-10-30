@@ -14,7 +14,7 @@ const states = {
     eyebrow: 'Property page unavailable',
     description:
       'This property page is not available. Its link may have changed or the page may have been removed. Contact Brad to confirm current details and availability.',
-    primary: ['/properties/', 'Explore Properties']
+    primary: ['/brads-listings/', 'Explore Brad’s Listings']
   },
   listings: {
     status: 503,
@@ -22,7 +22,7 @@ const states = {
     eyebrow: 'Listings temporarily unavailable',
     description:
       'We could not load the property collection right now. Try again later, explore the buying and selling guides, or contact Brad directly.',
-    primary: ['/properties/', 'Try Properties Again']
+    primary: ['/brads-listings/', 'Explore Brad’s Listings']
   }
 };
 const state = kind => (Object.hasOwn(states, kind) ? states[kind] : states.page);

@@ -9,6 +9,10 @@ test('Recovery states offer direct navigation and never echo arbitrary URLs or p
   for (const href of ['/buy/', '/sell/', '/resources/', '/contact/#inquiry', 'tel:+13609219484'])
     assert.ok(html.includes(href));
   assert.ok(publicRecoveryContent('property').includes('Property page unavailable'));
+  for (const kind of ['property', 'listings']) {
+    assert.ok(publicRecoveryContent(kind).includes('href="/brads-listings/"'));
+    assert.ok(!publicRecoveryContent(kind).includes('href="/properties/"'));
+  }
 });
 test('Unstyled fallback retains truthful statuses and useful links if assets fail', async () => {
   for (const [kind, status] of [

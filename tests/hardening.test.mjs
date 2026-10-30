@@ -4,7 +4,7 @@ import {DatabaseSync} from 'node:sqlite';
 import {readFileSync, readdirSync} from 'node:fs';
 import {generateKeyPair, SignJWT, exportJWK} from 'jose';
 import {cleanDraft, publishErrors, ListingInputError, photoMaxBytes} from '../server/listings.js';
-import {published} from '../server/public.js';
+import {published, collection, detail} from '../server/public.js';
 import {editor, ConfigError} from '../server/auth.js';
 import {photoLimits} from '../src/photo-preparation.js';
 import {onRequest} from '../functions/api/admin/[[path]].js';
@@ -112,7 +112,19 @@ test('One unreadable published snapshot does not hide other listings', async () 
   for (const [n, json] of [
     [1, good],
     [2, '{"slug":"y"}'],
-    [3, '{"slug":"x","images":[]}']
+    [3, '{"slug":"x","images":[]}'],
+    [4, JSON.stringify({...base, slug: 'null-photo', images: [null]})],
+    [5, JSON.stringify({...base, slug: 'bad-description', description: 42, images: [{file: file(1), alt: 'x'}]})],
+    [
+      6,
+      JSON.stringify({
+        ...base,
+        slug: 'missing-description',
+        description: undefined,
+        images: [{file: file(1), alt: 'x'}]
+      })
+    ],
+    [7, JSON.stringify({...base, slug: 'bad-price', price: 'not a price', images: [{file: file(1), alt: 'x'}]})]
   ])
     await DB.prepare('INSERT INTO listings(id,draft_json,published_json,updated_at,updated_by) VALUES(?,?,?,?,?)')
       .bind('8caa1a53-05bd-4212-9c9c-a487cc33455' + n, '{}', json, 'n', 'e')
@@ -122,6 +134,8 @@ test('One unreadable published snapshot does not hide other listings', async () 
   try {
     const items = await published({DB});
     assert.equal(items.length, 1);
+    assert.doesNotThrow(() => collection(items, new URL('https://bradhazen.com/properties/')));
+    assert.doesNotThrow(() => detail(items[0].id, items[0].item));
   } finally {
     console.error = originalError;
   }

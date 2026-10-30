@@ -225,7 +225,7 @@ try {
   const missingHTML = await missing.text();
   assert.ok(missingHTML.includes('Property page unavailable'));
   assert.ok(missingHTML.includes('recovery-header'));
-  assert.ok(missingHTML.includes('href="/properties/"'));
+  assert.ok(missingHTML.includes('href="/brads-listings/"'));
   assert.ok(!missingHTML.includes('INTERNAL_QA_NOTE'));
   assert.equal(missing.headers.get('cache-control'), 'no-store');
   const emptyCollection = await (await mf.dispatchFetch('https://qa.example/properties/')).text();

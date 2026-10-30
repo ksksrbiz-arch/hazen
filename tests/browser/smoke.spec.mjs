@@ -55,6 +55,15 @@ test('mobile menu opens, closes on Escape and returns focus', async ({page}) => 
   await expect(menu.locator('summary')).toBeFocused();
 });
 
+test('keyboard skip link reaches content and nested guides identify their parent section', async ({page}) => {
+  await page.goto('/communities/camas/');
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('link', {name: 'Skip to content', exact: true})).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#main')).toBeFocused();
+  await expect(page.locator('.desktop-nav a[href="/communities/"]')).toHaveAttribute('aria-current', 'location');
+});
+
 test('mobile menu links navigate when clicked with the mouse', async ({page}) => {
   await page.setViewportSize({width: 390, height: 800});
   for (const [label, path] of [

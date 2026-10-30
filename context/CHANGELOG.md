@@ -275,3 +275,11 @@ Validation: 132 Node tests and 85 browser tests passed, including automated WCAG
 ## October 30, 2026 — measurement release verified
 
 PR #26 and deployment `ae54ce76-8d79-4e14-a4d0-7fb9b1cb75a0` verified on bradhazen.com. Google HTTP 204 responses confirmed page/search/results and Brad/other-agent listing-click dimensions; GA4 Realtime showed the test session. Seven custom dimensions, 14-month event retention and Search Console linking are saved. Added a 320px consent-panel regression check (four analytics browser tests pass). Realty Pro subdomain installation remains a documented provider-side blocker; no support message or test lead was sent.
+
+## October 30, 2026 — batch audit and visual refinement
+
+- Refined hero spacing, typography, warm card surfaces, community tiles, inquiry panels, FAQs and footer contrast. Screen-only styling preserves printable preparation layouts and existing branding.
+- Corrected nested-section navigation semantics and keyboard skip focus. Community social previews now use the matching licensed photograph and image description.
+- Isolated malformed legacy published listing snapshots; recovery actions point to the automatic featured gallery. No inventory imports or provider configuration changed.
+- Added form-type context to inquiry analytics and focus restoration after cookie choices. No visitor answers are measured and no drafts are reported as delivered leads.
+- Validation: 138 Node tests, 91 browser checks (automated WCAG, 320px layouts, keyboard navigation, search/gallery and preparation flows), compiled runtime, build/routes/assets/format/ICM. Six homepage/navigation checks rerun successfully after the final hero adjustment. Desktop/mobile screenshots reviewed separately; no physical-device or screen-reader testing.

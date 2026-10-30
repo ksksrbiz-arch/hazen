@@ -199,13 +199,13 @@ document.querySelectorAll('[data-inquiry]').forEach(form => {
     validationAttempted = true;
     const issues = renderInquiryErrors();
     if (issues.length) {
-      window.bradTrack?.('inquiry_validation_error', {count: issues.length});
+      window.bradTrack?.('inquiry_validation_error', {count: issues.length, form_type: form.dataset.inquiry});
       status.textContent = 'Review the highlighted fields to prepare your draft. Nothing has been sent.';
       issues[0].field.focus();
       return;
     }
     setInquiryStage(2);
-    window.bradTrack?.('email_draft_ready');
+    window.bradTrack?.('email_draft_ready', {form_type: form.dataset.inquiry});
     const data = new FormData(form);
     const value = key => String(data.get(key) || '').trim();
     const body = inquiryDraftBody(data);
@@ -241,7 +241,7 @@ document.querySelectorAll('[data-inquiry]').forEach(form => {
     const field = form.querySelector('.email-backup textarea');
     try {
       await navigator.clipboard.writeText(field.value);
-      window.bradTrack?.('inquiry_copy');
+      window.bradTrack?.('inquiry_copy', {form_type: form.dataset.inquiry});
       form.querySelector('.form-status').textContent =
         'Message copied. Paste it into an email to ' + contact.email + ' and send it.';
     } catch {
