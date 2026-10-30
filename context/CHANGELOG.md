@@ -271,3 +271,7 @@ Validation: 132 Node tests and 85 browser tests passed, including automated WCAG
 - Added consent-based production measurement for pages, engagement, inquiries, preparation tools and Ylopo search/detail activity. Listing scope and primary-agent ownership are independent; missing provider identity remains unknown. No form answers or query-string values go into analytics.
 - Dedicated GTM version 2 published with explicit event allowlist, exact hostnames and personal-data detection disabled. GA4 reporting dimensions configured; sitemap accepted in Search Console. Provider-side tracking installation is still pending because Brad's account exposes no search-subdomain code control.
 - Validation: 136 Node tests/build/route checks, compiled Cloudflare runtime, and 88 browser checks (one homepage navigation timeout passed on targeted retry). Live release verification is recorded in STATE after deployment.
+
+## October 30, 2026 — measurement release verified
+
+PR #26 and deployment `ae54ce76-8d79-4e14-a4d0-7fb9b1cb75a0` verified on bradhazen.com. Google HTTP 204 responses confirmed page/search/results and Brad/other-agent listing-click dimensions; GA4 Realtime showed the test session. Seven custom dimensions, 14-month event retention and Search Console linking are saved. Added a 320px consent-panel regression check (four analytics browser tests pass). Realty Pro subdomain installation remains a documented provider-side blocker; no support message or test lead was sent.

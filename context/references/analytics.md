@@ -5,8 +5,9 @@
 - Google account: skdev@1commercesolutions.com.
 - GA4 account 414213912; property 561690146; web stream 16238648656; measurement ID `G-QSEE7DZFHP`.
 - GTM account 6401294415; container 284423131 / `GTM-WG4QVGN8`. Version 2 published October 30, 2026.
+- Seven event-scoped custom dimensions: listing_owner, listing_id, search_scope, action, placement, form_type, page_type. Event retention set to 14 months; Google says changes take effect after 24 hours.
 - Search Console domain property `sc-domain:bradhazen.com` verified with the existing apex TXT record. Keep that verification record.
-- Sitemap submitted successfully; 21 URLs discovered. Homepage live inspection said indexable, but an indexing request encountered a reCAPTCHA connection failure. Submission does not guarantee indexing.
+- Sitemap submitted successfully; 21 URLs discovered. The domain property is linked to the Brad web stream in GA4. Homepage live inspection said indexable, but an indexing request encountered a reCAPTCHA connection failure. Submission does not guarantee indexing.
 
 ## What is measured
 
@@ -41,3 +42,7 @@ Use `npm run verify`, `npm run check:runtime` and browser analytics/search/galle
 - https://support.google.com/analytics/answer/6366371
 - https://support.google.com/analytics/answer/10071811
 - https://developers.google.com/search/docs/appearance/ai-features
+
+## Production evidence — October 30
+
+PR #26 merged as `af42392`; deployment `ae54ce76-8d79-4e14-a4d0-7fb9b1cb75a0` succeeded. Google returned HTTP 204 for page_view, property_search/search_results, and listing_click with other_agent/all_listings (271604944) and brad/brad (210989090). GA4 Realtime displayed the verification visit and search events. These were developer checks, not customer leads. Consent/revocation, iframe-source validation and exclusions passed automated tests; a 320px consent-panel check passed separately. No physical-device or provider-domain session stitching was verified.
