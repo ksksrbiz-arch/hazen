@@ -302,3 +302,7 @@ PR #26 and deployment `ae54ce76-8d79-4e14-a4d0-7fb9b1cb75a0` verified on bradhaz
 ## October 30, 2026 — first three article drafts
 
 Developed the two existing drafts and added seller preparation, with practical actions, official local sources checked October 30, proposed internal links and three voice/review prompts per article. Added individual Markdown articles and a printable local HTML review packet. All three remain draft/unapproved with no publication dates; no blog routes or bylines are published. Brad has not yet supplied voice samples or firsthand examples.
+
+## October 30 — Article publication preparation and provider follow-up
+
+Added article reading guides, reading time, safe public sources, related tools and print source URLs. Drafts remain unpublished and approval-gated. Sent the authorized Ylopo clarification with documentation/examples and activated a 30-minute reply monitor. Validation recorded in the commit handoff.

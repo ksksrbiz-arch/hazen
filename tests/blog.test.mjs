@@ -54,3 +54,28 @@ test('homepage note cards nest under the section heading as h3', () => {
   assert.doesNotMatch(home.replace('<h2>Real estate notes</h2>', ''), /<h2/);
   assert.match(blogPages(publishedPosts([approved], '2026-10-29'))[0].customBody, /<h2><a href="\/blog\/test-note\/">/);
 });
+
+test('article sources and related tools render safely with section navigation', () => {
+  const post = {
+    ...approved,
+    sources: [
+      {title: 'County <records>', url: 'https://clark.wa.gov/records'},
+      {title: 'Unsafe', url: 'javascript:alert(1)'},
+      {title: 'Credentials', url: 'https://user:pass@example.com/'}
+    ],
+    relatedLinks: [
+      {label: 'Buyer worksheet', href: '/buyer-checklist/'},
+      {label: 'External', href: '//example.com/'},
+      {label: 'Injection', href: '/bad" onclick="alert(1)'}
+    ]
+  };
+  const html = blogPages(publishedPosts([post], '2026-10-29'))[1].customBody;
+  assert.match(html, /County &lt;records&gt;/);
+  assert.match(html, /href="https:\/\/clark.wa.gov\/records"/);
+  assert.match(html, /href="\/buyer-checklist\/"/);
+  assert.match(html, /href="#note-section-1"/);
+  assert.match(html, /id="note-section-1" tabindex="-1"/);
+  assert.match(html, /1 min read/);
+  assert.doesNotMatch(html, /javascript:|user:pass|onclick|href="\/\/example/);
+  assert.doesNotMatch(html, /private interview|NEVER PUBLIC/);
+});

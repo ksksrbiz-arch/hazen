@@ -46,3 +46,5 @@ Run relevant gallery/search browser tests and `npm run check:runtime`, then chec
 - https://ylopo.zendesk.com/hc/en-us/articles/360021744372-Overview-of-Your-Home-Search-Site
 - https://bradhazen.realtypronw.net/widgets
 - https://www.realtypronw.net/team/brad-hazen
+
+Article templates render public sources and relatedLinks separately from private sourceReference/notes. Source links require HTTPS without credentials; related tool links must be local paths. Section anchors, reading time and printed source URLs support longer guides.

@@ -57,9 +57,33 @@ export function blogPages(posts) {
       title: post.title,
       intro: post.summary,
       sections: [],
-      customBody: `<article class="real-estate-note"><p>By Brad Hazen · <time datetime="${escape(post.publishedOn)}">${escape(post.publishedOn)}</time></p>${post.sections.map(section => `<section><h2>${escape(section.heading)}</h2>${section.paragraphs.map(text => `<p>${escape(text)}</p>`).join('')}</section>`).join('')}<a href="/contact/#inquiry">Talk with Brad about your next move</a><p><a href="/blog/">All real estate notes</a></p></article>`
+      customBody: articleBody(post)
     }))
   ];
+}
+const sourceURL = value => {
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' && !url.username && !url.password;
+  } catch {
+    return false;
+  }
+};
+export function articleBody(post) {
+  const minutes = Math.max(
+    1,
+    Math.ceil(
+      post.sections
+        .flatMap(s => s.paragraphs)
+        .join(' ')
+        .split(/\s+/).length / 200
+    )
+  );
+  const sources = (post.sources || []).filter(source => source.title?.trim() && sourceURL(source.url));
+  const links = (post.relatedLinks || []).filter(
+    link => link.label?.trim() && /^\/(?!\/)[a-z0-9/-]+(?:#[a-z0-9-]+)?$/.test(link.href)
+  );
+  return `<article class="real-estate-note"><p class="note-meta">By Brad Hazen · <time datetime="${escape(post.publishedOn)}">${escape(post.publishedOn)}</time> · ${minutes} min read</p><nav class="note-contents" aria-label="In this article"><h2>In this article</h2><ol>${post.sections.map((section, i) => `<li><a href="#note-section-${i + 1}">${escape(section.heading)}</a></li>`).join('')}</ol></nav>${post.sections.map((section, i) => `<section id="note-section-${i + 1}" tabindex="-1"><h2>${escape(section.heading)}</h2>${section.paragraphs.map(text => `<p>${escape(text)}</p>`).join('')}</section>`).join('')}${sources.length ? `<aside class="note-sources" aria-labelledby="note-sources-heading"><h2 id="note-sources-heading">Sources and further reading</h2><p>Check the original resources for current information.</p><ul>${sources.map(source => `<li><a href="${escape(source.url)}">${escape(source.title)}</a></li>`).join('')}</ul></aside>` : ''}${links.length ? `<nav class="note-next" aria-label="Related guides and tools"><h2>Put this into practice</h2>${links.map(link => `<a href="${escape(link.href)}">${escape(link.label)} <span aria-hidden="true">→</span></a>`).join('')}</nav>` : ''}<div class="note-contact"><h2>Talk through your next move</h2><p>Bring your questions and the details that matter to you.</p><a class="button" href="/contact/#inquiry">Start a conversation with Brad</a></div><p><a href="/blog/">← All real estate notes</a></p></article>`;
 }
 export const latestNotes = posts =>
   posts.length
