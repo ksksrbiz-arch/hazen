@@ -5,6 +5,7 @@ export const galleryMarkup = `<div class="listing-experience"><div class="listin
 export const widgetStyle = `
 *{box-sizing:border-box}body{margin:0;padding:8px;font:16px/1.5 system-ui;background:#f7f8f5;color:#172e33}a{color:#173f47}h1{font:600 16px system-ui;margin:4px 0 18px;color:#526269}
 .YLOPO-widget .widget-gallery-container{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.YLOPO-widget .grid-view-item[hidden]{display:none!important}
 .YLOPO-widget .grid-view-item{width:auto!important;float:none!important;padding:0!important;margin:0!important}
 .YLOPO-widget .gallery-card-b,.YLOPO-widget .gallery-card-b-main-card{width:100%!important;height:auto!important;min-height:0!important}.YLOPO-widget .gallery-card-b-details-container{height:auto!important;min-height:0!important}.YLOPO-widget .gallery-card-b{border:1px solid #dce3df!important;border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 8px 22px #142f3510}
 .YLOPO-widget .gallery-card-b-image-container{height:260px!important}
@@ -31,6 +32,22 @@ new MutationObserver(()=>{
   link.setAttribute('aria-label','View '+address.textContent.trim()+' property details (opens in a new tab)');
   const map=card.querySelector('button.card-icon');if(map)map.setAttribute('aria-label','Switch property photo and map');
   if(!card.querySelector('.gallery-detail-link')){const detail=document.createElement('a');detail.href=link.href;detail.className='gallery-detail-link';detail.textContent='View property details ↗';detail.setAttribute('aria-label',link.getAttribute('aria-label'));card.querySelector('.gallery-card-b').append(detail);}
+ }
+ // Group only this verified cross-listed property; never infer identity from photos or addresses.
+ const findCard=id=>cards.find(card=>[...card.querySelectorAll('a[href]')].some(a=>new URL(a.href).pathname==='/search/detail/'+id));
+ const land=findCard('210989090'),commercial=findCard('210973857');
+ if(commercial)commercial.hidden=Boolean(land);
+ if(land){
+  const primary=land.querySelector('.gallery-detail-link');
+  let alternate=land.querySelector('[data-commercial-details]');
+  if(commercial && primary){
+   if(primary.textContent!=='Land listing details ↗'){primary.textContent='Land listing details ↗';primary.setAttribute('aria-label','East Yacolt Road land listing details (opens in a new tab)');}
+   if(!alternate){alternate=document.createElement('a');alternate.className='gallery-detail-link';alternate.dataset.commercialDetails='';alternate.textContent='Commercial listing details ↗';alternate.setAttribute('aria-label','East Yacolt Road commercial listing details (opens in a new tab)');land.querySelector('.gallery-card-b').append(alternate);}
+   alternate.href=commercial.querySelector('a[href]').href;
+  }else{
+   if(alternate)alternate.remove();
+   if(primary && primary.textContent!=='View property details ↗')primary.textContent='View property details ↗';
+  }
  }
  if(cards.length && !ready){ready=true;send('ready');}
 }).observe(document.querySelector('.YLOPO_resultsWidget'),{childList:true,subtree:true});
