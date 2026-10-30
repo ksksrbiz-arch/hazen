@@ -265,3 +265,9 @@ Validation: `npm run verify` passed (132 Node tests, build, route/asset, formatt
 Added a small outlined “Built by 1commerce” badge in the shared public footer, linking to Keith's requested marketing site. Retains a 44px touch target, keyboard focus and a screen-reader new-tab notice; wraps on small screens and is hidden when printing.
 
 Validation: 132 Node tests and 85 browser tests passed, including automated WCAG checks. Build, route/asset, formatting and ICM checks passed. Footer visually reviewed at 1440px and 320px with no horizontal overflow.
+# October 30, 2026 — SEO and analytics foundation
+
+- Added Person/WebSite/WebPage/Breadcrumb structured data using existing verified public facts; retained preview/private noindex behavior.
+- Added consent-based production measurement for pages, engagement, inquiries, preparation tools and Ylopo search/detail activity. Listing scope and primary-agent ownership are independent; missing provider identity remains unknown. No form answers or query-string values go into analytics.
+- Dedicated GTM version 2 published with explicit event allowlist, exact hostnames and personal-data detection disabled. GA4 reporting dimensions configured; sitemap accepted in Search Console. Provider-side tracking installation is still pending because Brad's account exposes no search-subdomain code control.
+- Validation: 136 Node tests/build/route checks, compiled Cloudflare runtime, and 88 browser checks (one homepage navigation timeout passed on targeted retry). Live release verification is recorded in STATE after deployment.

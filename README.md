@@ -49,3 +49,7 @@ Cloudflare's build command is `npm run verify`, output `dist`; it does not run t
 Start with [AGENTS.md](AGENTS.md), then [CLAUDE.md](CLAUDE.md) and [current state](context/STATE.md). Stable operating references live in `context/references/`; recurring workflows in `context/workflows/`; dated history in [CHANGELOG](context/CHANGELOG.md).
 
 Read [search integration](context/references/search-and-blog-implementation.md), [deployment](context/references/cloudflare-pages.md), [preparation/PDF maintenance](context/references/preparation-tools.md) or [image rights](context/references/image-assets.md) as appropriate. Preserve provider attribution, preview noindex, private editor protection, blog approval gates and truthful inquiry wording. Never commit credentials, backups or private client data.
+
+## Analytics and search visibility
+
+Measurement setup, event definitions, consent and provider limitations: [analytics reference](context/references/analytics.md). The dedicated GTM configuration is in `docs/analytics/gtm-container.json`. Realty Pro subdomain installation is a separate provider-side requirement; see the [installation handoff](docs/analytics/YLOPO-TRACKING-HANDOFF.md). A working outgoing listing click is not a verified CRM lead.

@@ -1,3 +1,4 @@
+import {listingAnalyticsClient} from '../src/listing-analytics.js';
 // Verified against Ylopo listing attribution and positive/negative controls, 2026-10-29.
 // HAZENB is not this ID. Omitting propertyTypes reinstates residential defaults and hides Brad's land.
 export const bradGallerySearch = {featured: 't', agentId: 24820243, propertyTypes: [], limit: 6};
@@ -20,6 +21,7 @@ body .YLOPO-widget a.gallery-detail-link{display:block;padding:15px 20px;backgro
 @media(max-width:620px){.YLOPO-widget .widget-gallery-container{grid-template-columns:1fr;gap:20px}.YLOPO-widget .gallery-card-b-image-container{height:230px!important}}
 `;
 const widgetClient = `
+${listingAnalyticsClient}
 window.YLOPO_WIDGETS={domain:'bradhazen.realtypronw.net',openInNewTab:true};
 const send=(state)=>parent.postMessage({type:'brad-listing-gallery',height:document.body.offsetHeight+16,state},'*');
 let ready=false;
@@ -52,7 +54,7 @@ new MutationObserver(()=>{
  if(cards.length && !ready){ready=true;send('ready');}
 }).observe(document.querySelector('.YLOPO_resultsWidget'),{childList:true,subtree:true});
 setTimeout(()=>{if(!ready)send('unavailable');},15000);
-document.addEventListener('click',function(event){const link=event.target.closest('a[href]');if(link && new URL(link.href).hostname==='bradhazen.realtypronw.net'){event.preventDefault();event.stopImmediatePropagation();window.open(link.href,'_blank','noopener');}},true);
+document.addEventListener('click',function(event){const link=event.target.closest('a[href]');if(link && new URL(link.href).hostname==='bradhazen.realtypronw.net'){const details=listingClickDetails(link.href,true);if(details)measureListing('listing_click',details);event.preventDefault();event.stopImmediatePropagation();window.open(link.href,'_blank','noopener');}},true);
 `;
 export function galleryResponse() {
   return new Response(

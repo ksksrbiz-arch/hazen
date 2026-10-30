@@ -43,3 +43,18 @@ footer .footer-bottom .builder-credit{gap:6px;padding:0 12px;border:1px solid #c
 footer .builder-credit strong{font-weight:600;letter-spacing:.02em}
 footer .footer-bottom .builder-credit:hover{color:#fff;border-color:#695326;background:#ffffff0d}
 @media print{footer .builder-credit{display:none!important}}
+
+/* Optional measurement choices remain visible and clear of mobile contact controls. */
+.analytics-choice{position:fixed;z-index:100;bottom:20px;left:50%;transform:translateX(-50%);width:min(760px,calc(100% - 32px));max-width:1080px;margin:0;padding:24px;box-shadow:0 8px 32px #173f4733;border:1px solid #cbbd9b;border-radius:12px;background:#f7f8f5;color:#173f47}
+.analytics-choice[hidden]{display:none}
+.analytics-choice p{margin:0 0 16px;max-width:76ch;font-size:15px;line-height:1.6}
+.analytics-choice strong{display:block;font-size:18px}
+.analytics-choice a{color:#173f47;text-decoration:underline}
+.analytics-choice>div{display:flex;gap:12px;flex-wrap:wrap}
+.analytics-choice button,footer .analytics-settings{min-height:44px;padding:10px 16px;border:1px solid currentColor;border-radius:6px;font:inherit;cursor:pointer}
+.analytics-choice button{background:#173f47;color:#fff}
+.analytics-choice button[data-choice=no]{background:#fff;color:#173f47}
+footer .analytics-settings{background:transparent;color:inherit;font-size:13px}
+.analytics-choice button:focus-visible,footer .analytics-settings:focus-visible{outline:3px solid #967323;outline-offset:4px}
+@media(max-width:700px){.analytics-choice{bottom:76px;padding:16px}.analytics-choice p{font-size:13px;line-height:1.5}.analytics-choice button{flex:1}}
+@media print{.analytics-choice,footer .analytics-settings{display:none!important}}

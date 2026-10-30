@@ -16,6 +16,9 @@ Current implementation and last verified release facts. Historical passes belong
 
 ## Unresolved integration and handoff
 
+- Analytics release work: dedicated GA4 `G-QSEE7DZFHP` and GTM `GTM-WG4QVGN8` (version 2 published); custom site installation is being validated for release. Event definitions and limits: `context/references/analytics.md`. Realty Pro subdomain code installation remains unavailable in Brad's exposed account controls; exact-domain Google configuration alone is not installation. Provider handoff prepared, not sent.
+- Search Console domain verification and sitemap submission succeeded (21 discovered URLs). Homepage live test passed indexability; the manual indexing request hit a reCAPTCHA connection failure. Do not report indexed or queued without new evidence.
+
 - Custom forms prepare email drafts; visitors must send them. No direct delivery endpoint or FUB creation is configured.
 - FUB access, exact Brad user mapping and an end-to-end test remain pending. Ylopo confirmed new registrations/inquiries on Brad's subdomain go to Brad, but existing contacts retain their CRM owner; do not promise all leads go to Brad. Check automatic messages before any authorized test.
 - Last email reviewed: Ylopo Support October 30, 10:28 a.m. Pacific says embedding its search site on bradhazen.com is outside its RMLS/NWMLS agreement and would require a separate MLS agreement/import solution. This is not approval for the currently functioning external widgets. A clarification distinguishing widgets from full-page embedding is drafted, not sent; exact setup, fees and supported agent filtering remain unanswered. User asked to continue backend work for now; integration left unchanged.

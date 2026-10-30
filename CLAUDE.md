@@ -30,6 +30,7 @@ Mission: Brad Hazen's agent marketing and listing site (Cloudflare Pages, D1, R2
 | Brad's facts and sources | `context/references/client-content.md`, `context/references/brad-profile-sources.md` | `context/workflows/` |
 | What to ask Brad | `context/references/client-intake.md` | `context/workflows/` |
 | MLS, IDX, Ylopo, accounts, alerts | `context/references/search-and-blog-implementation.md`, `context/references/idx-and-mls.md` | unrelated workflows |
+| SEO, Search Console, GA4, GTM, analytics | `context/references/analytics.md`, `context/workflows/site-change/` | unrelated workflows |
 | Preparation tools or PDFs | `context/references/preparation-tools.md` | unrelated workflows |
 | Scope, sitemap, milestones, acceptance | `context/references/project-plan.md` | `context/CHANGELOG.md` |
 | What changed and when | `context/CHANGELOG.md` | everything else |

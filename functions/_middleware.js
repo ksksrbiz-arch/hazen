@@ -5,7 +5,7 @@ import {editor, ConfigError} from '../server/auth.js';
 import {detail, published, collection} from '../server/public.js';
 import {idPattern} from '../server/listings.js';
 import {secureResponse} from '../server/response-security.js';
-import {domainResponse, siteOrigin} from '../server/site-domain.js';
+import {domainResponse, siteOrigin, publicSearchPath} from '../server/site-domain.js';
 export async function onRequest(context) {
   const url = new URL(context.request.url);
   if (url.hostname === 'www.bradhazen.com' || (url.hostname === 'bradhazen.com' && url.protocol !== 'https:')) {
@@ -24,7 +24,9 @@ export async function onRequest(context) {
   }
   if (url.pathname.replace(/\/$/, '') === '/listing-widget') return galleryResponse();
   if (url.pathname.replace(/\/$/, '') === '/search-widget') return searchWidgetResponse();
-  return secureResponse(await domainResponse(context.request, await handleRequest(context)));
+  return secureResponse(await domainResponse(context.request, await handleRequest(context)), {
+    analytics: url.origin === siteOrigin && publicSearchPath(url.pathname)
+  });
 }
 async function handleRequest(context) {
   const {request, env} = context,
