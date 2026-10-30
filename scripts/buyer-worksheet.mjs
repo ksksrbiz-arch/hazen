@@ -80,7 +80,7 @@ export function buyerWorksheet() {
   return conversationWorksheet({
     label: 'Buyer conversation worksheet',
     groups: buyerGroups,
-    download: '/resources/buyer-conversation-checklist.txt',
+    download: '/resources/buyer-conversation-checklist.pdf',
     notesLabel: 'Priorities and questions to bring to Brad (optional)',
     notesPlaceholder:
       'Which property features matter most, and what would you like to understand before your next move?',
