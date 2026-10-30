@@ -6,7 +6,7 @@ const groups = [
     items: [
       [
         '/seller-checklist/',
-        'Printable worksheet',
+        'Guided planning tool',
         'Seller conversation checklist',
         'Review your goals, property facts, preparation and questions. Check prompts and print your notes.'
       ],
@@ -37,7 +37,7 @@ const groups = [
     items: [
       [
         '/buyer-checklist/',
-        'Printable worksheet',
+        'Guided planning tool',
         'Buyer conversation checklist',
         'Organize priorities, review preparation prompts and download or print your questions for Brad.'
       ],
@@ -54,10 +54,10 @@ const groups = [
         'Explore six community guides, compare up to three areas and follow official local resource links.'
       ],
       [
-        '/properties/',
+        '/brads-listings/',
         'Brad’s property collection',
         'Explore featured properties',
-        'View manually maintained listings when published and contact Brad to confirm current details.'
+        'Explore Brad’s automatically updated listings and open current property details.'
       ]
     ]
   }
@@ -71,11 +71,11 @@ export const resourcesPage = {
   sections: []
 };
 export function resourceHub() {
-  return `<div class="resource-finder" data-resource-finder hidden><div><label for="resource-search">Find a guide or tool</label><input id="resource-search" type="search" maxlength="100" placeholder="Try photos, checklist or communities" aria-describedby="resource-search-help"><p id="resource-search-help">Search titles and descriptions. Combine a topic with buying or selling.</p></div><div><label for="resource-topic">Your next move</label><select id="resource-topic"><option value="all">Buying and selling</option><option value="selling-resources">Preparing to sell</option><option value="buying-resources">Planning to buy</option></select></div><button type="button" data-resource-clear>Clear filters</button><p class="resource-results" data-resource-count role="status" aria-live="polite" aria-atomic="true"></p></div><p class="resource-no-results" data-resource-empty hidden>No guides match those filters. Try a shorter topic or clear the filters to see all guides.</p><nav class="page-sections" aria-label="Resource categories"><span>Explore</span><a href="#selling-resources">Preparing to sell</a><a href="#buying-resources">Planning your next move</a></nav>${groups.map(group => `<section class="resource-group" id="${group.id}" aria-labelledby="${group.id}-heading"><p class="eyebrow">Your preparation tools</p><h2 id="${group.id}-heading">${group.title}</h2><p>${group.intro}</p><div class="resource-grid">${group.items.map(([href, type, title, detail]) => `<a class="resource-card" href="${href}"><span class="resource-type">${type}</span><h3>${title}</h3><p>${detail}</p><span class="resource-action">Open resource <span aria-hidden="true">→</span></span></a>`).join('')}</div></section>`).join('')}<aside class="resource-help"><div><h2>Not sure where to begin?</h2><p>Tell Brad what you have in mind. You can start a conversation before every decision is made.</p></div><a class="button" href="/contact/#inquiry">Talk With Brad</a></aside>`;
+  return `<div class="resource-finder" data-resource-finder hidden><div><label for="resource-search">Find a guide or tool</label><input id="resource-search" type="search" maxlength="100" placeholder="Try photos, checklist or communities" aria-describedby="resource-search-help"><p id="resource-search-help">Search titles and descriptions. Combine a topic with buying or selling.</p></div><div><label for="resource-topic">Your next move</label><select id="resource-topic"><option value="all">Buying and selling</option><option value="selling-resources">Preparing to sell</option><option value="buying-resources">Planning to buy</option></select></div><button type="button" data-resource-clear>Clear filters</button><p class="resource-results" data-resource-count role="status" aria-live="polite" aria-atomic="true"></p></div><p class="resource-no-results" data-resource-empty hidden>No guides match those filters. Try a shorter topic or clear the filters to see all guides.</p><nav class="page-sections" aria-label="Resource categories"><span>Explore</span><a href="#selling-resources">Preparing to sell</a><a href="#buying-resources">Planning your next move</a></nav>${groups.map(group => `<section class="resource-group" id="${group.id}" aria-labelledby="${group.id}-heading"><p class="eyebrow">Your preparation tools</p><h2 id="${group.id}-heading">${group.title}</h2><p>${group.intro}</p><div class="resource-grid">${group.items.map(([href, type, title, detail]) => `<a class="resource-card" href="${href}"><span class="resource-type">${type}</span><h3>${title}</h3><p>${detail}</p><span class="resource-action">Explore this step <span aria-hidden="true">→</span></span></a>`).join('')}</div></section>`).join('')}<aside class="resource-help"><div><h2>Not sure where to begin?</h2><p>Tell Brad what you have in mind. You can start a conversation before every decision is made.</p></div><a class="button" href="/contact/#inquiry">Talk With Brad</a></aside>`;
 }
 
 export function resourceOverview() {
-  return `<section class="section home-preparation" aria-labelledby="home-preparation-heading"><div class="home-preparation-heading"><div><p class="eyebrow">Before your first conversation</p><h2 id="home-preparation-heading">Bring a clearer picture of your next move.</h2><p>Organize the details you know and the questions you want to ask. These tools are open to everyone.</p></div><a href="/resources/">All Guides and Tools →</a></div><nav class="home-preparation-grid" aria-label="Conversation preparation"><a href="/seller-checklist/"><span class="preparation-number" aria-hidden="true">01</span><div><span class="resource-type">Preparing to sell</span><h3>Seller Conversation Checklist</h3><p>Review your property details, goals and questions. Download or print your notes.</p><span class="resource-action">Open seller checklist →</span></div></a><a href="/buyer-checklist/"><span class="preparation-number" aria-hidden="true">02</span><div><span class="resource-type">Planning a purchase</span><h3>Buyer Conversation Checklist</h3><p>Clarify your priorities, places to explore and questions for your next home.</p><span class="resource-action">Open buyer checklist →</span></div></a><a href="/listing-photos/"><span class="preparation-number" aria-hidden="true">03</span><div><span class="resource-type">Presenting a property</span><h3>Listing Photo Preparation</h3><p>Plan the photos, prepare rooms and organize an accurate property presentation.</p><span class="resource-action">Open photo guide →</span></div></a></nav></section>`;
+  return `<section class="section home-preparation" aria-labelledby="home-preparation-heading"><div class="home-preparation-heading"><div><p class="eyebrow">Before your first conversation</p><h2 id="home-preparation-heading">Bring a clearer picture of your next move.</h2><p>Organize the details you know and the questions you want to ask. These tools are open to everyone.</p></div><a href="/resources/">All Guides and Tools →</a></div><nav class="home-preparation-grid" aria-label="Conversation preparation"><a href="/seller-checklist/"><span class="preparation-number" aria-hidden="true">01</span><div><span class="resource-type">Preparing to sell</span><h3>Seller Conversation Checklist</h3><p>Review your property details, goals and questions. Build your plan, one step at a time.</p><span class="resource-action">Open seller checklist →</span></div></a><a href="/buyer-checklist/"><span class="preparation-number" aria-hidden="true">02</span><div><span class="resource-type">Planning a purchase</span><h3>Buyer Conversation Checklist</h3><p>Clarify your priorities, places to explore and questions for your next home.</p><span class="resource-action">Open buyer checklist →</span></div></a><a href="/listing-photos/"><span class="preparation-number" aria-hidden="true">03</span><div><span class="resource-type">Presenting a property</span><h3>Listing Photo Preparation</h3><p>Plan the photos, prepare rooms and organize an accurate property presentation.</p><span class="resource-action">Open photo guide →</span></div></a></nav></section>`;
 }
 
 export function relatedResources(page) {
@@ -88,7 +88,7 @@ export function relatedResources(page) {
     buy: [
       ['/buyer-checklist/', 'Buyer checklist'],
       ['/communities/', 'Explore and compare communities'],
-      ['/properties/', 'Featured properties']
+      ['/brads-listings/', 'Featured properties']
     ],
     'home-valuation': [
       ['/seller-checklist/', 'Organize your property details'],
