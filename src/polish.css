@@ -36,3 +36,10 @@
 @media print{.reveal{transform:none!important}}
 .breadcrumbs a{min-width:44px;justify-content:center}
 footer .contact-links a,.footer-bottom a,footer .footer-account-links a,.page-actions a:not(.button),.community-resources a,[data-compare-jump]{display:inline-flex;align-items:center;min-height:44px}
+
+/* Quiet, readable builder credit with a full-size touch target. */
+footer .footer-account-links{flex-wrap:wrap}
+footer .footer-bottom .builder-credit{gap:6px;padding:0 12px;border:1px solid #cbbd9b;border-radius:6px;color:#695326;font-size:12px;line-height:1.4;text-decoration:none;white-space:nowrap;background:#fff}
+footer .builder-credit strong{font-weight:600;letter-spacing:.02em}
+footer .footer-bottom .builder-credit:hover{color:#fff;border-color:#695326;background:#ffffff0d}
+@media print{footer .builder-credit{display:none!important}}

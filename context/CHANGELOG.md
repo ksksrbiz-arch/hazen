@@ -258,3 +258,10 @@ Rewrote README/current state and reconciled contributor, deployment, architectur
 Admin JSON now uses bounded streaming reads (40,000-byte maximum), rejects non-object input and reports oversized requests as 413. Exact route/method validation prevents trailing path segments from selecting an unintended operation. Regression coverage verifies cancellation, multibyte limits, unchanged listing/history state on rejection and a valid save at the limit. Updated current provider notes with the October 30 Ylopo reply; no integration, production data or account changes.
 
 Validation: `npm run verify` passed (132 Node tests, build, route/asset, formatting and ICM checks); `npm run check:runtime` passed against isolated local storage, including authenticated draft preview and unpublication. No live test lead or production data mutation.
+
+
+## October 30, 2026 — 1commerce footer credit
+
+Added a small outlined “Built by 1commerce” badge in the shared public footer, linking to Keith's requested marketing site. Retains a 44px touch target, keyboard focus and a screen-reader new-tab notice; wraps on small screens and is hidden when printing.
+
+Validation: 132 Node tests and 85 browser tests passed, including automated WCAG checks. Build, route/asset, formatting and ICM checks passed. Footer visually reviewed at 1440px and 320px with no horizontal overflow.
