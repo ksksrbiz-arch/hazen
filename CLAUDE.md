@@ -9,7 +9,7 @@ Mission: Brad Hazen's agent marketing and listing site (Cloudflare Pages, D1, R2
 2. **Never invent facts** about Brad: credentials, areas, statistics, reviews, listings, prices. Say `VERIFY`.
 3. **Deterministic code owns deterministic work.** AI judges, routes, summarizes, proposes.
 4. **Honor session authorization.** Complete authorized releases without re-asking. New listing content, third-party charges, production data/access changes and messages need the applicable authorization; do not treat ordinary authorized site work as blocked.
-5. **No MLS scraping or custom inventory sync.** Approved Ylopo widgets load current listings automatically. Legacy D1 listings remain manual; do not conflate them or restore MLS-number-only selection.
+5. **No MLS scraping or custom inventory sync.** Ylopo widgets load current listings automatically; external-domain approval remains unresolved. Legacy D1 listings remain manual; do not conflate them or restore MLS-number-only selection.
 6. **Never commit secrets or `backups/`.** Do not collect Brad's MLS password.
 7. **Cathedral order.** Foundation, Revenue, Systems, Scale: flag scale-before-revenue.
 

@@ -253,3 +253,93 @@ test('Library list reports when more than 200 listings exist', async () => {
     globalThis.fetch = originalFetch;
   }
 });
+test('Admin JSON streams and route shapes reject safely before mutations', async () => {
+  const {privateKey, publicKey} = await generateKeyPair('RS256');
+  const jwk = await exportJWK(publicKey);
+  jwk.kid = 'bounded';
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => Response.json({keys: [jwk]});
+  const DB = db();
+  const env = {
+    DB,
+    PHOTOS: {},
+    ACCESS_TEAM_DOMAIN: 'https://bounded.example',
+    ACCESS_AUD: 'bounded',
+    EDITOR_EMAILS: 'editor@example.com'
+  };
+  try {
+    const token = await new SignJWT({email: 'editor@example.com'})
+      .setProtectedHeader({alg: 'RS256', kid: 'bounded'})
+      .setSubject('q')
+      .setIssuer(env.ACCESS_TEAM_DOMAIN)
+      .setAudience('bounded')
+      .setExpirationTime('5m')
+      .sign(privateKey);
+    const call = (path, method = 'GET', body) =>
+      onRequest({
+        env,
+        request: new Request('https://bounded.example/api/admin/' + path, {
+          method,
+          headers: {
+            'cf-access-jwt-assertion': token,
+            origin: 'https://bounded.example',
+            'content-type': 'application/json'
+          },
+          body,
+          ...(body instanceof ReadableStream ? {duplex: 'half'} : {})
+        })
+      });
+    const created = await call('listings', 'POST', JSON.stringify({listing: base}));
+    assert.equal(created.status, 201);
+    const {id: recordId} = await created.json();
+    const snapshot = () =>
+      JSON.stringify({
+        rows: DB.sqlite.prepare('SELECT * FROM listings').all(),
+        events: DB.sqlite.prepare('SELECT * FROM listing_events').all()
+      });
+    const before = snapshot();
+    for (const input of ['null', '[]', '42', '"text"', '{bad'])
+      assert.equal((await call('listings', 'POST', input)).status, 400);
+    // Byte limit, not JS character count; no Content-Length is supplied.
+    assert.equal((await call('listings', 'POST', JSON.stringify({padding: 'é'.repeat(21000)}))).status, 413);
+    let cancelled = false,
+      pulls = 0;
+    const stream = new ReadableStream({
+      pull(controller) {
+        pulls++;
+        controller.enqueue(new Uint8Array(10000));
+      },
+      cancel() {
+        cancelled = true;
+      }
+    });
+    assert.equal((await call('listings', 'POST', stream)).status, 413);
+    assert.equal(cancelled, true);
+    assert.ok(pulls <= 6, 'stop reading at the limit, allowing one queued chunk');
+    for (const path of [
+      'session/extra',
+      `listings/${recordId}/unknown`,
+      `listings/${recordId}/photos/${file(1)}/extra`
+    ])
+      assert.equal((await call(path)).status, 404);
+    assert.equal((await call(`listings/${recordId}/archive/extra`, 'POST', '{"revision":1}')).status, 404);
+    const wrongMethod = await call(`listings/${recordId}/publish`);
+    assert.equal(wrongMethod.status, 405);
+    assert.equal(wrongMethod.headers.get('allow'), 'POST');
+    assert.equal((await call('session', 'POST', '{}')).status, 405);
+    const head = await call('session', 'HEAD');
+    assert.equal(head.status, 200);
+    assert.equal(await head.text(), '');
+    assert.equal(snapshot(), before);
+    // A legitimate bounded save still works at exactly 40,000 bytes.
+    const payload = JSON.stringify({revision: 1, listing: base});
+    assert.equal(
+      (await call(`listings/${recordId}/save`, 'POST', payload + ' '.repeat(40000 - Buffer.byteLength(payload))))
+        .status,
+      200
+    );
+  } finally {
+    globalThis.fetch = originalFetch;
+    DB.sqlite.close();
+  }
+});

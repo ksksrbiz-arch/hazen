@@ -28,6 +28,33 @@ export async function onRequest({request, env}) {
     return json({error: 'Same-origin request required'}, 403);
   if (!env.DB || !env.PHOTOS) return json({error: 'Cloud storage unavailable'}, 503);
   const path = new URL(request.url).pathname.split('/').filter(Boolean).slice(2);
+  // Reject unknown shapes before any storage access or mutation.
+  const actionMethods = {
+    history: ['GET'],
+    save: ['POST'],
+    publish: ['POST'],
+    unpublish: ['POST'],
+    archive: ['POST'],
+    restore: ['POST']
+  };
+  let methods;
+  if (path.length === 1 && path[0] === 'session') methods = ['GET', 'HEAD'];
+  else if (path[0] === 'listings') {
+    if (path.length === 1) methods = ['GET', 'POST'];
+    else if (idPattern.test(path[1] || '')) {
+      if (path.length === 2) methods = ['GET', 'POST'];
+      else if (path.length === 3 && Object.hasOwn(actionMethods, path[2])) methods = actionMethods[path[2]];
+      else if (path.length === 4 && path[2] === 'photos' && filePattern.test(path[3] || '')) methods = ['GET', 'PUT'];
+    }
+  }
+  if (!methods) return json({error: 'Not found'}, 404);
+  if (!methods.includes(request.method))
+    return new Response(JSON.stringify({error: 'Method not allowed'}), {
+      status: 405,
+      headers: {'Content-Type': 'application/json', 'Cache-Control': 'no-store', Allow: methods.join(', ')}
+    });
+  if (path[0] === 'session' && request.method === 'HEAD')
+    return new Response(null, {headers: {'Content-Type': 'application/json', 'Cache-Control': 'no-store'}});
   try {
     if (path[0] === 'session') return json({email: actor});
     if (path[0] !== 'listings') return json({error: 'Not found'}, 404);
@@ -143,7 +170,7 @@ export async function onRequest({request, env}) {
     if (action === 'archive') return json({archived: true});
     return json(rowRecord(await env.DB.prepare('SELECT * FROM listings WHERE id=?').bind(id).first()));
   } catch (error) {
-    if (error instanceof RangeError) return json({error: 'Request too large'}, 400);
+    if (error instanceof RangeError) return json({error: 'Request too large'}, 413);
     if (error instanceof ListingInputError || error instanceof SyntaxError)
       return json({error: 'Unable to process the listing. Check the details and try again.'}, 400);
     // Storage and unexpected failures are not the editor's mistake: report 500 and log the cause.
@@ -152,10 +179,11 @@ export async function onRequest({request, env}) {
   }
 }
 async function body(request) {
-  if (Number(request.headers.get('content-length')) > 40000) throw new RangeError();
-  const text = await request.text();
-  if (text.length > 40000) throw new RangeError();
-  return JSON.parse(text);
+  const bytes = await readLimited(request, 40001);
+  if (!bytes) throw new RangeError();
+  const input = JSON.parse(new TextDecoder().decode(bytes));
+  if (!input || typeof input !== 'object' || Array.isArray(input)) throw new ListingInputError('Expected an object');
+  return input;
 }
 // Reads at most limit-1 bytes; returns null when the body is that large or larger.
 async function readLimited(request, limit) {

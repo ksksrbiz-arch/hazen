@@ -6,7 +6,7 @@ Load this before any discussion or work on MLS data, IDX search, visitor account
 
 Keith authorized Ylopo integration through Realty Pro. Brad's provider site is `https://bradhazen.realtypronw.net/`; RMLS ID is HAZENB. Automatic featured listings and on-site filtered results are live; full map/details/accounts stay provider-hosted. Use `search-and-blog-implementation.md` for implementation. The old wait-for-provider/Phase 2 gate is superseded.
 
-External-domain support/approval, fee/setup questions and actual FUB assignment remain unconfirmed. Custom forms still use visitor-sent email drafts. Do not infer routing from an agent URL or gallery filter. Do not send tests or messages without authorization.
+October 30 Ylopo Support says external search-site embedding is outside its RMLS/NWMLS agreement. The specific widget clarification is drafted, not sent; technical functionality is not approval. Setup and fee details remain unresolved. Support confirms new subdomain registrations/inquiries go to Brad, while existing contacts retain their CRM owner; exact FUB user mapping and an end-to-end test remain unverified. Custom forms still use visitor-sent email drafts. Do not infer routing from an agent URL or gallery filter. Do not send tests or messages without authorization.
 
 A direct RMLS Broker Specific feed is on hold, not implemented. Historical estimates/process below are research, not current quotes or permission to subscribe. User-specific correspondence and the latest provider answer take precedence. Never collect Brad's MLS password, scrape inventory or duplicate the feed into D1 without a separately approved design.
 
