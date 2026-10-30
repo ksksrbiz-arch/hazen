@@ -16,11 +16,17 @@ Current implementation and last verified release facts. Historical passes belong
 ## Unresolved integration and handoff
 
 - Custom forms prepare email drafts; visitors must send them. No direct delivery endpoint or FUB creation is configured.
-- FUB access and actual Brad lead assignment remain unverified. Need account mapping confirmation and an authorized end-to-end test; distinguish new leads from existing-contact routing and check automatic messages before testing.
-- Last mailbox check October 29: Ylopo response at 4:10 p.m. Pacific did not settle external embedding approval, routing, setup or fee questions. Clarification sent at 4:16 p.m. Pacific. Check for a new reply when asked; do not claim this is current inbox state or resend automatically.
+- FUB access, exact Brad user mapping and an end-to-end test remain pending. Ylopo confirmed new registrations/inquiries on Brad's subdomain go to Brad, but existing contacts retain their CRM owner; do not promise all leads go to Brad. Check automatic messages before any authorized test.
+- Last email reviewed: Ylopo Support October 30, 10:28 a.m. Pacific says embedding its search site on bradhazen.com is outside its RMLS/NWMLS agreement and would require a separate MLS agreement/import solution. This is not approval for the currently functioning external widgets. A clarification distinguishing widgets from full-page embedding is drafted, not sent; exact setup, fees and supported agent filtering remain unanswered. User asked to continue backend work for now; integration left unchanged.
 - Direct RMLS Broker Specific feed is on hold while using Ylopo. It is not configured or billed by this repo. A working widget is not proof of contractual approval or CRM assignment.
 - Secondary co-listing matching, future inventory/status transitions and more than six featured records are not fully verified.
 - Brad's exact blog wording/approval, final bio/license/brokerage assets/disclosures, commercial maintenance agreement, operating responsibilities, signed-in editor check on the custom domain, physical-device and physical-print acceptance remain to be completed as applicable. Technical launch is already authorized; do not revert it to preview because handoff items remain.
+
+## Backend audit — October 30
+
+- Admin JSON bodies now stop reading above 40,000 bytes, including chunked and multibyte inputs; oversize returns 413. Non-object JSON returns 400.
+- Exact route shapes and allowed methods reject extra suffixes before storage operations. Regression tests assert rejected requests do not change listings or history.
+- Validation: all 132 Node tests, build/routes/assets/format/ICM checks and the compiled Cloudflare runtime passed. No production data, editor permissions, CRM configuration or email sending changed.
 
 ## Validation baseline
 

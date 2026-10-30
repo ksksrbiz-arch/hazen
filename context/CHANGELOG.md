@@ -251,3 +251,10 @@ Verified PDF rendering on both checklist pages, extracted filled notes, browser 
 ## October 30 — current repository documentation
 
 Rewrote README/current state and reconciled contributor, deployment, architecture, plan, intake, imagery, Studio and search references with the live site through PR #22. Added AGENTS.md routing to the shared CLAUDE instructions and a preparation/PDF maintenance reference. Removed superseded pre-launch/no-MLS/manual-homepage gates; preserved current authorization boundaries, provider/lead-routing uncertainty and blog approval. Historical lab experiments remain labeled historical. Site-change and handoff workflows distinguish technical release from unresolved client acceptance. Documentation-only: no application behavior, provider account, access policy or customer data changed.
+
+
+## October 30, 2026 — backend request hardening
+
+Admin JSON now uses bounded streaming reads (40,000-byte maximum), rejects non-object input and reports oversized requests as 413. Exact route/method validation prevents trailing path segments from selecting an unintended operation. Regression coverage verifies cancellation, multibyte limits, unchanged listing/history state on rejection and a valid save at the limit. Updated current provider notes with the October 30 Ylopo reply; no integration, production data or account changes.
+
+Validation: `npm run verify` passed (132 Node tests, build, route/asset, formatting and ICM checks); `npm run check:runtime` passed against isolated local storage, including authenticated draft preview and unpublication. No live test lead or production data mutation.
