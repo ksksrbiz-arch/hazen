@@ -30,7 +30,7 @@ Place authorized image files in `src/assets/`; use the filename only in the JSON
 
 ## Testimonials
 
-Add to `testimonials`: `published`, `quote`, `attribution`, `permissionNote`, and optional `sourceUrl` (HTTPS only). Use exact client-approved wording and attribution. Consent/source notes stay internal. No star rating is inferred or displayed. Empty collections keep the current introductory/contact content.
+Add to `testimonials`: `published`, `quote`, `attribution`, `permissionNote`, and optional `sourceUrl` (HTTPS only). Use exact client-approved wording and attribution. Consent/source notes stay internal. No star rating is inferred or displayed. Empty collections keep the current introductory/contact content, but Testimonials is omitted from shared navigation until approved testimonials are published.
 
 ## Verification and publication
 

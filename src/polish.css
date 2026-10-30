@@ -154,3 +154,81 @@ footer .analytics-settings{background:transparent;color:inherit;font-size:13px}
 }
 
 @media screen{.area-card:focus-visible,.resource-card:focus-visible,.home-preparation-grid>a:focus-visible{outline:3px solid #936b1c;outline-offset:5px}}
+
+/* Reading and planning pages share the same editorial rhythm as the landing page. */
+@media screen{
+ .resource-finder{border:1px solid #d5dfd8;border-radius:16px;background:#f3f5ef;padding:28px;gap:20px;box-shadow:0 8px 26px #173f4706}
+ .resource-finder label{font-size:15px;color:#173f47}
+ .resource-finder input,.resource-finder select{min-height:52px;border-color:#aabbb1;border-radius:8px;padding:12px 14px;font-size:16px;background:#fff}
+ .resource-finder button{min-height:52px;border-radius:8px;margin-top:33px;font-size:14px;padding:12px 18px;color:#173f47;border-color:#aabbb1}
+ .resource-finder .resource-results{padding-top:16px;border-top:1px solid #d5dfd8;font-size:14px;color:#405950}
+ .resource-no-results{border-radius:12px;padding:22px 24px;line-height:1.75}
+ .resource-group{margin:48px 0 56px}
+ .resource-group>h2{font-family:Georgia,serif;font-size:clamp(30px,3.3vw,42px);font-weight:400;line-height:1.2;margin:10px 0 16px;color:#173f47}
+ .resource-group>p:not(.eyebrow){font-size:17px;max-width:64ch}
+ .resource-group+.resource-group{border-top:1px solid #dbe2dc;padding-top:40px}
+ .resource-card .resource-action{display:flex;justify-content:space-between;gap:16px;border-top:1px solid #dbe2dc;padding-top:18px}
+ .resource-card .resource-action>span{font-size:22px;line-height:1}
+ .resource-help{border:1px solid #2d5660;border-radius:18px;padding:32px;background:#173f47;color:#fff}
+ .resource-help h2{font:400 30px/1.25 Georgia,serif;color:#fff;margin-bottom:12px}
+ .resource-help p{color:#edf3ef;font-size:16px;line-height:1.7}
+ .resource-help .button{background:#fff;color:#173f47;border:1px solid #fff}
+ .resource-help .button:hover{background:#e8eee7;color:#173f47}
+ .inner-content>.page-sections{justify-content:flex-start;gap:10px;padding:16px 20px;background:#f4f6f0;border:1px solid #dbe2dc;border-radius:12px;margin:24px 0 30px}
+ .inner-content>.page-sections>span{font-size:11px;font-weight:600;letter-spacing:.08em;color:#526269;margin-right:6px}
+ .inner-content>.page-sections a{border:1px solid #d3ddd5;border-radius:7px;background:#fff;padding:10px 14px;color:#173f47;font-size:14px;line-height:1.6;text-decoration:none}
+ .inner-content>.page-sections a:hover{border-color:#a68a4d;background:#fffaf0}
+ .process-guide{padding:36px 0 16px;margin:36px 0 48px;border-top:1px solid #dbe2dc}
+ .process-guide>h2{font:400 clamp(30px,3.3vw,42px)/1.2 Georgia,serif;color:#173f47;margin:10px auto 30px}
+ .process-grid{gap:24px;margin-top:0}
+ .process-grid article{display:grid;grid-template-columns:42px minmax(0,1fr);align-content:start;column-gap:16px;border:1px solid #dbe2dc;border-radius:14px;background:#fafbf7;padding:28px;box-shadow:0 8px 24px #173f4706}
+ .process-grid .process-number{grid-row:1/3;font:400 32px/1.2 Georgia,serif;color:#806326;margin:0}
+ .process-grid h3{font-size:21px;line-height:1.35;color:#173f47;margin:0 0 16px}
+ .process-grid p{grid-column:2;font-size:16px;line-height:1.8;color:#46585d}
+ .seller-conversation>div{gap:24px}
+ .seller-conversation a{border:1px solid #dbe2dc;border-radius:14px;box-shadow:0 8px 24px #173f4706;background:#fafbf7;padding:28px}
+ .seller-conversation .conversation-number{color:#806326;font-size:13px;letter-spacing:.08em}
+ .seller-conversation h3{font:400 26px/1.25 Georgia,serif;color:#173f47;margin:14px 0}
+ .seller-conversation .conversation-action{padding-top:16px;border-top:1px solid #dbe2dc;font-size:14px;color:#173f47}
+ .seller-marketing-link{border-radius:16px;padding:32px;border-color:#dbe2dc;background:#f4f5ef}
+ .seller-marketing-link h2{font:400 clamp(28px,3vw,36px)/1.25 Georgia,serif;color:#173f47;max-width:700px}
+ .inner-content .community-guide-tools{max-width:850px;border:1px solid #dbe2dc;border-radius:16px;padding:28px;background:#f3f5ef}
+ .inner-content .community-guide-tools>p{font-size:13px;color:#526269;margin:0 0 18px}
+ .inner-content .community-guide-tools nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .inner-content .community-guide-tools nav a{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px;font-size:15px;line-height:1.5;min-height:52px}
+ .inner-content .community-guide-tools nav a:after{content:'↓';flex-shrink:0;color:#806326}
+ .community-guide-tools+.reading-sections{max-width:850px;margin:40px auto}
+ .community-guide-tools+.reading-sections .content-section{max-width:none;margin:0;padding:32px 28px;border-bottom:1px solid #dbe2dc}
+ .community-guide-tools+.reading-sections .content-section:first-child{padding-top:12px}
+ .community-guide-tools+.reading-sections .content-section h2{font:400 clamp(27px,3vw,34px)/1.25 Georgia,serif;color:#173f47;max-width:700px;margin-bottom:18px}
+ .community-guide-tools+.reading-sections .content-section p{max-width:70ch;line-height:1.85}
+ .community-guide-tools+.reading-sections .guide-citation{margin-bottom:0}
+ .community-guide-tools+.reading-sections .guide-citation a{display:inline-flex;align-items:center;min-height:44px;font-size:14px;color:#3f5e50;text-underline-offset:4px}
+ .resource-next{border:1px solid #dbe2dc;border-radius:14px;padding:24px;background:#f7f8f3}
+ .resource-next h2{font:400 27px/1.3 Georgia,serif;color:#173f47;margin:8px 0 18px}
+ .resource-next a{border-radius:7px;background:#fff;font-size:14px}
+}
+@media screen and (max-width:800px){
+ .process-grid{grid-template-columns:1fr}
+ .process-grid article{padding:24px}
+ .process-grid p{max-width:68ch}
+}
+@media screen and (max-width:650px){
+ .resource-finder{padding:20px;gap:18px}
+ .resource-finder button{margin-top:0}
+ .resource-group{margin:36px 0 44px}
+ .resource-group+.resource-group{padding-top:32px}
+ .resource-help,.seller-marketing-link{padding:24px}
+ .inner-content>.page-sections{padding:16px;gap:8px}
+ .inner-content>.page-sections>span{flex-basis:100%;margin:0 0 2px}
+ .inner-content>.page-sections a{font-size:13px;padding:10px 12px}
+ .process-grid article{grid-template-columns:32px minmax(0,1fr);column-gap:14px;padding:22px}
+ .process-grid .process-number{font-size:27px}
+ .process-grid h3{font-size:21px}
+ .seller-conversation a{padding:24px}
+ .inner-content .community-guide-tools{padding:20px}
+ .inner-content .community-guide-tools nav{grid-template-columns:1fr;gap:10px}
+ .community-guide-tools+.reading-sections{margin:28px auto}
+ .community-guide-tools+.reading-sections .content-section{padding:28px 4px}
+ .resource-next{padding:20px}
+}
