@@ -290,3 +290,11 @@ PR #26 and deployment `ae54ce76-8d79-4e14-a4d0-7fb9b1cb75a0` verified on bradhaz
 - Guided worksheets keep the selected mobile tab visible, and complete-plan review starts at the first section.
 - Optional analytics respects Global Privacy Control after reopening choices, validates remembered consent timestamps/types, and retains safe public PDF/TXT resource identifiers.
 - Validation: 138 Node tests, 98 browser checks, formatting/build/routes/assets/ICM passed. Actual blank and filled buyer PDF pages were visually reviewed, and buyer/seller notes extracted. Physical printing remains unverified.
+
+## October 30, 2026 — resources and community experience audit
+
+- Refined resource filters/cards, community guide navigation/reading layout, buying/selling process cards and contextual preparation links with screen-only styling.
+- Shared navigation exposes Guides & Tools and omits empty Testimonials until approved reviews are published; the existing fallback page remains available.
+- Fixed resource category Back/Forward visibility, worksheet reset focus and post-load worksheet fragment navigation.
+- Community structured data now identifies the actual community Place and credits its licensed primary photograph, retaining Brad as publisher.
+- Validation: 139 Node tests, 104 browser checks, format/build/routes/assets/ICM passed. Desktop/mobile screenshots reviewed; no overflow and header fits at 1151px/1280px. Physical-device and screen-reader checks remain unperformed.

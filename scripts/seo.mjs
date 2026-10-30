@@ -61,6 +61,30 @@ export function structuredData(page, seo) {
     inLanguage: 'en-US'
   };
   const graph = [person, website, webpage];
+  if (page.slug.startsWith('communities/')) {
+    const place = {
+      '@type': 'Place',
+      '@id': seo.url + '#community',
+      name: `${page.title}, Washington`,
+      address: {'@type': 'PostalAddress', addressRegion: 'WA', addressCountry: 'US'}
+    };
+    graph.push(place);
+    webpage.about = {'@id': place['@id']};
+    webpage.publisher = {'@id': person['@id']};
+    if (page.photo) {
+      const image = {
+        '@type': 'ImageObject',
+        '@id': seo.url + '#primary-image',
+        contentUrl: seo.image,
+        caption: page.photo.caption,
+        creditText: `${page.photo.author} · ${page.photo.license}`,
+        license: page.photo.licenseUrl,
+        isBasedOn: page.photo.source
+      };
+      graph.push(image);
+      webpage.primaryImageOfPage = {'@id': image['@id']};
+    }
+  }
   if (page.slug) {
     const items = [{'@type': 'ListItem', position: 1, name: 'Home', item: origin + '/'}];
     if (page.slug.startsWith('communities/'))

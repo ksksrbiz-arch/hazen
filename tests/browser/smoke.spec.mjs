@@ -22,6 +22,17 @@ test('built route list is non-trivial', () => {
   expect(publicRoutes.length).toBeGreaterThan(15);
 });
 
+test('navigation exposes useful guides instead of an empty testimonials destination', async ({page}) => {
+  await page.goto('/');
+  await expect(page.locator('.desktop-nav a[href="/resources/"]')).toHaveText('Guides & Tools');
+  await expect(page.locator('header a[href="/testimonials/"],footer a[href="/testimonials/"]')).toHaveCount(0);
+  await page.setViewportSize({width: 390, height: 800});
+  await page.locator('.mobile-nav summary').click();
+  await expect(page.locator('.mobile-nav a[href="/resources/"]')).toHaveCount(1);
+  await page.locator('.mobile-nav a[href="/resources/"]').click();
+  await expect(page).toHaveURL(/\/resources\/$/);
+});
+
 for (const route of publicRoutes) {
   test(`loads cleanly: ${route}`, async ({page}) => {
     const problems = [];

@@ -58,3 +58,24 @@ test('community structured data retains the breadcrumb hierarchy and cannot clos
   );
   assert.equal(graph.find(node => node['@type'] === 'WebPage').description, seo.description);
 });
+
+test('community structured data describes the community and preserves the actual photo credit', async () => {
+  const photos = JSON.parse(await readFile(new URL('../src/community-photos.json', import.meta.url), 'utf8'));
+  for (const [slug, photo] of Object.entries(photos)) {
+    const page = {slug: `communities/${slug}`, title: slug, photo};
+    const seo = pageSeo(page, 'description');
+    const markup = structuredData(page, seo);
+    const graph = JSON.parse(markup.slice(markup.indexOf('>') + 1, markup.lastIndexOf('</script>')))['@graph'];
+    const webpage = graph.find(node => node['@type'] === 'WebPage');
+    const subject = graph.find(node => node['@id'] === webpage.about['@id']);
+    assert.equal(subject['@type'], 'Place');
+    assert.equal(subject.name, `${slug}, Washington`);
+    assert.equal(graph.find(node => node['@id'] === webpage.publisher['@id']).name, 'Brad Hazen');
+    const image = graph.find(node => node['@id'] === webpage.primaryImageOfPage['@id']);
+    assert.equal(image.contentUrl, seo.image);
+    assert.equal(image.caption, photo.caption);
+    assert.equal(image.creditText, `${photo.author} · ${photo.license}`);
+    assert.equal(image.license, photo.licenseUrl);
+    assert.equal(image.isBasedOn, photo.source);
+  }
+});

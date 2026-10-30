@@ -508,6 +508,7 @@ if (worksheet) {
     worksheetExported = false;
     if (feedback) feedback.textContent = 'Checks and notes cleared on this page.';
     updateWorksheet();
+    worksheet.dispatchEvent(new Event('worksheet-reset'));
     checks[0]?.focus();
   });
   updateWorksheet();
@@ -569,6 +570,15 @@ if (resourceFinder) {
     search.value = '';
     update();
   });
+  const followCategory = () => {
+    const category = location.hash.slice(1);
+    if (category && !groups.some(({group}) => group.id === category)) return;
+    topic.value = category || 'all';
+    search.value = '';
+    update();
+  };
+  window.addEventListener('hashchange', followCategory);
+  if (location.hash) followCategory();
   window.addEventListener('pageshow', update);
   update();
 }
@@ -762,6 +772,20 @@ if (worksheet) {
   });
   controls.querySelector('[data-plan-all]').addEventListener('click', () => {
     all = !all;
+    showStep(true);
+  });
+  worksheet.addEventListener('worksheet-reset', () => {
+    step = 0;
+    all = false;
+    showStep();
+    if (location.hash.startsWith('#worksheet-section-'))
+      history.replaceState(history.state, '', location.pathname + location.search + '#worksheet-section-0');
+  });
+  window.addEventListener('hashchange', () => {
+    const target = cards.findIndex(card => '#' + card.id === location.hash);
+    if (target < 0) return;
+    step = target;
+    all = false;
     showStep(true);
   });
   showStep();
