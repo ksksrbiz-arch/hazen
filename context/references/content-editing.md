@@ -1,5 +1,7 @@
 # Editing Brad’s website content
 
+Current source map: community copy is in `scripts/community-guides.mjs`; real photo metadata in `src/community-photos.json`; preparation/PDF behavior in `context/references/preparation-tools.md`; blog drafts in `src/posts.json`. The build overrides corresponding legacy community fields. Manual properties below are not the homepage inventory source.
+
 Content lives in `src/content.json`. Editing and deploying currently requires repository access; no client CMS is connected.
 
 ## Featured properties
@@ -24,7 +26,7 @@ Add an object to `properties` only after Brad supplies the property details and 
 | `permissionNote` | Internal record of Brad’s authorization and image rights; not rendered |
 | `updatedAt` | Date the details were reviewed, in `YYYY-MM-DD` format |
 
-Place authorized image files in `src/assets/`; use the filename only in the JSON. Optimize images below 400 KB before publishing. The page also shows an At a glance grid, price per acre and per sq ft (calculated from the asking price and size, labelled as not an appraisal, never stored), a map link, and a paragraph starting `Disclosure:` as a callout. Nothing is shown for fields left empty. Build creates `/properties/[slug]/`, property cards, a gallery, status/price/facts, attribution, and an inquiry prefilled with the address. Published properties are separate from any future MLS search. Update status and review date when Brad confirms changes; set `published` to `false` to unpublish. Rebuilding removes the old output directory, so unpublished property routes are not retained.
+Place authorized image files in `src/assets/`; use the filename only in the JSON. Optimize images below 400 KB before publishing. The page also shows an At a glance grid, price per acre and per sq ft (calculated from the asking price and size, labelled as not an appraisal, never stored), a map link, and a paragraph starting `Disclosure:` as a callout. Nothing is shown for fields left empty. Build creates `/properties/[slug]/`, property cards, a gallery, status/price/facts, attribution, and an inquiry prefilled with the address. Published manual properties are separate from the live Ylopo gallery/search. Update status and review date when Brad confirms changes; set `published` to `false` to unpublish. Rebuilding removes the old output directory, so unpublished property routes are not retained.
 
 ## Testimonials
 

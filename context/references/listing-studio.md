@@ -1,5 +1,7 @@
 # Listing Studio (reference)
 
+Current boundary: Studio maintains legacy/manual D1 pages. Homepage featured listings and `/brads-listings/` are provider-driven and do not change when Studio records are published. It does not edit RMLS or establish FUB ownership.
+
 Load this before changing the authenticated editor (`src/studio.js`, `src/listing-model.js`, `src/listing-promotion.js`, `src/photo-preparation.js`, `src/studio-recovery.js`) or explaining its behaviour to Brad. Reorganised on 2026-10-18 from docs/LISTING_WORKSPACE.md, text unchanged. Storage, authentication and publication internals are in `context/references/architecture.md`.
 
 ## Brad’s workflow
@@ -10,7 +12,7 @@ Load this before changing the authenticated editor (`src/studio.js`, `src/listin
 4. Add photo descriptions, review the property preview, and record the internal authorization note.
 5. Publish Listing. The server checks required fields, date, price, status, HTTPS tour link and registered photos. Duplicate public page slugs are rejected.
 6. The public property page, Properties collection and homepage features update without a GitHub commit or new deployment.
-7. Edit and save privately, then publish again when ready. Pending and Sold are supported; Sold properties leave the homepage feature section.
+7. Edit and save privately, then publish again when ready. Pending and Sold are supported; These statuses affect legacy/manual pages; the homepage uses Ylopo inventory.
 8. Unpublish removes the public page and public photo access while retaining the draft. Archive moves the listing to the Archived filter while retaining data/history. Choose Restore as Draft to recover it without republishing.
 
 JSON export and photo downloads remain available as manual backups. Old browser-only drafts are not automatically uploaded or migrated; they remain in the old browser’s IndexedDB.
@@ -19,7 +21,7 @@ JSON export and photo downloads remain available as manual backups. Old browser-
 
 The editor shows draft/published/archived totals, title/address search, filters for unpublished changes, saved/unsaved indicators, a publication readiness count, a link to the current published page and the latest 20 recorded changes. Archived listings open read-only. Restore uses an expected revision, records history and keeps the recovered listing private. Photo order can be changed with Move Earlier/Move Later as well as Make Cover; changes require saving.
 
-The public Properties collection supports GET filters for title/address, Active/Pending/Sold and price ordering when published listings exist. These browse Brad’s manually maintained listings; they are not an MLS search. Property share metadata uses the actual listing title, description, cover image and URL. The preview remains noindex pending launch approval.
+The public Properties collection supports GET filters for title/address, Active/Pending/Sold and price ordering when published listings exist. These browse Brad’s manually maintained listings; they are not an MLS search. Property share metadata uses the actual listing title, description, cover image and URL. Legacy property routes and private previews remain noindex; production marketing pages are already live.
 
 ## Saved page previews and property presentation
 

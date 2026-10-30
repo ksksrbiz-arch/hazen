@@ -1,5 +1,13 @@
 # Website imagery
 
+## Current local community photos
+
+All six community cards and guide headers use `src/assets/community-*.webp`, with metadata in `src/community-photos.json`. Build overrides legacy image fields in `src/content.json`. Public credits include source, author, license, capture date and resizing/display crop. CC BY-SA adaptations retain their source license. Do not remove attribution or substitute an unrelated town. Dates range from 2005 to 2026; these are not current listing photos. Brush Prairie uses its actual post office; Battle Ground uses the nearby state park, identified as such.
+
+Verify location and commercial reuse rights, preserve provenance and optimize within the asset budget. Generated scenic hero/background images remain separately labeled.
+
+## Original illustrative assets (historical provenance)
+
 Created October 10, 2026 using the built-in image generation tool. These six original scenes were generated from text prompts without the Realty Pro photographs as reference inputs. They are illustrative Pacific Northwest settings, not actual listings or photographs of named communities.
 
 The earlier reference photographs and copied branding raster are excluded from the current source assets and deployment. Brad’s brokerage affiliation remains plain text. The original generated PNG files remain in scratch; only optimized WebP derivatives are shipped.
@@ -25,7 +33,7 @@ The earlier reference photographs and copied branding raster are excluded from t
 | `src/assets/riverwalk.webp` | riverwalk | 1000 × 563 | 156,482 |
 | `src/assets/guide-riverwalk.webp` | riverwalk | 600 × 338 | 59,648 |
 
-Hero variants serve the home page and inner-page headers; the neighborhood and porch images serve background sections. Guide images serve community cards and guide headers. Thumbnail images serve the three buying/selling/assessment circles. The public captions distinguish illustrative imagery from actual properties and places.
+Hero variants serve the home page and inner-page headers; the neighborhood and porch images serve background sections. Old guide images remain source assets but no longer serve the six community cards or guide headers. Thumbnail images serve the three buying/selling/assessment circles. The public captions distinguish illustrative imagery from actual properties and places.
 
 ## Generation prompts
 
