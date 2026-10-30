@@ -305,4 +305,4 @@ Developed the two existing drafts and added seller preparation, with practical a
 
 ## October 30 — Article publication preparation and provider follow-up
 
-Added article reading guides, reading time, safe public sources, related tools and print source URLs. Drafts remain unpublished and approval-gated. Sent the authorized Ylopo clarification with documentation/examples and activated a 30-minute reply monitor. Validation recorded in the commit handoff.
+Added article reading guides, reading time, safe public sources, related tools and print source URLs. Drafts remain unpublished and approval-gated. Sent the authorized Ylopo clarification with documentation/examples and activated a 30-minute reply monitor. Validation: 140 Node tests and build/route/format/ICM checks passed. Browser suite: 103 passed initially; one provider-page load timeout passed on its targeted rerun. Article preview at 390px and 1280px passed overflow and section-navigation checks; mobile screenshot reviewed. Draft routes remain absent from the public build.
