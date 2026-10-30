@@ -283,3 +283,10 @@ PR #26 and deployment `ae54ce76-8d79-4e14-a4d0-7fb9b1cb75a0` verified on bradhaz
 - Isolated malformed legacy published listing snapshots; recovery actions point to the automatic featured gallery. No inventory imports or provider configuration changed.
 - Added form-type context to inquiry analytics and focus restoration after cookie choices. No visitor answers are measured and no drafts are reported as delivered leads.
 - Validation: 138 Node tests, 91 browser checks (automated WCAG, 320px layouts, keyboard navigation, search/gallery and preparation flows), compiled runtime, build/routes/assets/format/ICM. Six homepage/navigation checks rerun successfully after the final hero adjustment. Desktop/mobile screenshots reviewed separately; no physical-device or screen-reader testing.
+
+## October 30, 2026 — preparation completion and consent repair
+
+- Upgraded buyer blank and filled downloads to branded Letter-size PDFs using the shared lazy PDF bundle. Reviewed topics and visitor notes stay local; legacy text downloads remain compatible.
+- Guided worksheets keep the selected mobile tab visible, and complete-plan review starts at the first section.
+- Optional analytics respects Global Privacy Control after reopening choices, validates remembered consent timestamps/types, and retains safe public PDF/TXT resource identifiers.
+- Validation: 138 Node tests, 98 browser checks, formatting/build/routes/assets/ICM passed. Actual blank and filled buyer PDF pages were visually reviewed, and buyer/seller notes extracted. Physical printing remains unverified.

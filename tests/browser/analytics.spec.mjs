@@ -94,6 +94,64 @@ test('preview and private pages do not initialize Google analytics', async ({pag
   expect(await page.evaluate(() => typeof window.bradTrack)).toBe('undefined');
 });
 
+test('Global Privacy Control stays authoritative when cookie choices are reopened', async ({page}) => {
+  await localProduction(page);
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'globalPrivacyControl', {value: true});
+    localStorage.setItem('brad-analytics-choice-v1', JSON.stringify({allowed: true, at: Date.now()}));
+  });
+  await page.goto('https://bradhazen.com/contact/');
+  await expect(page.locator('script[src*="googletagmanager"]')).toHaveCount(0);
+  await page.getByRole('button', {name: 'Cookie choices', exact: true}).click();
+  await expect(
+    page.getByText('Your browser’s Global Privacy Control is on, so optional analytics stays off.')
+  ).toBeVisible();
+  await expect(page.getByRole('button', {name: 'Allow analytics', exact: true})).toBeDisabled();
+  await expect(page.getByRole('button', {name: 'No thanks', exact: true})).toBeFocused();
+  await page.getByRole('button', {name: 'No thanks', exact: true}).click();
+  await expect(page.locator('script[src*="googletagmanager"]')).toHaveCount(0);
+  expect(await page.evaluate(() => window.dataLayer.filter(event => event.event))).toEqual([]);
+});
+
+test('only a recent explicit boolean consent choice can start analytics automatically', async ({page}) => {
+  await localProduction(page);
+  await page.goto('https://bradhazen.com/contact/');
+  for (const choice of [
+    {allowed: 'false', at: Date.now()},
+    {allowed: true, at: Date.now() + 86400000},
+    {allowed: true, at: Date.now() - 181 * 86400000},
+    {allowed: true, at: String(Date.now())}
+  ]) {
+    await page.evaluate(value => localStorage.setItem('brad-analytics-choice-v1', JSON.stringify(value)), choice);
+    await page.reload();
+    await expect(page.locator('script[src*="googletagmanager"]')).toHaveCount(0);
+    await expect(page.getByRole('region', {name: 'Analytics cookie choice'})).toBeVisible();
+  }
+  await page.evaluate(() =>
+    localStorage.setItem('brad-analytics-choice-v1', JSON.stringify({allowed: true, at: Date.now()}))
+  );
+  await page.reload();
+  await expect(page.locator('script[src*="googletagmanager"]')).toHaveCount(1);
+  await expect(page.getByRole('region', {name: 'Analytics cookie choice'})).toBeHidden();
+});
+
+test('download measurement retains the public filename without query values', async ({page}) => {
+  await localProduction(page);
+  await page.goto('https://bradhazen.com/resources/');
+  await page.getByRole('button', {name: 'Allow analytics', exact: true}).click();
+  await page.evaluate(() => {
+    const link = document.createElement('a');
+    link.href = '/assets/seller-conversation-checklist.pdf?email=private@example.com';
+    link.addEventListener('click', event => event.preventDefault());
+    document.body.append(link);
+    link.click();
+    link.remove();
+  });
+  const event = await page.evaluate(() => window.dataLayer.find(value => value.event === 'resource_download'));
+  expect(event).toMatchObject({action: 'pdf', item_id: '/assets/seller-conversation-checklist.pdf'});
+  expect(JSON.stringify(event)).not.toContain('private@example.com');
+});
+
 test('inquiry measurement preserves form context without sending answers', async ({page}) => {
   await localProduction(page);
   await page.goto('https://bradhazen.com/buy/');

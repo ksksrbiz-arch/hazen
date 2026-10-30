@@ -1,7 +1,15 @@
 import {jsPDF} from 'jspdf';
 import {contact} from './contact.js';
 // Shared by the build-time blank download and the private, browser-only filled export.
-export function sellerPdf({groups, notes = ''}) {
+export function sellerPdf(options) {
+  return conversationPdf({...options, kind: 'seller'});
+}
+export function buyerPdf(options) {
+  return conversationPdf({...options, kind: 'buyer'});
+}
+function conversationPdf({groups, notes = '', kind}) {
+  const buyer = kind === 'buyer';
+  const kicker = buyer ? 'YOUR BUYER CONVERSATION' : 'YOUR SELLER CONVERSATION';
   const doc = new jsPDF({unit: 'pt', format: 'letter', compress: true});
   const green = [23, 63, 71],
     gold = [151, 113, 38],
@@ -32,10 +40,12 @@ export function sellerPdf({groups, notes = ''}) {
   for (let page = 0; page < 2; page++) {
     if (page) doc.addPage();
     header(
-      'YOUR SELLER CONVERSATION',
-      page ? 'Shape the listing plan.' : 'Start with what matters.',
+      kicker,
+      page ? (buyer ? 'Plan your next steps.' : 'Shape the listing plan.') : 'Start with what matters.',
       page
-        ? 'Preparation, presentation and the questions to settle together.'
+        ? buyer
+          ? 'Financing, property visits and the questions to settle together.'
+          : 'Preparation, presentation and the questions to settle together.'
         : 'A practical plan to bring to your conversation with Brad.'
     );
     groups.slice(page * 3, page * 3 + 3).forEach((group, index) => {
@@ -76,18 +86,14 @@ export function sellerPdf({groups, notes = ''}) {
   }
   if (notes.trim()) {
     doc.addPage();
-    header(
-      'YOUR SELLER CONVERSATION',
-      'Your questions & notes.',
-      'Your entries from the website. Nothing has been sent to Brad.'
-    );
+    header(kicker, 'Your questions & notes.', 'Your entries from the website. Nothing has been sent to Brad.');
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(11);
     let y = 193;
     for (const line of doc.splitTextToSize(clean(notes.slice(0, 1200)), 520)) {
       if (y > 700) {
         doc.addPage();
-        header('YOUR SELLER CONVERSATION', 'Notes, continued.', '');
+        header(kicker, 'Notes, continued.', '');
         y = 193;
       }
       text(line, 42, y);
@@ -103,9 +109,9 @@ export function sellerPdf({groups, notes = ''}) {
     text(p + ' / ' + doc.getNumberOfPages(), 548, 765, 8);
   }
   doc.setProperties({
-    title: 'Seller Conversation Checklist | Brad Hazen',
+    title: `${buyer ? 'Buyer' : 'Seller'} Conversation Checklist | Brad Hazen`,
     author: 'Brad Hazen | Realty Pro, Inc.',
-    subject: 'Seller preparation and conversation planning'
+    subject: `${buyer ? 'Buyer' : 'Seller'} preparation and conversation planning`
   });
   return doc;
 }

@@ -7,7 +7,7 @@ Live at **https://bradhazen.com/** for Brad Hazen, Realty Pro, Inc. Built and op
 - Marketing pages, six researched community guides, local photography with public source/license/date credits, and community comparison.
 - `/brads-listings/` and the homepage show Brad's current Ylopo listings. The verified Yacolt land/commercial pair shares one card with both detail links.
 - `/search/` provides on-site city, price, type and bedroom filters, current results, reset/retry and show-more. Listing details, full map, saved searches and account tools open on `https://bradhazen.realtypronw.net/`.
-- Guided buyer/seller preparation and selectable photo planning. Seller downloads are branded PDFs, including checked items and notes; buyer export remains text. Entries stay in the page unless the visitor downloads/prints them.
+- Guided buyer/seller preparation and selectable photo planning. Buyer and seller downloads are branded PDFs, including checked items and notes. Entries stay in the page unless the visitor downloads/prints them.
 - Private Cloudflare Access-protected `/studio/` uses D1/R2 for legacy/manual listing pages. It does not control the Ylopo gallery or update RMLS.
 - Blog infrastructure exists, but the two draft posts are unapproved and unpublished. No empty blog is exposed.
 
@@ -33,16 +33,16 @@ Cloudflare's build command is `npm run verify`, output `dist`; it does not run t
 
 ## Source map
 
-| Area                               | Files                                                                                                                                   |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Build, routes, shared layout       | `scripts/build.mjs`, `src/content.json`, `src/styles.css`, `src/editorial.css`, `src/site.js`                                           |
-| Featured gallery / Yacolt grouping | `server/ylopo-gallery.js`                                                                                                               |
-| On-site search                     | `scripts/property-search.mjs`, `server/search-widget.js`, `src/search-widget-client.js`                                                 |
-| Guides and real community images   | `scripts/community-guides.mjs`, `src/community-photos.json`, `src/assets/community-*.webp`                                              |
-| Preparation / printable seller PDF | `scripts/resources.mjs`, `scripts/conversation-worksheet.mjs`, `scripts/seller-worksheet.mjs`, `src/resources.css`, `src/seller-pdf.js` |
-| Blog approval gates                | `scripts/blog.mjs`, `src/posts.json`, `docs/editorial/`                                                                                 |
-| Hostname indexing / security       | `server/site-domain.js`, `functions/_middleware.js`, `server/response-security.js`                                                      |
-| Legacy editor and storage          | `src/studio.js`, `server/listings.js`, `database/cloudflare/`                                                                           |
+| Area                                          | Files                                                                                                                                                                  |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Build, routes, shared layout                  | `scripts/build.mjs`, `src/content.json`, `src/styles.css`, `src/editorial.css`, `src/site.js`                                                                          |
+| Featured gallery / Yacolt grouping            | `server/ylopo-gallery.js`                                                                                                                                              |
+| On-site search                                | `scripts/property-search.mjs`, `server/search-widget.js`, `src/search-widget-client.js`                                                                                |
+| Guides and real community images              | `scripts/community-guides.mjs`, `src/community-photos.json`, `src/assets/community-*.webp`                                                                             |
+| Preparation / printable buyer and seller PDFs | `scripts/resources.mjs`, `scripts/conversation-worksheet.mjs`, `scripts/seller-worksheet.mjs`, `scripts/buyer-worksheet.mjs`, `src/resources.css`, `src/seller-pdf.js` |
+| Blog approval gates                           | `scripts/blog.mjs`, `src/posts.json`, `docs/editorial/`                                                                                                                |
+| Hostname indexing / security                  | `server/site-domain.js`, `functions/_middleware.js`, `server/response-security.js`                                                                                     |
+| Legacy editor and storage                     | `src/studio.js`, `server/listings.js`, `database/cloudflare/`                                                                                                          |
 
 ## Contributor guidance
 

@@ -69,6 +69,7 @@
   ]);
   let enabled = false,
     loaded = false;
+  const privacyControl = navigator.globalPrivacyControl === true;
   let choiceTrigger;
   const pagePath = document.querySelector('link[rel="canonical"]')?.getAttribute('href') || 'https://bradhazen.com/';
   const pageType = location.pathname.startsWith('/communities/')
@@ -120,7 +121,11 @@
     for (const k of ['count', 'percent'])
       if (Number.isFinite(details[k])) safe[k] = Math.max(0, Math.min(1000, Math.round(details[k])));
     // Public route or fixed control IDs only, never visitor-entered values.
-    if (typeof details.item_id === 'string' && /^[a-z0-9/_-]{1,100}$/.test(details.item_id))
+    if (
+      typeof details.item_id === 'string' &&
+      details.item_id.length <= 100 &&
+      /^[a-z0-9/_-]+(?:\.(?:pdf|txt))?$/.test(details.item_id)
+    )
       safe.item_id = details.item_id;
     if (['brad', 'all_listings'].includes(details.search_scope)) safe.search_scope = details.search_scope;
     if (['brad', 'other_agent', 'unknown'].includes(details.listing_owner)) safe.listing_owner = details.listing_owner;
@@ -134,8 +139,15 @@
   panel.setAttribute('aria-label', 'Analytics cookie choice');
   panel.innerHTML =
     '<p><strong>A little insight helps us improve.</strong> Allow optional analytics cookies to help Brad understand which pages and tools are useful. Your form answers and notes are not included. <a href="/privacy/">Privacy details</a></p><div><button data-choice="yes">Allow analytics</button><button data-choice="no">No thanks</button></div>';
+  if (privacyControl) {
+    panel.querySelector('[data-choice="yes"]').disabled = true;
+    const explanation = document.createElement('p');
+    explanation.textContent = 'Your browser’s Global Privacy Control is on, so optional analytics stays off.';
+    panel.prepend(explanation);
+  }
   document.body.append(panel);
   function start() {
+    if (privacyControl) return;
     enabled = true;
     window['ga-disable-' + measurement] = false;
     gtag('consent', 'update', {
@@ -156,6 +168,7 @@
     }
   }
   function choose(yes) {
+    yes = yes && !privacyControl;
     try {
       localStorage.setItem(key, JSON.stringify({allowed: yes, at: Date.now()}));
     } catch {}
@@ -185,15 +198,16 @@
     button.addEventListener('click', () => {
       choiceTrigger = button;
       panel.hidden = false;
-      panel.querySelector('button').focus();
+      panel.querySelector('button:not(:disabled)').focus();
     });
   });
   let choice;
   try {
     choice = JSON.parse(localStorage.getItem(key));
   } catch {}
-  if (navigator.globalPrivacyControl === true) choose(false);
-  else if (choice && Date.now() - choice.at < 180 * 86400000) {
+  const age = Date.now() - choice?.at;
+  if (privacyControl) choose(false);
+  else if (typeof choice?.allowed === 'boolean' && Number.isFinite(choice?.at) && age >= 0 && age < 180 * 86400000) {
     if (choice.allowed) start();
   } else panel.hidden = false;
   const placement = el =>

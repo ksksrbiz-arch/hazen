@@ -15,9 +15,9 @@ import {getCollections, propertyCards, propertyDetail, reviewCards} from './coll
 import {photoGuide} from './photo-guide.mjs';
 import {sellerWorksheet, prompts as sellerPrompts} from './seller-worksheet.mjs';
 import {sellerChecklist} from './seller-marketing.mjs';
-import {sellerPdf} from '../src/seller-pdf.js';
+import {sellerPdf, buyerPdf} from '../src/seller-pdf.js';
 import {build as bundle} from 'esbuild';
-import {buyerWorksheetPage, buyerWorksheet, buyerChecklistText} from './buyer-worksheet.mjs';
+import {buyerWorksheetPage, buyerWorksheet, buyerChecklistText, buyerGroups} from './buyer-worksheet.mjs';
 import {studioPage} from './studio-page.mjs';
 import {agentLogin} from './agent-login.mjs';
 import {studioGuide, studioGuideText} from './studio-guide.mjs';
@@ -297,6 +297,18 @@ await writeFile(
   )
 );
 await writeFile(path.join(root, 'dist/resources/buyer-conversation-checklist.txt'), buyerChecklistText);
+await writeFile(
+  path.join(root, 'dist/resources/buyer-conversation-checklist.pdf'),
+  Buffer.from(
+    buyerPdf({
+      groups: buyerGroups.map(([title, , prompts]) => ({
+        title,
+        items: prompts.map(label => ({label, reviewed: false}))
+      }))
+    }).output('arraybuffer')
+  )
+);
+
 await writeFile(path.join(root, 'dist/robots.txt'), 'User-agent: *\nDisallow: /\n');
 await writeFile(
   path.join(root, 'dist/_headers'),

@@ -11,7 +11,7 @@
 
 ## What is measured
 
-`src/analytics.js` loads GTM only after optional analytics consent on the exact production origin. Preview, widgets, Studio, API, media and legacy property pages do not initialize analytics. Global Privacy Control disables optional analytics. Footer Cookie choices allows changes; choice expires after 180 days.
+`src/analytics.js` loads GTM only after optional analytics consent on the exact production origin. Preview, widgets, Studio, API, media and legacy property pages do not initialize analytics. Global Privacy Control disables optional analytics, including when Cookie choices is reopened. Remembered choices require an explicit boolean and a valid timestamp within the previous 180 days. Footer Cookie choices allows changes; choice expires after 180 days.
 
 Events cover page views, scroll milestones, visible engagement time, navigation, phone/email clicks, inquiry starts/validation/draft preparation/copy/edit, downloads/printing, guided steps, checklists, photo plans, community comparisons, FAQs and property search/results/detail clicks. Email draft preparation is never reported as a submitted lead. No visitor form values or worksheet notes enter the data layer. Page URLs use canonical paths without queries; referrers use origins only. Google advertising and automatic user-data detection are disabled.
 

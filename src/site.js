@@ -464,53 +464,32 @@ if (worksheet) {
   if (progressPanel) progressPanel.hidden = false;
   if (downloadButton) {
     downloadButton.hidden = false;
-    if (window.location.pathname.includes('seller-checklist')) downloadButton.textContent = 'Download My PDF';
+    downloadButton.textContent = 'Download My PDF';
     downloadButton.addEventListener('click', async () => {
-      if (window.location.pathname.includes('seller-checklist')) {
-        downloadButton.disabled = true;
-        feedback.textContent = 'Preparing your PDF…';
-        try {
-          const {sellerPdf} = await import('/assets/seller-pdf.js');
-          sellerPdf({
-            groups: sections.map(({card, checks}) => ({
-              title: card.querySelector('h3').textContent,
-              items: checks.map(check => ({
-                label: check.closest('label').querySelector('.worksheet-check-text').textContent,
-                reviewed: check.checked
-              }))
-            })),
-            notes: notes.value
-          }).save('brad-hazen-seller-checklist.pdf');
-          window.bradTrack?.('worksheet_download', {action: 'pdf'});
-          worksheetExported = true;
-          feedback.textContent = 'Your PDF was downloaded with your checks and notes. Nothing was sent to Brad.';
-        } catch {
-          feedback.textContent =
-            'The PDF could not be prepared. Try again, or use Print Checklist or Download Blank PDF.';
-        } finally {
-          downloadButton.disabled = false;
-        }
-        return;
+      downloadButton.disabled = true;
+      feedback.textContent = 'Preparing your PDF…';
+      try {
+        const {sellerPdf, buyerPdf} = await import('/assets/seller-pdf.js');
+        const buyer = worksheet.dataset.worksheetKind === 'buyer';
+        (buyer ? buyerPdf : sellerPdf)({
+          groups: sections.map(({card, checks}) => ({
+            title: card.querySelector('h3').textContent,
+            items: checks.map(check => ({
+              label: check.closest('label').querySelector('.worksheet-check-text').textContent,
+              reviewed: check.checked
+            }))
+          })),
+          notes: notes.value
+        }).save(`brad-hazen-${buyer ? 'buyer' : 'seller'}-checklist.pdf`);
+        window.bradTrack?.('worksheet_download', {action: 'pdf'});
+        worksheetExported = true;
+        feedback.textContent = 'Your PDF was downloaded with your checks and notes. Nothing was sent to Brad.';
+      } catch {
+        feedback.textContent =
+          'The PDF could not be prepared. Try again, or use Print Checklist or Download Blank PDF.';
+      } finally {
+        downloadButton.disabled = false;
       }
-      const content = worksheetText({
-        title: document.querySelector('h1').textContent,
-        items: checks.map(check => ({
-          label: check.closest('label').querySelector('.worksheet-check-text').textContent,
-          reviewed: check.checked
-        })),
-        notes: notes.value
-      });
-      const url = URL.createObjectURL(new Blob([content], {type: 'text/plain;charset=utf-8'})),
-        link = document.createElement('a');
-      link.href = url;
-      link.download =
-        (window.location.pathname.includes('buyer-checklist') ? 'buyer' : 'seller') + '-conversation-worksheet.txt';
-      link.click();
-      window.bradTrack?.('worksheet_download', {action: 'txt'});
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-      worksheetExported = true;
-      feedback.textContent =
-        'Your worksheet was downloaded with the current checks and notes. Nothing was sent to Brad.';
     });
     worksheet.addEventListener('input', () => {
       if (worksheetExported)
@@ -752,9 +731,16 @@ if (worksheet) {
     controls.querySelector('[data-plan-next]').textContent =
       step === cards.length - 1 ? 'Review your plan →' : 'Next step →';
     controls.querySelector('[data-plan-all]').textContent = all ? 'Return to guided steps' : 'View all steps';
+    if (!all && nav.scrollWidth > nav.clientWidth) {
+      const bounds = nav.getBoundingClientRect();
+      const active = links[step].getBoundingClientRect();
+      if (active.left < bounds.left) nav.scrollLeft += active.left - bounds.left;
+      else if (active.right > bounds.right) nav.scrollLeft += active.right - bounds.right;
+    }
     if (focus) {
-      cards[step].focus({preventScroll: true});
-      cards[step].scrollIntoView({block: 'start', behavior: 'instant'});
+      const target = cards[all ? 0 : step];
+      target.focus({preventScroll: true});
+      target.scrollIntoView({block: 'start', behavior: 'instant'});
     }
   };
   links.forEach((link, i) =>
