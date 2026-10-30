@@ -691,3 +691,85 @@ window.addEventListener('message', event => {
   if (!frame || event.source !== frame.contentWindow || !Number.isFinite(event.data.height)) return;
   frame.style.height = Math.min(24000, Math.max(400, event.data.height)) + 'px';
 });
+// Guided preparation keeps the full worksheet available for printing and review.
+if (worksheet) {
+  const cards = [...worksheet.querySelectorAll('.worksheet-card')];
+  const nav = worksheet.querySelector('.worksheet-topic-nav');
+  const links = [...nav.querySelectorAll('a[href^="#worksheet-section-"]')];
+  const controls = document.createElement('div');
+  controls.className = 'planning-controls';
+  controls.innerHTML =
+    '<button type="button" data-plan-back>Previous step</button><p data-plan-position role="status" aria-live="polite"></p><button type="button" data-plan-next>Next step →</button><button type="button" data-plan-all>View all steps</button>';
+  worksheet.querySelector('.worksheet-grid').after(controls);
+  let step = Math.max(
+      0,
+      cards.findIndex(card => '#' + card.id === location.hash)
+    ),
+    all = false;
+  const showStep = (focus = false) => {
+    worksheet.classList.toggle('planning-guided', !all);
+    cards.forEach((card, i) => card.classList.toggle('planning-current', i === step));
+    links.forEach((link, i) => {
+      if (!all && i === step) link.setAttribute('aria-current', 'step');
+      else link.removeAttribute('aria-current');
+    });
+    controls.querySelector('[data-plan-position]').textContent = all
+      ? 'Your complete plan'
+      : 'Step ' + (step + 1) + ' of ' + cards.length;
+    controls.querySelector('[data-plan-back]').disabled = all || step === 0;
+    controls.querySelector('[data-plan-next]').disabled = all;
+    controls.querySelector('[data-plan-next]').textContent =
+      step === cards.length - 1 ? 'Review your plan →' : 'Next step →';
+    controls.querySelector('[data-plan-all]').textContent = all ? 'Return to guided steps' : 'View all steps';
+    if (focus) {
+      cards[step].focus({preventScroll: true});
+      cards[step].scrollIntoView({block: 'start', behavior: 'instant'});
+    }
+  };
+  links.forEach((link, i) =>
+    link.addEventListener('click', event => {
+      event.preventDefault();
+      step = i;
+      all = false;
+      showStep(true);
+    })
+  );
+  controls.querySelector('[data-plan-back]').addEventListener('click', () => {
+    step = Math.max(0, step - 1);
+    showStep(true);
+  });
+  controls.querySelector('[data-plan-next]').addEventListener('click', () => {
+    if (step === cards.length - 1) all = true;
+    else step++;
+    showStep(true);
+  });
+  controls.querySelector('[data-plan-all]').addEventListener('click', () => {
+    all = !all;
+    showStep(true);
+  });
+  showStep();
+}
+const shotPlan = document.querySelector('.photo-shot-grid');
+if (shotPlan) {
+  const status = document.createElement('p');
+  status.className = 'photo-plan-status';
+  status.setAttribute('role', 'status');
+  status.setAttribute('aria-live', 'polite');
+  shotPlan.before(status);
+  for (const item of shotPlan.querySelectorAll('li')) {
+    const label = document.createElement('label'),
+      check = document.createElement('input'),
+      text = document.createElement('span');
+    check.type = 'checkbox';
+    text.textContent = item.textContent;
+    label.append(check, text);
+    item.replaceChildren(label);
+  }
+  const update = () => {
+    status.textContent =
+      shotPlan.querySelectorAll('input:checked').length +
+      ' views selected for your photo conversation. Selections stay on this page; print to keep them.';
+  };
+  shotPlan.addEventListener('change', update);
+  update();
+}
