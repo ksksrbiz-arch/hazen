@@ -13,7 +13,10 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {getCollections, propertyCards, propertyDetail, reviewCards} from './collections.mjs';
 import {photoGuide} from './photo-guide.mjs';
-import {sellerWorksheet} from './seller-worksheet.mjs';
+import {sellerWorksheet, prompts as sellerPrompts} from './seller-worksheet.mjs';
+import {sellerChecklist} from './seller-marketing.mjs';
+import {sellerPdf} from '../src/seller-pdf.js';
+import {build as bundle} from 'esbuild';
 import {buyerWorksheetPage, buyerWorksheet, buyerChecklistText} from './buyer-worksheet.mjs';
 import {studioPage} from './studio-page.mjs';
 import {agentLogin} from './agent-login.mjs';
@@ -194,6 +197,18 @@ const inquiryCommunities = Object.fromEntries(content.communities.map(page => [p
 const stripModule = source => source.replace(/^import .*$/gm, '').replaceAll('export ', '');
 const contactModel = stripModule(await readFile(path.join(root, 'src/contact.js'), 'utf8'));
 const worksheetModel = stripModule(await readFile(path.join(root, 'src/worksheet-model.js'), 'utf8'));
+const pdfBundle = await bundle({
+  entryPoints: [path.join(root, 'src/seller-pdf.js')],
+  bundle: true,
+  format: 'esm',
+  platform: 'browser',
+  minify: true,
+  write: false,
+  external: ['canvg', 'html2canvas', 'dompurify']
+});
+const pdfCode = pdfBundle.outputFiles[0].contents;
+const pdfModuleName = 'seller-pdf.' + createHash('sha256').update(pdfCode).digest('hex').slice(0, 12) + '.js';
+await writeFile(path.join(root, 'dist/assets', pdfModuleName), pdfCode);
 const js =
   contactModel +
   '\n' +
@@ -204,7 +219,7 @@ const js =
   ';\n' +
   inquiryModel +
   '\n' +
-  (await readFile(path.join(root, 'src/site.js'), 'utf8'));
+  (await readFile(path.join(root, 'src/site.js'), 'utf8')).replace('/assets/seller-pdf.js', '/assets/' + pdfModuleName);
 const jsName = 'site.' + createHash('sha256').update(js).digest('hex').slice(0, 12) + '.js';
 await writeFile(path.join(root, 'dist', jsName), js);
 await writeFile(
@@ -268,6 +283,17 @@ for (const page of pages) {
 }
 await mkdir(path.join(root, 'dist/resources'), {recursive: true});
 await writeFile(path.join(root, 'dist/resources/seller-conversation-checklist.txt'), sellerChecklistText);
+await writeFile(
+  path.join(root, 'dist/resources/seller-conversation-checklist.pdf'),
+  Buffer.from(
+    sellerPdf({
+      groups: sellerChecklist.map(([title], i) => ({
+        title,
+        items: sellerPrompts[i].map(label => ({label, reviewed: false}))
+      }))
+    }).output('arraybuffer')
+  )
+);
 await writeFile(path.join(root, 'dist/resources/buyer-conversation-checklist.txt'), buyerChecklistText);
 await writeFile(path.join(root, 'dist/robots.txt'), 'User-agent: *\nDisallow: /\n');
 await writeFile(
