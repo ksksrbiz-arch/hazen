@@ -12,7 +12,7 @@ Current implementation and last verified release facts. Historical passes belong
 - PR #22 / merge `2d3f3f9`: polished two-page seller PDF, blank download plus browser-generated filled PDF preserving checks and appending notes. Verified live PDF response, download and extracted notes. Buyer download was subsequently upgraded to the same PDF experience. Preparation entries are page-only, not saved or sent.
 - Footer includes a subtle accessible “Built by 1commerce” badge linking to https://1commercesolutions.com in a new tab.
 - Legacy D1 `/properties/` pages and Studio remain available but are not the featured inventory source. Main navigation and resource links use the Ylopo gallery.
-- Public marketing pages are indexable on production only; widgets, legacy property routes, private routes and empty testimonials remain excluded. Blog drafts are unapproved/unpublished; no blog routes/nav are generated yet.
+- Public marketing pages are indexable on production only; widgets, legacy property routes, private routes and empty testimonials remain excluded. Three full article drafts (acreage research, community comparison and seller preparation) are ready in docs/editorial/FIRST-THREE-ARTICLES-2026-10-30.md with sources and Brad review questions. Blog drafts are unapproved/unpublished; no blog routes/nav are generated yet.
 
 ## Unresolved integration and handoff
 

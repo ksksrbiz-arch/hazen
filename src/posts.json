@@ -1,82 +1,216 @@
 [
   {
     "slug": "clark-county-acreage-parcel-research",
-    "title": "Before You Tour Acreage in Clark County: Start With the Parcel",
-    "summary": "A listing can show an attractive piece of land without answering the question that matters most: will it work for your plans? Before scheduling a visit, write down what you hope to use the property for. A home, a workshop, a garden and additional outdoor space create different questions. Keep that list beside the listing so you can separate the features you like from the details you still need to establish.",
+    "title": "Buying Acreage in Clark County? Check These Details Before You Fall in Love With the View",
+    "summary": "Start with the parcel, access and property systems. A little homework can turn a promising acreage listing into a much more useful conversation.",
     "status": "draft",
     "approvedByBrad": false,
-    "sourceReference": "docs/editorial/BLOG-DRAFTS-2026-10-29.md",
+    "sourceReference": "docs/editorial/FIRST-THREE-ARTICLES-2026-10-30.md",
     "sections": [
       {
-        "heading": "Start with what you want to do",
+        "heading": "Put your plans on paper first",
         "paragraphs": [
-          "A listing can show an attractive piece of land without answering the question that matters most: will it work for your plans? Before scheduling a visit, write down what you hope to use the property for. A home, a workshop, a garden and additional outdoor space create different questions. Keep that list beside the listing so you can separate the features you like from the details you still need to establish."
+          "Five acres can look like plenty of room for a house, a shop and a garden. Whether a particular property can support those plans is a different question. Before a tour, write down what you want the land to do for you. Separate what you need now from what you hope to add later.",
+          "Be specific. “Room for a shop” leaves a lot unanswered. A rough size, the equipment you want to store and how you would reach it give you better questions to ask. The same applies to animals, a driveway, an addition or a future home."
         ]
       },
       {
-        "heading": "Match the listing to the parcel",
+        "heading": "Make sure you are researching the right property",
         "paragraphs": [
-          "Ask for the parcel number and confirm that the records you are reviewing correspond to the property being offered. Clark County's Property Information Center and MapsOnline are starting points for parcel research. The county explains that these tools connect with its permitting system and can show permits issued for a property. Save the records and note the date you checked them. A map is a useful research tool; it is not a substitute for resolving a boundary question with the appropriate professional."
+          "Ask for the parcel number and confirm which parcels are included in the sale. Clark County’s Property Information Center and MapsOnline provide parcel information and connect with county permit records. Keep the listing, parcel numbers and documents together so everyone is discussing the same property.",
+          "Use the map to get oriented. The county says its tax maps are not survey-level accurate and should not be used to locate property lines on the ground. A fence, a mowed edge or a line drawn over an aerial photo should prompt a question rather than settle a boundary."
         ]
       },
       {
-        "heading": "Turn unknowns into specific questions",
+        "heading": "Give access its own line on the checklist",
         "paragraphs": [
-          "Instead of asking only whether land is “buildable,” describe your intended project and ask which agency or professional can evaluate it. Make a list covering access, water, wastewater, power and any existing structures. Ask which answers are documented, which need an inspection and which require agency review. Do not treat an attractive aerial image or an acreage figure as proof that your whole plan is feasible."
+          "During a visit, notice where the driveway begins, who appears to use it and how you would move a trailer or equipment through it. Then separate those observations from the documents. Ask what establishes access and whether there are shared-road or maintenance agreements to review.",
+          "A road that is easy to drive today does not answer every question about using or maintaining it. If something is unclear, identify who needs to review it before treating the issue as resolved."
         ]
       },
       {
-        "heading": "Look at systems as well as scenery",
+        "heading": "Look beyond the house and the scenery",
         "paragraphs": [
-          "If a property has an on-site septic system, request the available records and discuss their relevance with a qualified local professional. Clark County Public Health provides access to septic information and lists certified service providers. An existing system is a topic to investigate, not an automatic answer about what a future project can support. Keep the system questions separate from the listing's general description."
+          "Ask how the property gets water, handles wastewater and receives power. For a septic system, Clark County Public Health provides records resources and lists certified service providers. Available permits, drawings and inspection reports can help organize the next conversation with a qualified professional.",
+          "Keep your proposed use in that conversation. An existing system does not, by itself, establish what a future project can support. Ask the relevant agency or provider about the specific plan rather than relying on a broad description such as “utilities available.”"
         ]
       },
       {
-        "heading": "Bring a useful packet to the conversation",
+        "heading": "Leave the tour with a short list of unanswered questions",
         "paragraphs": [
-          "Collect the listing link, parcel number, your intended uses, available documents and the unanswered questions. That small packet makes a conversation with Brad more productive than a folder of favorite photos alone. It also helps identify which questions belong with the broker and which need a surveyor, inspector, utility provider or permitting agency. The aim is to understand the property before allowing an assumption to become part of your plan."
+          "You do not need to solve every technical issue on the first visit. You do need to know which answers are documented, which are observations and which are still assumptions. For each open question, write down the next person to ask and the document or inspection that could help.",
+          "Bring Brad the listing link, parcel numbers, your intended uses and that question list. It gives him a useful starting point for helping you decide what to investigate next—and when a surveyor, inspector, utility provider or permitting office needs to be involved."
         ]
       }
-    ]
+    ],
+    "sources": [
+      {
+        "title": "Clark County: property research and records",
+        "url": "https://clark.wa.gov/community-development/property-research-and-records"
+      },
+      {
+        "title": "Clark County: cadastral mapping overview",
+        "url": "https://clark.wa.gov/assessor/cadastral-mapping-overview"
+      },
+      {
+        "title": "Clark County: on-site septic systems",
+        "url": "https://clark.wa.gov/public-health/site-septic-systems"
+      }
+    ],
+    "relatedLinks": [
+      {
+        "label": "Browse current properties",
+        "href": "/search/"
+      },
+      {
+        "label": "Prepare your buyer checklist",
+        "href": "/buyer-checklist/"
+      },
+      {
+        "label": "Discuss a property with Brad",
+        "href": "/contact/#inquiry"
+      }
+    ],
+    "privateNotes": "Awaiting Brad voice interview and exact-text approval. Sources checked 2026-10-30."
   },
   {
     "slug": "compare-clark-county-communities",
-    "title": "How to Compare Clark County Communities Before Choosing a Home",
-    "summary": "A community can make a great impression during a weekend visit. Choosing a home calls for a second kind of visit: one that looks like an ordinary day. Write down the destinations you use regularly and the times you expect to travel. Then test those routes from actual candidate addresses. A broad city label cannot tell you how your own routine will work.",
+    "title": "Choosing Where to Live in Clark County: Compare Your Everyday Life, Not Just the Listing Photos",
+    "summary": "A good community comparison starts with actual addresses, everyday routes and the same questions at each home. Here is a practical way to narrow your search.",
     "status": "draft",
     "approvedByBrad": false,
-    "sourceReference": "docs/editorial/BLOG-DRAFTS-2026-10-29.md",
+    "sourceReference": "docs/editorial/FIRST-THREE-ARTICLES-2026-10-30.md",
     "sections": [
       {
-        "heading": "Start with a normal Tuesday",
+        "heading": "Start with an ordinary weekday",
         "paragraphs": [
-          "A community can make a great impression during a weekend visit. Choosing a home calls for a second kind of visit: one that looks like an ordinary day. Write down the destinations you use regularly and the times you expect to travel. Then test those routes from actual candidate addresses. A broad city label cannot tell you how your own routine will work."
+          "A good lunch and a pleasant walk can make a place easy to like. Before choosing a home, give yourself another kind of visit: the one that looks like your normal day. Where do you need to be, how often do you go there and when would you leave?",
+          "Write down a few regular destinations. Use candidate property addresses to test the trips that matter most, at the times you would actually make them. A route from the center of a city is a different test from a route starting at the home you are considering."
         ]
       },
       {
-        "heading": "Choose places you would use",
+        "heading": "Choose two or three places to investigate",
         "paragraphs": [
-          "Use local amenities to make your visits specific. Vancouver Waterfront Park connects with the Columbia River Renaissance Trail. Ridgefield's city trail guide includes Abrams Park and refuge connections. Camas has the Round Lake and Lacamas park network. These are useful starting points for a visit, but the right comparison is the trip from the particular home to the public entrance you would use. Nearby on a map does not always mean convenient on foot."
+          "Vancouver, Ridgefield, Camas, Battle Ground, Brush Prairie and Washougal give you several starting points. Trying to rank all of them at once can turn a search into a pile of tabs. Pick two or three for your next round of visits, then compare individual properties within them.",
+          "Keep the questions consistent: parking, outdoor upkeep, storage, access and the space you use every day. A community name does not tell you whether a particular house has the layout or practical features you need."
         ]
       },
       {
-        "heading": "Give each property the same questions",
+        "heading": "Visit the places you would really use",
         "paragraphs": [
-          "Record your priorities before touring: the space you need, outdoor upkeep you are prepared for, storage, parking and the features you cannot compromise on. Ask the same questions at each property. Separate what you observed from what someone needs to confirm. A useful note might say “check the shared driveway documents,” rather than assuming how maintenance works because the driveway looks well cared for."
+          "If walking trails matter to you, choose a real trail entrance and try the trip from the property. Ridgefield’s official trail guide, for example, describes city routes and refuge connections. It also identifies access conditions such as seasonal routes and refuge fees. Check the current guidance before building a routine around a place.",
+          "Do the same for groceries, appointments or other regular stops. Note the actual entrance, parking and walking connection. A green area or business marker near a home on a map is a reason to investigate, not proof of a convenient connection."
         ]
       },
       {
-        "heading": "Verify the details that follow the address",
+        "heading": "Separate observations from things to verify",
         "paragraphs": [
-          "Confirm school assignment with the relevant district and service availability with the providers using the exact address. For property records, start with the appropriate local agency. Do not assume that a community name or mailing address answers every jurisdiction or service question. Keep links to the sources you consulted so you can return to them when a specific property becomes a serious candidate."
+          "Keep three headings in your visit notes: what you liked, what you noticed and what needs an answer. “The driveway is shared” is more useful than “the access seems fine.” It tells you to ask for the relevant documents and understand the arrangement.",
+          "For address-specific questions such as school assignment or service availability, contact the responsible district or provider. For property records, begin with the appropriate local agency. Clark County’s research tools are useful for parcel and permit information; keep the source links with your notes."
         ]
       },
       {
-        "heading": "Keep your comparison small enough to use",
+        "heading": "Compare the home after you compare the location",
         "paragraphs": [
-          "Choose two or three communities for the next round rather than trying to rank the entire county at once. Use the website's community comparison tool and buyer checklist to capture what you learned. Bring Brad your candidate listings, the routes you tested and the remaining questions. That gives the conversation a practical focus: which properties deserve another look, and what information do you need next?"
+          "Picture a normal morning inside each property. Where would you work, keep equipment or bring in groceries? What maintenance would you take on? Which compromises would you still be comfortable with after the excitement of the tour wears off?",
+          "Use the community comparison tool to organize a short list, and the buyer checklist to record your priorities. Bring Brad the listings you are considering and the questions left from your visits. The next conversation can focus on actual choices instead of trying to name one community as the answer for everyone."
         ]
       }
-    ]
+    ],
+    "sources": [
+      {
+        "title": "City of Ridgefield: Find a Trail",
+        "url": "https://ridgefieldwa.us/218/Find-a-Trail"
+      },
+      {
+        "title": "Clark County: property research and records",
+        "url": "https://clark.wa.gov/community-development/property-research-and-records"
+      }
+    ],
+    "relatedLinks": [
+      {
+        "label": "Compare local communities",
+        "href": "/communities/#compare"
+      },
+      {
+        "label": "Build your buyer checklist",
+        "href": "/buyer-checklist/"
+      },
+      {
+        "label": "Talk through your short list",
+        "href": "/contact/#inquiry"
+      }
+    ],
+    "privateNotes": "Awaiting Brad voice interview and exact-text approval. Sources checked 2026-10-30."
+  },
+  {
+    "slug": "before-you-spend-preparing-to-sell",
+    "title": "Getting Ready to Sell in Clark County? Make a Plan Before You Start Spending",
+    "summary": "Before ordering paint, replacing finishes or scheduling major work, organize your goals, property records and questions. A focused preparation plan starts there.",
+    "status": "draft",
+    "approvedByBrad": false,
+    "sourceReference": "docs/editorial/FIRST-THREE-ARTICLES-2026-10-30.md",
+    "sections": [
+      {
+        "heading": "Start with the move you are trying to make",
+        "paragraphs": [
+          "A seller’s to-do list can grow quickly: paint, flooring, landscaping, repairs, photographs. Before booking the work, step back and write down your timing, the amount of work you can manage and the questions you want answered about the sale.",
+          "Bring those details to an early conversation with Brad. A property that needs to be ready soon presents different decisions from one with time for a longer preparation schedule. The first useful question is what needs attention for this property and this move."
+        ]
+      },
+      {
+        "heading": "Sort the list before you price the list",
+        "paragraphs": [
+          "Use three headings: condition questions, presentation and optional changes. Put something you do not understand—such as a recurring leak—under condition questions. Put clearing a cluttered room under presentation. Put replacing a functioning finish simply because you prefer another style under optional changes.",
+          "This is a conversation tool, not a recommendation to leave a problem untreated. It helps you explain what you know and where you need advice. Ask what each proposed project would accomplish, who should evaluate it and how it fits your timing and budget."
+        ]
+      },
+      {
+        "heading": "Collect records while you plan the work",
+        "paragraphs": [
+          "Make a folder for records you already have: permits, service reports, warranties and information about completed improvements. Note anything you cannot find. Clark County offers online property and permit research, and explains that records not available online may need a separate request.",
+          "If the home uses a septic system, raise that early. Clark County Public Health advises sellers and real estate professionals to have a current Report of System Status on file before listing. Check the county’s current guidance and discuss the property with an appropriate certified provider instead of leaving the question until the end of preparation."
+        ]
+      },
+      {
+        "heading": "Make the property easier to understand",
+        "paragraphs": [
+          "A useful presentation lets a buyer see how the rooms and outdoor areas work. Walk through the home with that purpose in mind. Where does stored material hide space? What would you need to explain during a visit? Which features deserve a clear photograph?",
+          "Use the listing-photo guide to plan the views you want to discuss. Photographs should help explain the property accurately. Keep questions about condition and documents on their own list; a good-looking image does not answer them."
+        ]
+      },
+      {
+        "heading": "Agree on the next few actions",
+        "paragraphs": [
+          "You do not need a long list of projects to have a productive first meeting. Bring a short description of your timing, the work you are considering, available records and the questions you cannot answer. Ask Brad to help you organize the next conversation and identify where specialist advice is needed.",
+          "For each action you agree on, record who is handling it and what has to happen before the next step. Use the seller checklist to keep the plan together. The goal is a preparation process you understand, with decisions made deliberately rather than a rush of spending before the listing conversation."
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "title": "Clark County: property research and records",
+        "url": "https://clark.wa.gov/community-development/property-research-and-records"
+      },
+      {
+        "title": "Clark County Public Health: on-site septic systems",
+        "url": "https://clark.wa.gov/public-health/site-septic-systems"
+      }
+    ],
+    "relatedLinks": [
+      {
+        "label": "Build your seller checklist",
+        "href": "/seller-checklist/"
+      },
+      {
+        "label": "Plan listing photographs",
+        "href": "/listing-photos/"
+      },
+      {
+        "label": "Discuss your selling plans",
+        "href": "/sell/#inquiry"
+      }
+    ],
+    "privateNotes": "Awaiting Brad voice interview and exact-text approval. Sources checked 2026-10-30."
   }
 ]
