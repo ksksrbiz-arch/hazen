@@ -34,9 +34,9 @@ A branded subdomain or working search does not establish FUB ownership. Actual a
 
 ## Blog
 
-`src/posts.json` contains two unpublished drafts. `scripts/blog.mjs` requires sources, complete text, Brad approval and valid nonfuture dates. Editorial metadata stays private; rendered content is escaped. No eligible posts means no empty blog route or navigation.
+`src/posts.json` contains three unpublished drafts. `scripts/blog.mjs` requires sources, complete text, Brad approval and valid nonfuture dates. Editorial metadata stays private; rendered content is escaped. No eligible posts means no empty blog route or navigation.
 
-Use `docs/editorial/FIRST-INTERVIEW.md` and `BLOG-DRAFTS-2026-10-29.md`. Do not publish generated prose as Brad's personal voice without his recorded perspective and exact-text approval.
+Use `docs/editorial/FIRST-INTERVIEW.md` and `docs/editorial/FIRST-THREE-ARTICLES-2026-10-30.md`. The local printable review packet is `docs/editorial/FIRST-THREE-ARTICLES-REVIEW.html`; it is not copied into the public build. The October 29 packet is historical and superseded. Do not publish generated prose as Brad's personal voice without his recorded perspective and exact-text approval.
 
 ## Verification and sources
 
@@ -46,3 +46,5 @@ Run relevant gallery/search browser tests and `npm run check:runtime`, then chec
 - https://ylopo.zendesk.com/hc/en-us/articles/360021744372-Overview-of-Your-Home-Search-Site
 - https://bradhazen.realtypronw.net/widgets
 - https://www.realtypronw.net/team/brad-hazen
+
+Article templates render public sources and relatedLinks separately from private sourceReference/notes. Source links require HTTPS without credentials; related tool links must be local paths. Section anchors, reading time and printed source URLs support longer guides.

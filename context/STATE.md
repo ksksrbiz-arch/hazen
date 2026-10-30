@@ -12,7 +12,7 @@ Current implementation and last verified release facts. Historical passes belong
 - PR #22 / merge `2d3f3f9`: polished two-page seller PDF, blank download plus browser-generated filled PDF preserving checks and appending notes. Verified live PDF response, download and extracted notes. Buyer download was subsequently upgraded to the same PDF experience. Preparation entries are page-only, not saved or sent.
 - Footer includes a subtle accessible “Built by 1commerce” badge linking to https://1commercesolutions.com in a new tab.
 - Legacy D1 `/properties/` pages and Studio remain available but are not the featured inventory source. Main navigation and resource links use the Ylopo gallery.
-- Public marketing pages are indexable on production only; widgets, legacy property routes, private routes and empty testimonials remain excluded. Blog drafts are unapproved/unpublished; no blog routes/nav are generated yet.
+- Public marketing pages are indexable on production only; widgets, legacy property routes, private routes and empty testimonials remain excluded. Three full article drafts (acreage research, community comparison and seller preparation) are ready in docs/editorial/FIRST-THREE-ARTICLES-2026-10-30.md with sources and Brad review questions. Blog drafts are unapproved/unpublished; no blog routes/nav are generated yet.
 
 ## Unresolved integration and handoff
 
@@ -21,7 +21,7 @@ Current implementation and last verified release facts. Historical passes belong
 
 - Custom forms prepare email drafts; visitors must send them. No direct delivery endpoint or FUB creation is configured.
 - FUB access, exact Brad user mapping and an end-to-end test remain pending. Ylopo confirmed new registrations/inquiries on Brad's subdomain go to Brad, but existing contacts retain their CRM owner; do not promise all leads go to Brad. Check automatic messages before any authorized test.
-- Last email reviewed: Ylopo Support October 30, 10:28 a.m. Pacific says embedding its search site on bradhazen.com is outside its RMLS/NWMLS agreement and would require a separate MLS agreement/import solution. This is not approval for the currently functioning external widgets. A clarification distinguishing widgets from full-page embedding is drafted, not sent; exact setup, fees and supported agent filtering remain unanswered. User asked to continue backend work for now; integration left unchanged.
+- Last email reviewed: Ylopo Support October 30, 10:28 a.m. Pacific says embedding its search site on bradhazen.com is outside its RMLS/NWMLS agreement and would require a separate MLS agreement/import solution. This is not approval for the currently functioning external widgets. A follow-up was sent October 30 from skdev@1commerce.online with the exact live widget configuration, external-site documentation and comparable sites, requesting written permission, required agreements/fees and attribution review. A 30-minute reply monitor is active; exact setup approval remains unanswered. User asked to continue backend work for now; integration left unchanged.
 - Direct RMLS Broker Specific feed is on hold while using Ylopo. It is not configured or billed by this repo. A working widget is not proof of contractual approval or CRM assignment.
 - Secondary co-listing matching, future inventory/status transitions and more than six featured records are not fully verified.
 - Brad's exact blog wording/approval, final bio/license/brokerage assets/disclosures, commercial maintenance agreement, operating responsibilities, signed-in editor check on the custom domain, physical-device and physical-print acceptance remain to be completed as applicable. Technical launch is already authorized; do not revert it to preview because handoff items remain.
@@ -49,3 +49,5 @@ Current implementation and last verified release facts. Historical passes belong
 - D1 indexes from `002_indexes.sql` were verified present October 18; do not reapply as an outstanding migration.
 - October 18 backup/restore drill passed: 9 photos and database content verified. Local backup is git-ignored; second off-device copy, retention and scheduling remain undecided. Scratch restore resources await a separately authorized cleanup; do not delete by inference.
 - This checkout is `C:/Users/keith/Projects/hazen-site-next`. Other checkout/worktree changes may belong to Keith or another agent; inspect status before editing or merging.
+
+- Blog publication preparation: article templates now include a linked reading guide, reading-time estimate, public source links, related guides and print-friendly source URLs. The three articles remain drafts; editorial notes stay private.

@@ -9,7 +9,7 @@ Live at **https://bradhazen.com/** for Brad Hazen, Realty Pro, Inc. Built and op
 - `/search/` provides on-site city, price, type and bedroom filters, current results, reset/retry and show-more. Listing details, full map, saved searches and account tools open on `https://bradhazen.realtypronw.net/`.
 - Guided buyer/seller preparation and selectable photo planning. Buyer and seller downloads are branded PDFs, including checked items and notes. Entries stay in the page unless the visitor downloads/prints them.
 - Private Cloudflare Access-protected `/studio/` uses D1/R2 for legacy/manual listing pages. It does not control the Ylopo gallery or update RMLS.
-- Blog infrastructure exists, but the two draft posts are unapproved and unpublished. No empty blog is exposed.
+- Blog infrastructure exists, but the three draft posts are unapproved and unpublished. No empty blog is exposed.
 
 **Lead routing is not certified.** Custom-site forms prepare an email draft that the visitor must send. They do not deliver to a server or create Follow Up Boss leads. Ylopo/FUB assignment, provider approval/setup details and fees still need confirmation; see [current state](context/STATE.md). Working search and Brad-branded URLs do not prove lead ownership.
 

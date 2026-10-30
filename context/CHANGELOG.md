@@ -298,3 +298,11 @@ PR #26 and deployment `ae54ce76-8d79-4e14-a4d0-7fb9b1cb75a0` verified on bradhaz
 - Fixed resource category Back/Forward visibility, worksheet reset focus and post-load worksheet fragment navigation.
 - Community structured data now identifies the actual community Place and credits its licensed primary photograph, retaining Brad as publisher.
 - Validation: 139 Node tests, 104 browser checks, format/build/routes/assets/ICM passed. Desktop/mobile screenshots reviewed; no overflow and header fits at 1151px/1280px. Physical-device and screen-reader checks remain unperformed.
+
+## October 30, 2026 — first three article drafts
+
+Developed the two existing drafts and added seller preparation, with practical actions, official local sources checked October 30, proposed internal links and three voice/review prompts per article. Added individual Markdown articles and a printable local HTML review packet. All three remain draft/unapproved with no publication dates; no blog routes or bylines are published. Brad has not yet supplied voice samples or firsthand examples.
+
+## October 30 — Article publication preparation and provider follow-up
+
+Added article reading guides, reading time, safe public sources, related tools and print source URLs. Drafts remain unpublished and approval-gated. Sent the authorized Ylopo clarification with documentation/examples and activated a 30-minute reply monitor. Validation: 140 Node tests and build/route/format/ICM checks passed. Browser suite: 103 passed initially; one provider-page load timeout passed on its targeted rerun. Article preview at 390px and 1280px passed overflow and section-navigation checks; mobile screenshot reviewed. Draft routes remain absent from the public build.

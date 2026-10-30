@@ -1,26 +1,16 @@
-# Brad's first two articles: interview and review kit
+# Brad's first three articles: interview and review kit
 
-Private working material. Nothing here is an article attributed to Brad.
+Private editorial material. Use the current drafts and three questions per article in [the October 30 review packet](FIRST-THREE-ARTICLES-2026-10-30.md). Earlier article outlines are superseded.
 
-## 25-minute conversation
+## A 20-minute conversation
 
-Ask Brad if recording is okay. Have him talk as if answering one client, not giving a presentation. Skip client names, exact addresses and identifying details.
+Ask permission before recording. Have Brad answer as if talking to one client. Preserve his exact phrases; do not invent anecdotes or identify clients.
 
-### Article 1: Before you spend money getting your property ready to sell
+1. Acreage: what he asks first, the assumption he most often corrects, and one anonymous example.
+2. Community comparison: how he narrows a search, everyday details buyers overlook, and how he explains priorities.
+3. Seller preparation: what he asks before recommending work, projects he wants to discuss before money is spent, and what to bring to the first meeting.
 
-- What do you ask a seller before recommending any work?
-- Tell me about a repair or improvement that made sense, and one that did not. Why?
-- What would change your advice: property type, condition, budget or timing?
-- What are three questions the seller should ask before spending money?
-- What should they bring to a first conversation with you?
-
-### Article 2: What you look for when walking a property
-
-- Walk me through what catches your attention first.
-- What can you observe yourself, and what needs an inspector, surveyor or other specialist?
-- Is there a land-related question people overlook? Explain without making a legal or permitting promise.
-- Give an anonymized example and explain what you asked next.
-- What can photos leave out that a visit helps clarify?
+Use his answers to revise the draft, then ask him to approve the exact version. No quotations or first-person experience should be attributed to him until captured and checked.
 
 ## Capture sheet — repeat for each article
 

@@ -24,7 +24,7 @@ test('six community guides have distinct sourced content and usable search metad
 
 test('researched blog drafts cannot publish without Brad approval', async () => {
   const posts = JSON.parse(await readFile(new URL('../src/posts.json', import.meta.url), 'utf8'));
-  assert.equal(posts.length, 2);
+  assert.equal(posts.length, 3);
   for (const post of posts) {
     assert.equal(post.status, 'draft');
     assert.equal(post.approvedByBrad, false);
