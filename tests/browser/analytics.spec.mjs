@@ -1,5 +1,6 @@
 import {test, expect} from '@playwright/test';
 import {analyticsCsp} from '../../server/response-security.js';
+import {mkdir} from 'node:fs/promises';
 
 async function localProduction(page) {
   await page.route('https://bradhazen.com/**', async route => {
@@ -91,4 +92,21 @@ test('preview and private pages do not initialize Google analytics', async ({pag
   await localProduction(page);
   await page.goto('https://bradhazen.com/agent-login/');
   expect(await page.evaluate(() => typeof window.bradTrack)).toBe('undefined');
+});
+
+test('consent choices fit a narrow screen and remain above the mobile contact bar', async ({page}) => {
+  await page.setViewportSize({width: 320, height: 700});
+  await localProduction(page);
+  await page.goto('https://bradhazen.com/contact/');
+  const panel = page.getByRole('region', {name: 'Analytics cookie choice'});
+  await expect(panel).toBeVisible();
+  const box = await panel.boundingBox();
+  expect(box.x).toBeGreaterThanOrEqual(0);
+  expect(box.x + box.width).toBeLessThanOrEqual(320);
+  expect(box.y).toBeGreaterThanOrEqual(0);
+  expect(box.y + box.height).toBeLessThanOrEqual(624);
+  await mkdir('test-results/analytics-proof', {recursive: true});
+  await page.screenshot({path: 'test-results/analytics-proof/consent-mobile.png'});
+  await page.getByRole('button', {name: 'No thanks', exact: true}).click();
+  await expect(panel).toBeHidden();
 });

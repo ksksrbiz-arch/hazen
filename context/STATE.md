@@ -16,7 +16,7 @@ Current implementation and last verified release facts. Historical passes belong
 
 ## Unresolved integration and handoff
 
-- Analytics release work: dedicated GA4 `G-QSEE7DZFHP` and GTM `GTM-WG4QVGN8` (version 2 published); custom site installation is being validated for release. Event definitions and limits: `context/references/analytics.md`. Realty Pro subdomain code installation remains unavailable in Brad's exposed account controls; exact-domain Google configuration alone is not installation. Provider handoff prepared, not sent.
+- Analytics is live via PR #26 / merge `af42392`: GA4 `G-QSEE7DZFHP`, GTM `GTM-WG4QVGN8` version 2. Production deployment `ae54ce76-8d79-4e14-a4d0-7fb9b1cb75a0` succeeded. Live page/search/results and listing-click requests returned Google HTTP 204; Realtime showed the test session. Both Brad (210989090) and other-agent (271604944) clicks carried the correct independent scope/owner fields. Seven custom dimensions and 14-month event retention are configured; Search Console is linked. Event definitions and limits: `context/references/analytics.md`. Realty Pro subdomain code installation remains unavailable in Brad's exposed account controls; exact-domain Google configuration alone is not installation. Provider handoff prepared, not sent.
 - Search Console domain verification and sitemap submission succeeded (21 discovered URLs). Homepage live test passed indexability; the manual indexing request hit a reCAPTCHA connection failure. Do not report indexed or queued without new evidence.
 
 - Custom forms prepare email drafts; visitors must send them. No direct delivery endpoint or FUB creation is configured.
