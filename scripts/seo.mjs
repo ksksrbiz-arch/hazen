@@ -23,7 +23,9 @@ export function pageSeo(page, description) {
     description: community
       ? `Explore ${page.title}, Washington: local places, property-search questions and official resources. Plan your next move with Brad Hazen.`
       : description,
-    url: `https://bradhazen.com/${page.slug}${page.slug ? '/' : ''}`
+    url: `https://bradhazen.com/${page.slug}${page.slug ? '/' : ''}`,
+    image: `https://bradhazen.com/assets/${community && page.photo ? page.photo.file : 'river-hero.webp'}`,
+    imageAlt: community && page.photo ? page.photo.caption : 'Illustrative Pacific Northwest river landscape'
   };
 }
 

@@ -1,5 +1,6 @@
 import {contact} from '../src/contact.js';
 import {listLines, detailPairs} from '../src/listing-model.js';
+import {cleanDraft} from './listings.js';
 export const escapeHTML = value =>
   String(value ?? '').replace(
     /[&<>"']/g,
@@ -143,7 +144,14 @@ export async function published(env) {
     // One unreadable snapshot must not take the whole collection down.
     try {
       const item = JSON.parse(row.published_json);
-      if (!item || !Array.isArray(item.images) || !item.images.length || typeof item.slug !== 'string')
+      // Validate nested photos and optional field types too: a nonempty images array
+      // alone can still contain null, and detail metadata expects text descriptions.
+      cleanDraft(item);
+      if (
+        !item.images.length ||
+        ['slug', 'title', 'address', 'description'].some(field => typeof item[field] !== 'string') ||
+        !Number.isFinite(item.price)
+      )
         throw Error('Incomplete snapshot');
       items.push({id: row.id, item});
     } catch (error) {

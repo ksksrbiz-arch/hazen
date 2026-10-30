@@ -69,6 +69,7 @@
   ]);
   let enabled = false,
     loaded = false;
+  let choiceTrigger;
   const pagePath = document.querySelector('link[rel="canonical"]')?.getAttribute('href') || 'https://bradhazen.com/';
   const pageType = location.pathname.startsWith('/communities/')
     ? 'community'
@@ -159,6 +160,8 @@
       localStorage.setItem(key, JSON.stringify({allowed: yes, at: Date.now()}));
     } catch {}
     panel.hidden = true;
+    choiceTrigger?.focus();
+    choiceTrigger = undefined;
     if (yes) start();
     else {
       enabled = false;
@@ -180,6 +183,7 @@
   document.querySelectorAll('[data-analytics-settings]').forEach(button => {
     button.hidden = false;
     button.addEventListener('click', () => {
+      choiceTrigger = button;
       panel.hidden = false;
       panel.querySelector('button').focus();
     });
@@ -234,7 +238,8 @@
     if (button.matches('[data-plan-next]')) track('guide_step', {action: 'next'});
     if (button.matches('[data-plan-back]')) track('guide_step', {action: 'back'});
     if (button.matches('[data-plan-all]')) track('guide_review', {action: 'all'});
-    if (button.matches('.edit-inquiry')) track('inquiry_edit', {action: 'edit'});
+    if (button.matches('.edit-inquiry'))
+      track('inquiry_edit', {action: 'edit', form_type: button.closest('[data-inquiry]')?.dataset.inquiry});
   });
   const started = new WeakSet();
   document.addEventListener('focusin', e => {

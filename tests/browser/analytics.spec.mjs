@@ -94,6 +94,28 @@ test('preview and private pages do not initialize Google analytics', async ({pag
   expect(await page.evaluate(() => typeof window.bradTrack)).toBe('undefined');
 });
 
+test('inquiry measurement preserves form context without sending answers', async ({page}) => {
+  await localProduction(page);
+  await page.goto('https://bradhazen.com/buy/');
+  await page.getByRole('button', {name: 'Allow analytics', exact: true}).click();
+  const form = page.locator('[data-inquiry="buy"]');
+  await form.locator('button[type="submit"]').click();
+  await form.locator('#inquiry-name').fill('Private Visitor');
+  await form.locator('#inquiry-email').fill('private@example.com');
+  await form.locator('button[type="submit"]').click();
+  await expect(form.locator('.email-backup')).toBeVisible();
+  await form.locator('.edit-inquiry').click();
+  const measured = await page.evaluate(() =>
+    window.dataLayer.filter(e => ['inquiry_validation_error', 'email_draft_ready', 'inquiry_edit'].includes(e.event))
+  );
+  expect(measured.map(e => e.event)).toEqual(['inquiry_validation_error', 'email_draft_ready', 'inquiry_edit']);
+  expect(measured.every(e => e.form_type === 'buy')).toBe(true);
+  expect(JSON.stringify(measured)).not.toMatch(/Private Visitor|private@example/);
+  await page.getByRole('button', {name: 'Cookie choices', exact: true}).click();
+  await page.getByRole('button', {name: 'Allow analytics', exact: true}).click();
+  await expect(page.getByRole('button', {name: 'Cookie choices', exact: true})).toBeFocused();
+});
+
 test('consent choices fit a narrow screen and remain above the mobile contact bar', async ({page}) => {
   await page.setViewportSize({width: 320, height: 700});
   await localProduction(page);
