@@ -1,14 +1,20 @@
 # Architecture and operations (reference)
 
-Load this before changing `functions/`, `server/`, `database/`, Cloudflare configuration, authentication or the publication model. Reorganised on 2026-10-18 from docs/LISTING_WORKSPACE.md (sections dated 2026-10-10 to 2026-10-12), text unchanged. Deployment settings are in `context/references/cloudflare-pages.md`; editor behaviour is in `context/references/listing-studio.md`.
+Load this before changing `functions/`, `server/`, `database/`, Cloudflare configuration, authentication or the publication model. Updated for the production/Ylopo boundary; historical backend details remain applicable. Deployment settings are in `context/references/cloudflare-pages.md`; editor behaviour is in `context/references/listing-studio.md`.
 
-## Connected on October 10, 2026
+## Hosting and protected manual backend
 
-The website stays on Cloudflare Pages (`hazen`, `hazen-ci5.pages.dev`). Production uses a dedicated D1 database `hazen-listings` and private R2 bucket `hazen-listing-photos`. No unrelated projects or buckets are used.
+The website uses Cloudflare Pages (`hazen`, production `bradhazen.com`, preview hostname `hazen-ci5.pages.dev`). Production uses a dedicated D1 database `hazen-listings` and private R2 bucket `hazen-listing-photos`. No unrelated projects or buckets are used.
 
 Cloudflare Access application **Hazen Listing Studio** protects `/studio` and `/api/admin`. Existing email one-time-pin identity provider is used. Enrolled editors: `skdev@1commercesolutions.com`, `b.hazen@hotmail.com`, and `skdev@1commerce.online`. The latter two were explicitly requested and added to both the Access allow policy and production `EDITOR_EMAILS` on October 10, 2026. No password or MLS credentials belong in the repository or browser code.
 
 Functions verify Access JWT signatures, issuer, audience, expiration, subject and editor email. Alternate deployment URLs remain protected by origin verification, even where an Access gateway is absent. Preview builds have no production database, storage or authentication bindings and cannot change production listings. Production and preview fail closed.
+
+## Public listing/search boundary
+
+Homepage and `/brads-listings/` use isolated Ylopo `/listing-widget/`; `/search/` uses `/search-widget/`. These do not read D1. D1 publication affects legacy `/properties/` routes, not current featured inventory. Full map/details/accounts remain provider-hosted. See `search-and-blog-implementation.md` for exact filters, grouping and iframe security.
+
+Static HTML defaults to noindex; `server/site-domain.js` rewrites eligible production marketing responses. Preserve widget/legacy/private exclusions and parent CSP.
 
 ## Storage and publication
 
@@ -24,7 +30,7 @@ Cloudflare Access controls entry, with a second editor allowlist at the origin. 
 
 The first authenticated live session was verified with `skdev@1commercesolutions.com`: cloud draft creation, photo upload, saving and reload succeeded. The private QA record was archived with history retained. No test property was published to production. `npm run check:runtime` runs the compiled Pages Functions against isolated local D1/R2, including homepage/collection/detail rendering, private-note exclusion, anonymous rejection, media and unpublication. Before client launch, verify upload, reload, publication and unpublication with Brad’s first approved listing. Confirm backup/retention requirements, domain ownership, authorized assets and client content. No automated backup export/restore UI is provided yet; archived listings can be restored by an authorized editor in the studio.
 
-Automated showing/contact delivery is not connected: visitors use their own email application or call Brad. Add a verified sender/provider, approved recipient, bot protection, server validation and a truthful delivery result separately. MLS import and visitor accounts/alerts remain the separately planned IDX phase; an MLS login alone is not website API authorization.
+Automated showing/contact delivery is not connected: visitors use their own email application or call Brad. Add a verified sender/provider, approved recipient, bot protection, server validation and a truthful delivery result separately. No custom MLS import or account system exists; current provider-hosted search accounts are separate. An MLS login alone is not API authorization.
 
 An earlier, never-applied Supabase design (`database/migrations/001_listing_workspace.sql`) was removed on October 12, 2026 because this Cloudflare implementation superseded it; it remains in git history. `database/cloudflare/` is the only schema directory.
 
@@ -32,7 +38,7 @@ An earlier, never-applied Supabase design (`database/migrations/001_listing_work
 
 Photo uploads reserve the photo name and enforce the 200-upload history cap in one atomic D1 statement before the R2 write; an R2 failure removes the reservation. Request bodies are read with a hard size bound even without `Content-Length`. Storage or unexpected failures now return 500 (logged with the cause) instead of a misleading 400; missing Access configuration returns 503 instead of looking like a sign-in prompt. Draft numeric/boolean fields are type-checked on save. Publishing verifies all photos with one registration query. One unusable published snapshot is skipped rather than failing the collection. The library reports when more than 200 listings exist. The photo size limit lives in `src/listing-model.js` for both browser and server.
 
-`database/cloudflare/002_indexes.sql` adds additive indexes. **It must be applied to the production D1 database** (`wrangler d1 execute hazen-listings --remote --file database/cloudflare/002_indexes.sql`) — deploying code does not migrate. Tests and the runtime check load every file in that directory in order.
+`database/cloudflare/002_indexes.sql` adds additive indexes. For a new database, apply it through the migration workflow (`wrangler d1 execute hazen-listings --remote --file database/cloudflare/002_indexes.sql`) — deploying code does not migrate. Tests and the runtime check load every file in that directory in order.
 
 Verified 2026-10-18: all three indexes in `002_indexes.sql` already exist in production `hazen-listings` with definitions matching the file (read-only query of `sqlite_master`). The procedure for future migrations is `context/workflows/d1-migration/`.
 

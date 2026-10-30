@@ -1,25 +1,51 @@
-# Brad Hazen — agent website scaffold
+# Brad Hazen — real estate website
 
-Phase 1: marketing and lead-generation website closely matching Realty Pro’s layout and visual direction. No visitor accounts or MLS integration. Deployed for design review at https://hazen-ci5.pages.dev/; not ready for final production launch.
+Live at **https://bradhazen.com/** for Brad Hazen, Realty Pro, Inc. Built and operated by Keith Skaggs / **1commerce LLC**. Cloudflare Pages project `hazen` deploys `main`; `https://hazen-ci5.pages.dev/` is the non-indexed preview hostname. Repository: https://github.com/ksksrbiz-arch/hazen.
 
-Run `npm ci`, `npm run build` and `npm run check`, then `npm run preview` and open http://localhost:8000. The server uses `jose` for Access token verification; Wrangler is a development dependency. Edit `src/content.json` and `src/styles.css`; build generates physical route directories for refresh-safe navigation.
+## What is live
 
-Start with [the project plan](context/references/project-plan.md). Contact details and brokerage name were transcribed from Brad’s supplied card. Current credentials, service areas, listing content and testimonials await confirmation. No fictional properties or reviews are supplied. Contact, buyer, seller, and assessment forms prepare email drafts with a copyable fallback. Visitors send these through their own email application; direct website delivery is not configured. Six community guides include official local resource links.
+- Marketing pages, six researched community guides, local photography with public source/license/date credits, and community comparison.
+- `/brads-listings/` and the homepage show Brad's current Ylopo listings. The verified Yacolt land/commercial pair shares one card with both detail links.
+- `/search/` provides on-site city, price, type and bedroom filters, current results, reset/retry and show-more. Listing details, full map, saved searches and account tools open on `https://bradhazen.realtypronw.net/`.
+- Guided buyer/seller preparation and selectable photo planning. Seller downloads are branded PDFs, including checked items and notes; buyer export remains text. Entries stay in the page unless the visitor downloads/prints them.
+- Private Cloudflare Access-protected `/studio/` uses D1/R2 for legacy/manual listing pages. It does not control the Ylopo gallery or update RMLS.
+- Blog infrastructure exists, but the two draft posts are unapproved and unpublished. No empty blog is exposed.
 
-Repository: https://github.com/ksksrbiz-arch/hazen (private). Client ownership remains to be agreed. No GitHub Actions.
+**Lead routing is not certified.** Custom-site forms prepare an email draft that the visitor must send. They do not deliver to a server or create Follow Up Boss leads. Ylopo/FUB assignment, provider approval/setup details and fees still need confirmation; see [current state](context/STATE.md). Working search and Brad-branded URLs do not prove lead ownership.
 
-Client intake: [what to ask Brad](context/references/client-intake.md). Assets and CSS are content-versioned at build time; changes receive new filenames to prevent stale image/style caches. The Pages output remains `dist`.
+## Develop and verify
 
-Planning: [IDX Phase 2](context/references/idx-and-mls.md). Manually maintained properties and testimonials are supported through the collections in `src/content.json`; see [content editing](context/references/content-editing.md). Empty collections render useful contact paths without fictional listings or reviews.
+Node 22+ (Cloudflare is configured for Node 24):
 
-Listing workspace: `/studio/` is protected by Cloudflare Access email sign-in. It saves drafts to D1 and photos to a private R2 bucket. Publish updates dynamic property pages and homepage features immediately; later draft edits stay private. See [workspace operations](context/references/listing-studio.md). MLS import and automated inquiry delivery remain pending.
+```sh
+npm ci
+npx playwright install chromium
+npm run verify
+npm run test:browser
+npm run check:runtime
+```
 
-Property presentation: published listings support an enlarged photo viewer, link sharing and printable property sheets. Saved full-page previews remain private to enrolled editors at `/studio/preview/[id]/`. Run `npm test` and `npm run check:runtime` to verify storage, authentication, rendering and publication behavior in isolated fixtures.
+`verify` runs formatting, Node tests, build, route/asset checks and ICM checks. Browser tests cover navigation, mobile widths, accessibility, search, gallery grouping, guided preparation and PDF download. Runtime checks compile Pages Functions and exercise isolated D1/R2/auth plus emitted search-script execution; Chromium is required for that check too.
 
-Client handoff: the private operating guide is at `/studio/guide/`, linked from the editor. It includes a downloadable text copy. See [launch readiness](context/workflows/launch-check/CONTEXT.md) for remaining client inputs and final checks. Brad owns listing entry and real estate operations after handoff.
+For a local preview with fixture-backed Functions and production headers, run `node tests/browser/static-server.mjs` after building and open `http://localhost:4173` (`PORT` can override). `npm run preview` is a static-only Python server on port 8000: it does not reproduce Functions, Access or live hostname indexing behavior.
 
-Browser checks: `npm run test:browser` serves `dist/` with the production security headers and runs Chromium smoke tests (every public route loads without console/CSP errors and without horizontal scroll at 320px, mobile menu, inquiry flow, 404 recovery) plus an axe WCAG A/AA scan of key pages. Run `npm run build` first. It is separate from `npm run verify` because it needs a browser; on a machine without one, run `npx playwright install chromium` (or set `PW_CHROMIUM` to a Chromium binary). These are automated checks, not a substitute for keyboard, screen-reader, real-device and print review.
+Cloudflare's build command is `npm run verify`, output `dist`; it does not run the browser/runtime suites automatically. There is no GitHub Actions workflow. Run the applicable checks before merging. `dist` is generated, not edited. Source assets/CSS/scripts are fingerprinted; PDF generation code is loaded only when requested.
 
-Formatting: code is formatted with Prettier (`npm run format`; `npm run format:check` is part of `npm run verify`). Config is in `.prettierrc.json`; CSS, JSON content, docs and SQL are not reformatted. `npm test` also syntax-checks every browser/server module and every built browser script, and verifies that built relative imports resolve.
+## Source map
 
-Agent and contributor context: start at [CLAUDE.md](CLAUDE.md); current status is in `context/STATE.md`, history in `context/CHANGELOG.md`.
+| Area                               | Files                                                                                                                                   |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Build, routes, shared layout       | `scripts/build.mjs`, `src/content.json`, `src/styles.css`, `src/editorial.css`, `src/site.js`                                           |
+| Featured gallery / Yacolt grouping | `server/ylopo-gallery.js`                                                                                                               |
+| On-site search                     | `scripts/property-search.mjs`, `server/search-widget.js`, `src/search-widget-client.js`                                                 |
+| Guides and real community images   | `scripts/community-guides.mjs`, `src/community-photos.json`, `src/assets/community-*.webp`                                              |
+| Preparation / printable seller PDF | `scripts/resources.mjs`, `scripts/conversation-worksheet.mjs`, `scripts/seller-worksheet.mjs`, `src/resources.css`, `src/seller-pdf.js` |
+| Blog approval gates                | `scripts/blog.mjs`, `src/posts.json`, `docs/editorial/`                                                                                 |
+| Hostname indexing / security       | `server/site-domain.js`, `functions/_middleware.js`, `server/response-security.js`                                                      |
+| Legacy editor and storage          | `src/studio.js`, `server/listings.js`, `database/cloudflare/`                                                                           |
+
+## Contributor guidance
+
+Start with [AGENTS.md](AGENTS.md), then [CLAUDE.md](CLAUDE.md) and [current state](context/STATE.md). Stable operating references live in `context/references/`; recurring workflows in `context/workflows/`; dated history in [CHANGELOG](context/CHANGELOG.md).
+
+Read [search integration](context/references/search-and-blog-implementation.md), [deployment](context/references/cloudflare-pages.md), [preparation/PDF maintenance](context/references/preparation-tools.md) or [image rights](context/references/image-assets.md) as appropriate. Preserve provider attribution, preview noindex, private editor protection, blog approval gates and truthful inquiry wording. Never commit credentials, backups or private client data.

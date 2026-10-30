@@ -10,11 +10,13 @@ Makes a code, content or style change to the Hazen site and proves it with the r
 | `context/references/content-editing.md` (copy and property or testimonial fields) | `context/references/idx-and-mls.md` |
 | `context/references/architecture.md` (only for `functions/`, `server/`, `database/`) | `context/references/brad-profile-sources.md` unless editing Brad's bio |
 | `context/references/image-assets.md` (only for images) | other workflow contracts |
+| `context/references/preparation-tools.md` (guided tools or PDFs) | unrelated references |
+| `context/references/search-and-blog-implementation.md` (search/gallery/blog) | historical lab experiments unless diagnosing them |
 
 ## Input
 
 - A described change. Facts about Brad (credentials, areas, statistics, reviews, listings) must come from Brad or the sources in `context/references/client-content.md`; never invent them.
-- Content lives in `src/content.json` and `src/styles.css`; pages are built by `scripts/build.mjs`.
+- Use the README source map; generated guides, photo metadata, preparation and search have dedicated modules beyond `src/content.json`. Build entry is `scripts/build.mjs`.
 
 ## Process
 
@@ -26,14 +28,14 @@ Makes a code, content or style change to the Hazen site and proves it with the r
 
 ## Output
 
-A committed change on a branch, passing `npm run verify`, with the changelog entry. The Pages preview builds from `main` through Cloudflare's Git integration.
+A committed change on a branch, passing `npm run verify`, with the changelog entry. Cloudflare deploys `main` to bradhazen.com; branch previews stay noindex. Verify the deployed result when release is authorized.
 
 ## Stop conditions
 
 - The change needs a fact only Brad can supply: record it as an open input in `context/STATE.md` and leave a visible placeholder-free fallback.
-- It would enable indexing, a sitemap or a production domain before Keith's launch approval.
+- It introduces a new unapproved domain/indexing/access change; existing bradhazen.com launch approval persists.
 - It touches the D1 schema: use `context/workflows/d1-migration/`.
 
 ## Completion
 
-Done when `npm run verify` passes (plus the extra checks above where they apply), the changelog is updated, and Keith has merged it.
+Done when `npm run verify` passes (plus the extra checks above where they apply), the changelog is updated, and the authorized release is merged and verified, or the explicitly requested review-only handoff is delivered. Documentation-only changes need documentation/link/ICM checks; do not run unrelated browser tests without a reason.

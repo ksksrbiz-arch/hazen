@@ -1,6 +1,6 @@
 # Workflow: Listing import (manual)
 
-Puts one of Brad's authorized listings into Studio as a draft with its evidence recorded, and publishes it only when Keith or Brad authorizes. There is no import script and no MLS feed; this is a manual workflow.
+Puts one of Brad's authorized listings into Studio as a draft with its evidence recorded, and publishes it only when Keith or Brad authorizes. This is a manual legacy-D1 workflow, separate from the live Ylopo gallery. Do not create duplicate D1 records merely to make a provider listing appear on the homepage.
 
 ## Load / exclude
 

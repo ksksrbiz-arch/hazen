@@ -1,5 +1,7 @@
 # Private Ylopo integration lab
 
+Historical diagnostic fixtures, not production implementation. Current automatic agent filter, on-site results, Yacolt grouping and security boundaries are in `context/references/search-and-blog-implementation.md` at the repo root. MLS-only selection and pending production checks below describe earlier experiments; do not copy them over the live integration. These tools are excluded from `dist`.
+
 Run from repository root:
 
 ```powershell

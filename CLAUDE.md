@@ -1,15 +1,15 @@
 # Hazen — Claude Router
 
 Root router for AI agents in this repo. Routing only: detail lives in `context/`. Hard cap 80 lines.
-Mission: Brad Hazen's agent marketing and listing site (Cloudflare Pages, D1, R2), built and run by 1Commerce LLC for Keith Skaggs.
+Mission: Brad Hazen's agent marketing and listing site (Cloudflare Pages, D1, R2), built and run by 1commerce LLC for Keith Skaggs.
 
 ## Non-negotiables
 
 1. **Verify before asserting.** Read the repo, run the tests, inspect the live result.
 2. **Never invent facts** about Brad: credentials, areas, statistics, reviews, listings, prices. Say `VERIFY`.
 3. **Deterministic code owns deterministic work.** AI judges, routes, summarizes, proposes.
-4. **Human approval is a state boundary.** Publishing a listing, indexing, domain changes and production D1 changes need Keith's or Brad's approval.
-5. **No MLS scraping and no automatic MLS sync.** Listing status is manually maintained.
+4. **Honor session authorization.** Complete authorized releases without re-asking. New listing content, third-party charges, production data/access changes and messages need the applicable authorization; do not treat ordinary authorized site work as blocked.
+5. **No MLS scraping or custom inventory sync.** Approved Ylopo widgets load current listings automatically. Legacy D1 listings remain manual; do not conflate them or restore MLS-number-only selection.
 6. **Never commit secrets or `backups/`.** Do not collect Brad's MLS password.
 7. **Cathedral order.** Foundation, Revenue, Systems, Scale: flag scale-before-revenue.
 
@@ -29,7 +29,8 @@ Mission: Brad Hazen's agent marketing and listing site (Cloudflare Pages, D1, R2
 | Images and photo assets | `context/references/image-assets.md` | `context/references/architecture.md` |
 | Brad's facts and sources | `context/references/client-content.md`, `context/references/brad-profile-sources.md` | `context/workflows/` |
 | What to ask Brad | `context/references/client-intake.md` | `context/workflows/` |
-| MLS, IDX, Ylopo, accounts, alerts | `context/references/idx-and-mls.md` | `context/workflows/` |
+| MLS, IDX, Ylopo, accounts, alerts | `context/references/search-and-blog-implementation.md`, `context/references/idx-and-mls.md` | unrelated workflows |
+| Preparation tools or PDFs | `context/references/preparation-tools.md` | unrelated workflows |
 | Scope, sitemap, milestones, acceptance | `context/references/project-plan.md` | `context/CHANGELOG.md` |
 | What changed and when | `context/CHANGELOG.md` | everything else |
 | Change this structure | `context/references/icm-rules.md` | workflows you are not changing |

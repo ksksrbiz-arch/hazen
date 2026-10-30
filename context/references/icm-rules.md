@@ -4,7 +4,7 @@ Load this before creating or editing any `CONTEXT.md`, router, or reference file
 
 ## Layout
 
-- `CLAUDE.md` at the repo root is the router: routing only, at most 80 lines.
+- `AGENTS.md` is the cross-agent entry point; `CLAUDE.md` remains the shared router (at most 80 lines). Keep AGENTS concise and route to the shared instructions rather than duplicating them.
 - `context/references/` holds stable detail: one subject per file, at most 200 lines each.
 - `context/workflows/<name>/CONTEXT.md` holds one contract per recurring job.
 - Some repos name the folder `.ai/` instead of `context/`. Pick one per repo and keep it.

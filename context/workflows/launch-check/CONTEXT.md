@@ -1,6 +1,6 @@
 # Workflow: Launch check
 
-Produces a signed-off decision on whether the Hazen site can leave design preview, with every check observed and recorded, and Brad's handoff completed.
+Checks production releases and remaining client handoff. The site is already live under Keith's October 29 approval; do not treat this checklist as an instruction to revert indexing or block previously authorized work.
 
 ## Load / exclude
 
@@ -25,19 +25,19 @@ Produces a signed-off decision on whether the Hazen site can leave design previe
 - [ ] Brad signs in with his own authorized editor identity.
 - [ ] With Brad's approved listing, demonstrate save, reload, preview and publication. Verify details and cover photo on public pages.
 - [ ] Verify a later edit stays private until republished; demonstrate unpublish and restore without losing the draft.
-- [ ] Check homepage features and Active/Pending/Sold presentation with approved data.
+- [ ] Check the Ylopo homepage/gallery/search and both Yacolt links. Check legacy Studio status behavior only where used.
 - [ ] Confirm inquiry review/copy/email behavior with authorized test content. Send a delivery test only if explicitly approved.
-- [ ] Verify chosen IDX search, links, responsive behavior and provider disclosures once connected.
+- [ ] Verify connected Ylopo search, links and attribution; separately verify provider approval and FUB routing with authorized access/test data.
 - [ ] Check phone and desktop layout, keyboard focus, gallery, menu and contact paths.
 - [ ] Verify actual print/PDF output; print styles alone are not proof of a tested printout.
 - [ ] Run one real backup, verify and restore drill using `npm run backup` (runbook: `context/workflows/backup-drill/`), and confirm retention needs. Backups run on demand; nothing schedules them automatically yet.
-- [ ] Verify final domain, redirects, canonical/share URLs and permissions. Enable indexing and sitemap only after launch approval.
+- [ ] Verify final domain, redirects, canonical/share URLs and permissions. Preserve approved production indexing and preview/private exclusions.
 - [ ] Decide analytics/privacy settings; do not add third-party tracking by default.
 - [ ] Remove or update preview notices and placeholders only after approved replacements exist.
 
 2. Handoff session (from the launch readiness plan, 2026-10-11):
 
-Open the private guide. Have Brad create and manage an approved listing himself while Keith observes. Cover photo format/preparation, descriptions, review date, saved vs published state, status changes, unpublish/archive/restore, downloaded promotion copy and inquiry follow-up. Confirm Brad keeps source photos and understands that this editor does not update the MLS. Record final acceptance and the agreed maintenance start date.
+Open the private guide. Confirm who will operate the legacy Studio before assigning it to Brad; he has asked Keith to handle technical work. Demonstrate the workflows they agree to use. Cover photo format/preparation, descriptions, review date, saved vs published state, status changes, unpublish/archive/restore, downloaded promotion copy and inquiry follow-up. Confirm Brad keeps source photos and understands that this editor does not update the MLS. Record final acceptance and the agreed maintenance start date.
 
 ## Output
 
@@ -45,10 +45,10 @@ The checklist with each item checked or marked `VERIFY`, the recorded final acce
 
 ## Stop conditions
 
-- Any required client input in `context/STATE.md` is still open: list it, do not launch around it.
+- A requested change depends on missing client/provider information: record that dependency and continue independent authorized work.
 - Indexing, sitemap or production domain changes are requested before Keith records launch approval.
 - A check can only be shown by automated tests but needs a person (keyboard, screen reader, real device, printed output): mark it `VERIFY`.
 
 ## Completion
 
-Done when every checklist item is observed or explicitly deferred by Keith, Brad has created and managed an approved listing himself, final acceptance is recorded in `context/STATE.md`, and Keith approves going live. Preview notices and noindex are removed only after that approval.
+Done when applicable checks are observed or explicitly deferred, operating responsibilities and acceptance are recorded, and the authorized release is verified. Keep preview noindex and private protections. Technical deployment and full client handoff are distinct completion states.
