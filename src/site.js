@@ -461,7 +461,33 @@ if (worksheet) {
   if (progressPanel) progressPanel.hidden = false;
   if (downloadButton) {
     downloadButton.hidden = false;
-    downloadButton.addEventListener('click', () => {
+    if (window.location.pathname.includes('seller-checklist')) downloadButton.textContent = 'Download My PDF';
+    downloadButton.addEventListener('click', async () => {
+      if (window.location.pathname.includes('seller-checklist')) {
+        downloadButton.disabled = true;
+        feedback.textContent = 'Preparing your PDF…';
+        try {
+          const {sellerPdf} = await import('/assets/seller-pdf.js');
+          sellerPdf({
+            groups: sections.map(({card, checks}) => ({
+              title: card.querySelector('h3').textContent,
+              items: checks.map(check => ({
+                label: check.closest('label').querySelector('.worksheet-check-text').textContent,
+                reviewed: check.checked
+              }))
+            })),
+            notes: notes.value
+          }).save('brad-hazen-seller-checklist.pdf');
+          worksheetExported = true;
+          feedback.textContent = 'Your PDF was downloaded with your checks and notes. Nothing was sent to Brad.';
+        } catch {
+          feedback.textContent =
+            'The PDF could not be prepared. Try again, or use Print Checklist or Download Blank PDF.';
+        } finally {
+          downloadButton.disabled = false;
+        }
+        return;
+      }
       const content = worksheetText({
         title: document.querySelector('h1').textContent,
         items: checks.map(check => ({

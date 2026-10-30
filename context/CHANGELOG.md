@@ -240,3 +240,9 @@ Buyer and seller preparation now offer guided steps, section navigation, progres
 All six community cards and guide images use actual local photographs. Source, author, capture date, license, adaptation notes and download provenance are recorded in src/community-photos.json and credited publicly. CC BY-SA photo adaptations retain their source license. Some source photography is older (Camas 2005); dates are displayed. Brush Prairie uses its actual post office; no unrelated scenic photo is substituted. Other illustrative site imagery remains labeled separately.
 
 Validation: 130 Node tests, 84 browser tests including accessibility, mobile width and guided/print state; build/route/image checks. Production verification follows deployment.
+
+## October 30 — printable seller PDF
+
+Seller downloads now use a branded two-page Letter PDF instead of advertising the blank TXT file. The guided worksheet's Download My PDF generates the same design locally with reviewed checkboxes and an additional notes page when needed; no entries are submitted. The PDF library loads only on demand. Blank PDF is generated from the same seller prompts during build. Legacy TXT URL remains available for compatibility but is no longer linked from seller tools.
+
+Verified PDF rendering on both checklist pages, extracted filled notes, browser download bytes/filename and page-state behavior, 131 Node tests, build checks and compiled runtime checks.

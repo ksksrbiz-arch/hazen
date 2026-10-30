@@ -27,3 +27,23 @@ test('photo planning is selectable and community photos are credited', async ({p
   await page.locator('.community-photo-credits summary').click();
   await expect(page.locator('.community-photo-credits')).toContainText('Steve Morgan');
 });
+
+test('seller download creates a PDF with page-only entries and offers a blank PDF', async ({page}) => {
+  await page.goto('/seller-checklist/');
+  await page.locator('.worksheet-card:visible input').first().check();
+  await page.locator('#worksheet-notes').fill('Discuss the garden and preferred timeline.');
+  const downloaded = page.waitForEvent('download');
+  await page.getByRole('button', {name: 'Download My PDF', exact: true}).click();
+  const download = await downloaded;
+  expect(download.suggestedFilename()).toBe('brad-hazen-seller-checklist.pdf');
+  const stream = await download.createReadStream();
+  const chunks = [];
+  for await (const chunk of stream) chunks.push(chunk);
+  const pdf = Buffer.concat(chunks);
+  expect(pdf.subarray(0, 5).toString()).toBe('%PDF-');
+  await expect(page.locator('[data-worksheet-feedback]')).toContainText('Nothing was sent to Brad');
+  await expect(page.getByRole('link', {name: 'Download Blank PDF', exact: true})).toHaveAttribute(
+    'href',
+    '/resources/seller-conversation-checklist.pdf'
+  );
+});

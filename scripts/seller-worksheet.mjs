@@ -1,6 +1,6 @@
 import {conversationWorksheet} from './conversation-worksheet.mjs';
 import {sellerChecklist} from './seller-marketing.mjs';
-const prompts = [
+export const prompts = [
   [
     'Identify your preferred selling timeline.',
     'List your priorities for the sale and next move.',
@@ -36,7 +36,7 @@ export function sellerWorksheet() {
   return conversationWorksheet({
     label: 'Seller conversation worksheet',
     groups: sellerChecklist.map(([title, detail], i) => [title, detail, prompts[i]]),
-    download: '/resources/seller-conversation-checklist.txt',
+    download: '/resources/seller-conversation-checklist.pdf',
     notesLabel: 'Questions to bring to Brad (optional)',
     notesPlaceholder: 'What would you like to understand before deciding on a listing plan?',
     notesHint: 'Use general property questions here. Keep sensitive documents and access codes separate.',
