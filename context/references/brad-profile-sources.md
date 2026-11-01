@@ -30,3 +30,7 @@ The profiles reference E Yacolt Rd, Yacolt (land), NE Hazen Ave, La Center (acre
 ## Typography correction
 
 FontTools inspection of docs/source-assets/Montserrat-Medium.ttf finds a static OS/2 weight 500 face with no fvar axis. The former CSS range 400–700 was inaccurate. It now declares only 500. System UI fonts supply body and control weights; Montserrat Medium remains the heading face. Font synthesis is disabled to avoid simulated bold or italic. A shared typography stylesheet increases reading/control/helper sizes without changing print-specific dimensions.
+
+## November 1 user confirmation
+
+Keith confirmed over 22 years as a Clark County review engineer and over 22 years of land surveying experience for the profile card. Both homepage and About profile cards now state these durations separately; do not add them together or imply current engineering/surveying licensure.
