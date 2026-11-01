@@ -1,8 +1,10 @@
-# State — updated October 30, 2026
+# State — updated November 1, 2026
 
 Current implementation and last verified release facts. Historical passes belong in `CHANGELOG.md`, not as competing instructions here. External account status below is the last verified state, not a live mailbox or dashboard check.
 
 ## Live release
+
+- Homepage profile update: Brad’s portrait, existing professional background and direct contact links now sit directly below the hero, followed immediately by automatic featured listings. Wider-market search follows the listings; the duplicate lower-page profile was removed. Desktop/mobile visual checks at 1440, 390 and 320 pixels passed without overflow.
 
 - Production: https://bradhazen.com/; Pages project `hazen`, main branch. Preview hostname https://hazen-ci5.pages.dev/ stays noindex. HTTP/www redirect to HTTPS apex with path/query preserved. Domain activation authorized October 29.
 - PR #19: on-site filtered search at `/search/`, isolated `/search-widget/`, details/maps/accounts on Brad's Ylopo subdomain. Live city/type/price/bedroom/more/empty/reset/mobile checks passed.
