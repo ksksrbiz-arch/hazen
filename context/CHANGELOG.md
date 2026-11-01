@@ -298,3 +298,7 @@ PR #26 and deployment `ae54ce76-8d79-4e14-a4d0-7fb9b1cb75a0` verified on bradhaz
 - Fixed resource category Back/Forward visibility, worksheet reset focus and post-load worksheet fragment navigation.
 - Community structured data now identifies the actual community Place and credits its licensed primary photograph, retaining Brad as publisher.
 - Validation: 139 Node tests, 104 browser checks, format/build/routes/assets/ICM passed. Desktop/mobile screenshots reviewed; no overflow and header fits at 1151px/1280px. Physical-device and screen-reader checks remain unperformed.
+
+## November 1 — Homepage profile and listing flow
+
+Moved Brad’s introduction directly below the hero in a bordered portrait card with direct contact, inquiry and biography links. A listing jump link leads into the automatic featured gallery; wider search follows it. Removed the duplicate lower profile and replaced the introductory band. Existing biography and portrait reused. Validation: 139 Node tests, format/build/routes/ICM; desktop/mobile screenshots at 1440, 390 and 320 pixels. No provider, CRM or article publication changes.
