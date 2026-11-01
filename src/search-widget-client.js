@@ -39,6 +39,8 @@ export const searchWidgetClient = `(function searchWidgetClient() {
       const link = card.querySelector('a[href]');
       const address = card.querySelector('.gallery-card-b-address-block');
       if (!link || !address) continue;
+      link.target = '_blank';
+      link.rel = 'noopener';
       const label = address.textContent.trim();
       link.setAttribute('aria-label', \`View \${label} details (opens in a new tab)\`);
       const map = card.querySelector('button.card-icon');
@@ -46,6 +48,8 @@ export const searchWidgetClient = `(function searchWidgetClient() {
       if (!card.querySelector('.gallery-detail-link')) {
         const detail = document.createElement('a');
         detail.href = link.href;
+        detail.target = '_blank';
+        detail.rel = 'noopener';
         detail.className = 'gallery-detail-link';
         detail.textContent = 'View property details ↗';
         detail.setAttribute('aria-label', link.getAttribute('aria-label'));
@@ -134,9 +138,9 @@ export const searchWidgetClient = `(function searchWidgetClient() {
       if (link && new URL(link.href).hostname === 'bradhazen.realtypronw.net') {
         const details = listingClickDetails(link.href);
         if (details) measureListing('listing_click', details);
-        event.preventDefault();
+        link.target = '_blank';
+        link.rel = 'noopener';
         event.stopImmediatePropagation();
-        window.open(link.href, '_blank', 'noopener');
       }
     },
     true
