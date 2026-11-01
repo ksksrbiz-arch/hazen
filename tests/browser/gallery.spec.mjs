@@ -56,3 +56,53 @@ test('cross-listed Yacolt shares one card and follows provider changes', async (
   await expect(page.locator('.grid-view-item:visible')).toHaveCount(2);
   await expect(page.locator('[data-commercial-details]')).toHaveCount(0);
 });
+
+test('parent recovers when the frame is blocked and retry can load listings', async ({page}) => {
+  await page.clock.install();
+  await page.route('**/listing-widget/', route => route.abort());
+  await page.goto('/brads-listings/', {waitUntil: 'domcontentloaded'});
+  await page.locator('.listing-experience').scrollIntoViewIfNeeded();
+  await expect(page.locator('[data-gallery-placeholder]')).toBeVisible();
+  await page.clock.fastForward(21000);
+  await expect(page.locator('[data-gallery-status]')).toContainText('taking longer');
+  await expect(page.locator('[data-gallery-retry]')).toBeVisible();
+  await page.unroute('**/listing-widget/');
+  await page.route('https://bradhazen.realtypronw.net/build/js/widgets-1.0.0.js', route =>
+    route.fulfill({
+      contentType: 'text/javascript',
+      body: `document.querySelector('.YLOPO_resultsWidget').innerHTML='<div class="grid-view-item"><div class="gallery-card-b"><a href="https://bradhazen.realtypronw.net/search/detail/210989090"><span class="gallery-card-b-address-block">Test property</span></a></div></div>';`
+    })
+  );
+  await page.locator('[data-gallery-retry]').click();
+  await expect(page.locator('[data-gallery-status]')).toBeHidden();
+  await expect(page.locator('[data-gallery-placeholder]')).toBeHidden();
+  await expect(page.locator('.brad-listings-frame')).toBeVisible();
+});
+
+test('empty provider results explain availability and offer retry', async ({page}) => {
+  await page.route('https://bradhazen.realtypronw.net/build/js/widgets-1.0.0.js', route =>
+    route.fulfill({contentType: 'text/javascript', body: `window.YLOPO_WIDGETS.widgetOnloadCallback('listings',[]);`})
+  );
+  await page.goto('/brads-listings/', {waitUntil: 'domcontentloaded'});
+  await page.locator('.listing-experience').scrollIntoViewIfNeeded();
+  await expect(page.locator('[data-gallery-status]')).toContainText('No featured listings');
+  await expect(page.locator('[data-gallery-retry]')).toBeVisible();
+});
+
+test('listing detail links retain native new-tab browser behavior', async ({page}) => {
+  await page.route('https://bradhazen.realtypronw.net/build/js/widgets-1.0.0.js', route =>
+    route.fulfill({
+      contentType: 'text/javascript',
+      body: `document.querySelector('.YLOPO_resultsWidget').innerHTML='<div class="grid-view-item"><div class="gallery-card-b"><a href="https://bradhazen.realtypronw.net/search/detail/210989090"><span class="gallery-card-b-address-block">Test property</span></a></div></div>';`
+    })
+  );
+  await page.goto('/listing-widget/');
+  const link = page.locator('.gallery-detail-link');
+  await expect(link).toHaveAttribute('target', '_blank');
+  await expect(link).toHaveAttribute('rel', 'noopener');
+  const popup = page.waitForEvent('popup');
+  await link.click();
+  const opened = await popup;
+  expect(opened.url()).toContain('/search/detail/210989090');
+  await opened.close();
+});

@@ -306,3 +306,7 @@ Moved Brad’s introduction directly below the hero in a bordered portrait card 
 ## November 1 — Profile experience clarification
 
 User-confirmed profile copy now explicitly states over 22 years as a Clark County review engineer and over 22 years of land surveying experience on the homepage and About cards.
+
+## November 1 — Listing loading and browser recovery
+
+Added parent-side timeout even if the listing frame fails, near-viewport loading status, responsive placeholder cards, retry without full-page reload, offline/reconnected messaging and explicit empty results. Loading frames no longer collapse the area to their initial tiny document height. Deduplicated/batched provider resize messages and added provider connection hints inside the isolated frame. Featured/search links now use native new-tab anchors rather than scripted popups, retaining analytics and noopener. Provider filters, fresh data and isolation remain unchanged. Validation: 139 Node checks, build/routes/format/ICM and compiled runtime; full 106-test browser pass, then targeted gallery/search/analytics checks after native-link changes. Mobile loading/recovery screenshots reviewed. No guaranteed upstream speed improvement is claimed.

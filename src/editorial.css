@@ -16,3 +16,5 @@
 
 .property-search-frame { width: 100%; height: 1100px; border: 0; display: block; }
 .on-site-search { margin: 24px 0 36px; }
+
+.listing-experience{position:relative}.gallery-retry{margin:0 8px 20px;padding:12px 18px;border:1px solid #284f54;border-radius:8px;background:#fff;color:#173f47;font:inherit;cursor:pointer}.gallery-placeholder{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:0 8px 24px}.gallery-placeholder>div{height:400px;border:1px solid #dce3df;border-radius:14px;background:linear-gradient(#e5eae5 0 60%,#fff 60% 100%)}.gallery-placeholder[hidden],.gallery-retry[hidden],.brad-listings-frame[hidden]{display:none}.listing-experience[data-gallery-state="loading"] .brad-listings-frame{position:absolute;left:0;top:100px;visibility:hidden;pointer-events:none}.gallery-retry:focus-visible{outline:3px solid #927021;outline-offset:4px}@media(max-width:620px){.gallery-placeholder{grid-template-columns:1fr}.gallery-placeholder>div{height:400px}}

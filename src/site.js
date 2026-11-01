@@ -685,23 +685,81 @@ if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: re
 
 // Sandboxed provider frames have an opaque origin. Match the actual frame window,
 // then accept only bounded layout data; never accept HTML or navigation commands.
-// The loading note is hidden in the markup so it never claims progress when scripts are off.
-document.querySelectorAll('[data-gallery-status]').forEach(note => (note.hidden = false));
-window.addEventListener('message', event => {
-  if (event.data?.type !== 'brad-listing-gallery') return;
-  const frame = [...document.querySelectorAll('.brad-listings-frame')].find(
-    item => item.contentWindow === event.source
-  );
-  if (!frame || !Number.isFinite(event.data.height)) return;
-  frame.style.height = Math.min(5000, Math.max(180, event.data.height + 8)) + 'px';
-  const status = frame.closest('.listing-experience').querySelector('[data-gallery-status]');
-  if (event.data.state === 'ready') status.hidden = true;
-  else if (event.data.state === 'unavailable') {
-    status.hidden = false;
+// Parent-side recovery still works when the widget document never executes.
+document.querySelectorAll('.brad-listings-frame').forEach(frame => {
+  const shell = frame.closest('.listing-experience');
+  const status = shell.querySelector('[data-gallery-status]');
+  const retry = shell.querySelector('[data-gallery-retry]');
+  const placeholder = shell.querySelector('[data-gallery-placeholder]');
+  let timer,
+    started = false,
+    state = 'waiting';
+  const display = next => {
+    state = next;
+    status.hidden = next === 'ready';
+    placeholder.hidden = next !== 'loading';
+    retry.hidden = !['unavailable', 'offline', 'empty'].includes(next);
+    frame.hidden = ['unavailable', 'offline', 'empty'].includes(next);
+    shell.dataset.galleryState = next;
     status.textContent =
-      'The listing service is taking longer than expected. Open the direct listing links below, or contact Brad.';
-    frame.closest('.listing-experience').querySelector('details').open = true;
-  }
+      next === 'offline'
+        ? 'You appear to be offline. Reconnect, then try the listings again.'
+        : next === 'empty'
+          ? 'No featured listings were returned. Contact Brad for current availability.'
+          : next === 'unavailable'
+            ? 'The listing service is taking longer than expected. Try again, open the direct listing links below, or contact Brad.'
+            : 'Loading Brad’s listings…';
+    if (next !== 'loading') clearTimeout(timer);
+    if (next === 'unavailable') shell.querySelector('details').open = true;
+  };
+  const start = () => {
+    started = true;
+    clearTimeout(timer);
+    display(navigator.onLine === false ? 'offline' : 'loading');
+    if (state === 'loading') timer = setTimeout(() => display('unavailable'), 20000);
+  };
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries.some(entry => entry.isIntersecting)) {
+          if (!started) start();
+          observer.disconnect();
+        }
+      },
+      {rootMargin: '800px'}
+    );
+    observer.observe(shell);
+  } else start();
+  retry.addEventListener('click', () => {
+    start();
+    if (state === 'loading') {
+      frame.src = '/listing-widget/';
+      status.tabIndex = -1;
+      status.focus({preventScroll: true});
+    }
+  });
+  window.addEventListener('offline', () => {
+    if (state === 'loading') display('offline');
+  });
+  window.addEventListener('online', () => {
+    if (state === 'offline') status.textContent = 'Your connection is back. Try loading the listings again.';
+  });
+  window.addEventListener('message', event => {
+    if (
+      event.source !== frame.contentWindow ||
+      event.data?.type !== 'brad-listing-gallery' ||
+      !Number.isFinite(event.data.height)
+    )
+      return;
+    if (!['ready', 'loading', 'unavailable', 'empty'].includes(event.data.state)) return;
+    if (event.data.state === 'loading') {
+      if (!started) start();
+      return;
+    }
+    started = true;
+    if (event.data.state === 'ready') frame.style.height = Math.min(5000, Math.max(180, event.data.height + 8)) + 'px';
+    display(event.data.state);
+  });
 });
 
 // Search controls live in their own sandbox; only its exact window may resize this frame.

@@ -46,3 +46,7 @@ Run relevant gallery/search browser tests and `npm run check:runtime`, then chec
 - https://ylopo.zendesk.com/hc/en-us/articles/360021744372-Overview-of-Your-Home-Search-Site
 - https://bradhazen.realtypronw.net/widgets
 - https://www.realtypronw.net/team/brad-hazen
+
+## Loading and browser behavior
+
+Parent gallery recovery starts near the viewport and times out after 20 seconds even when the child script never executes. Retry reloads only the isolated frame. The child can report ready, unavailable or empty; resize data remains window-checked and bounded. Loading preserves a placeholder rather than following partial document heights. Offline messages do not hide already loaded listings. Native detail anchors preserve browser tab controls; no inventory caching or account changes.

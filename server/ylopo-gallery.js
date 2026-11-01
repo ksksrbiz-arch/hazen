@@ -2,7 +2,7 @@ import {listingAnalyticsClient} from '../src/listing-analytics.js';
 // Verified against Ylopo listing attribution and positive/negative controls, 2026-10-29.
 // HAZENB is not this ID. Omitting propertyTypes reinstates residential defaults and hides Brad's land.
 export const bradGallerySearch = {featured: 't', agentId: 24820243, propertyTypes: [], limit: 6};
-export const galleryMarkup = `<div class="listing-experience"><div class="listing-toolbar"><p><span class="listing-provider-dot" aria-hidden="true"></span>Property details from Realty Pro</p><a href="/contact/#inquiry">Ask Brad about a property <span aria-hidden="true">↗</span></a></div><p class="listing-load-status" role="status" data-gallery-status hidden>Loading Brad’s listings…</p><iframe class="brad-listings-frame" src="/listing-widget/" title="Brad Hazen listings from Realty Pro" loading="lazy" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe><div class="listing-footnote"><p>Explore the photos and current details on Brad’s Realty Pro site. Property links open in a new tab.</p><details><summary>Having trouble viewing the listings?</summary><p>Open a listing directly: <a href="https://bradhazen.realtypronw.net/search/detail/210989090">East Yacolt Road · MLS 24202394</a> or <a href="https://bradhazen.realtypronw.net/search/detail/205684283">NE Hazen Avenue · MLS 24434415</a>.</p></details><noscript><p>The gallery requires JavaScript. Open a listing directly using the links under “Having trouble viewing the listings?” above.</p></noscript></div></div>`;
+export const galleryMarkup = `<div class="listing-experience"><div class="listing-toolbar"><p><span class="listing-provider-dot" aria-hidden="true"></span>Property details from Realty Pro</p><a href="/contact/#inquiry">Ask Brad about a property <span aria-hidden="true">↗</span></a></div><p class="listing-load-status" role="status" data-gallery-status hidden>Loading Brad’s listings…</p><button type="button" class="gallery-retry" data-gallery-retry hidden>Try loading listings again</button><div class="gallery-placeholder" data-gallery-placeholder hidden aria-hidden="true"><div></div><div></div></div><iframe class="brad-listings-frame" src="/listing-widget/" title="Brad Hazen listings from Realty Pro" loading="lazy" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe><div class="listing-footnote"><p>Explore the photos and current details on Brad’s Realty Pro site. Property links open in a new tab.</p><details><summary>Having trouble viewing the listings?</summary><p>Open a listing directly: <a href="https://bradhazen.realtypronw.net/search/detail/210989090">East Yacolt Road · MLS 24202394</a> or <a href="https://bradhazen.realtypronw.net/search/detail/205684283">NE Hazen Avenue · MLS 24434415</a>.</p></details><noscript><p>The gallery requires JavaScript. Open a listing directly using the links under “Having trouble viewing the listings?” above.</p></noscript></div></div>`;
 export const widgetStyle = `
 *{box-sizing:border-box}body{margin:0;padding:8px;font:16px/1.5 system-ui;background:#f7f8f5;color:#172e33}a{color:#173f47}h1{font:600 16px system-ui;margin:4px 0 18px;color:#526269}
 .YLOPO-widget .widget-gallery-container{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
@@ -23,17 +23,19 @@ body .YLOPO-widget a.gallery-detail-link{display:block;padding:15px 20px;backgro
 const widgetClient = `
 ${listingAnalyticsClient}
 window.YLOPO_WIDGETS={domain:'bradhazen.realtypronw.net',openInNewTab:true};
-const send=(state)=>parent.postMessage({type:'brad-listing-gallery',height:document.body.offsetHeight+16,state},'*');
-let ready=false;
-new ResizeObserver(()=>send(ready?'ready':'loading')).observe(document.body);
+let ready=false,empty=false,lastMessage='',resizePending=false;
+const send=(state)=>{const height=document.body.offsetHeight+16;const key=state+':'+height;if(key===lastMessage)return;lastMessage=key;parent.postMessage({type:'brad-listing-gallery',height,state},'*');};
+new ResizeObserver(()=>{if(resizePending)return;resizePending=true;requestAnimationFrame(()=>{resizePending=false;send(empty?'empty':ready?'ready':'loading');});}).observe(document.body);
+window.YLOPO_WIDGETS.widgetOnloadCallback=(type,listings)=>{if(type==='listings' && Array.isArray(listings) && !listings.length){ready=true;empty=true;send('empty');}};
 new MutationObserver(()=>{
  const cards=[...document.querySelectorAll('.grid-view-item')];
  for(const card of cards){
   const link=card.querySelector('a[href]'),address=card.querySelector('.gallery-card-b-address-block');
   if(!link || !address)continue;
+  link.target='_blank';link.rel='noopener';
   link.setAttribute('aria-label','View '+address.textContent.trim()+' property details (opens in a new tab)');
   const map=card.querySelector('button.card-icon');if(map)map.setAttribute('aria-label','Switch property photo and map');
-  if(!card.querySelector('.gallery-detail-link')){const detail=document.createElement('a');detail.href=link.href;detail.className='gallery-detail-link';detail.textContent='View property details ↗';detail.setAttribute('aria-label',link.getAttribute('aria-label'));card.querySelector('.gallery-card-b').append(detail);}
+  if(!card.querySelector('.gallery-detail-link')){const detail=document.createElement('a');detail.href=link.href;detail.className='gallery-detail-link';detail.target='_blank';detail.rel='noopener';detail.textContent='View property details ↗';detail.setAttribute('aria-label',link.getAttribute('aria-label'));card.querySelector('.gallery-card-b').append(detail);}
  }
  // Group only this verified cross-listed property; never infer identity from photos or addresses.
  const findCard=id=>cards.find(card=>[...card.querySelectorAll('a[href]')].some(a=>new URL(a.href).pathname==='/search/detail/'+id));
@@ -44,21 +46,21 @@ new MutationObserver(()=>{
   let alternate=land.querySelector('[data-commercial-details]');
   if(commercial && primary){
    if(primary.textContent!=='Land listing details ↗'){primary.textContent='Land listing details ↗';primary.setAttribute('aria-label','East Yacolt Road land listing details (opens in a new tab)');}
-   if(!alternate){alternate=document.createElement('a');alternate.className='gallery-detail-link';alternate.dataset.commercialDetails='';alternate.textContent='Commercial listing details ↗';alternate.setAttribute('aria-label','East Yacolt Road commercial listing details (opens in a new tab)');land.querySelector('.gallery-card-b').append(alternate);}
+   if(!alternate){alternate=document.createElement('a');alternate.className='gallery-detail-link';alternate.target='_blank';alternate.rel='noopener';alternate.dataset.commercialDetails='';alternate.textContent='Commercial listing details ↗';alternate.setAttribute('aria-label','East Yacolt Road commercial listing details (opens in a new tab)');land.querySelector('.gallery-card-b').append(alternate);}
    alternate.href=commercial.querySelector('a[href]').href;
   }else{
    if(alternate)alternate.remove();
    if(primary && primary.textContent!=='View property details ↗')primary.textContent='View property details ↗';
   }
  }
- if(cards.length && !ready){ready=true;send('ready');}
+ if(cards.length && (!ready || empty)){ready=true;empty=false;send('ready');}
 }).observe(document.querySelector('.YLOPO_resultsWidget'),{childList:true,subtree:true});
 setTimeout(()=>{if(!ready)send('unavailable');},15000);
-document.addEventListener('click',function(event){const link=event.target.closest('a[href]');if(link && new URL(link.href).hostname==='bradhazen.realtypronw.net'){const details=listingClickDetails(link.href,true);if(details)measureListing('listing_click',details);event.preventDefault();event.stopImmediatePropagation();window.open(link.href,'_blank','noopener');}},true);
+document.addEventListener('click',function(event){const link=event.target.closest('a[href]');if(link && new URL(link.href).hostname==='bradhazen.realtypronw.net'){const details=listingClickDetails(link.href,true);if(details)measureListing('listing_click',details);link.target='_blank';link.rel='noopener';event.stopImmediatePropagation();}},true);
 `;
 export function galleryResponse() {
   return new Response(
-    `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Brad Hazen listings</title><style>${widgetStyle}</style></head><body><h1 style="font-size:18px">Featured properties</h1><div class="YLOPO_resultsWidget" data-search='${JSON.stringify(bradGallerySearch)}'></div><script>${widgetClient}</script><script defer src="https://bradhazen.realtypronw.net/build/js/widgets-1.0.0.js"></script></body></html>`,
+    `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Brad Hazen listings</title><link rel="preconnect" href="https://bradhazen.realtypronw.net"><link rel="dns-prefetch" href="https://portal.ylopo.com"><style>${widgetStyle}</style></head><body><h1 style="font-size:18px">Featured properties</h1><div class="YLOPO_resultsWidget" data-search='${JSON.stringify(bradGallerySearch)}'></div><script>${widgetClient}</script><script defer src="https://bradhazen.realtypronw.net/build/js/widgets-1.0.0.js"></script></body></html>`,
     {
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
