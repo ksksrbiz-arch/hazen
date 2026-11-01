@@ -4,6 +4,8 @@ Current implementation and last verified release facts. Historical passes belong
 
 ## Live release
 
+- November 1 user-confirmed profile copy states over 22 years as a Clark County review engineer and over 22 years of land surveying experience, separately, on the homepage and About cards.
+
 - Homepage profile update: Brad’s portrait, existing professional background and direct contact links now sit directly below the hero, followed immediately by automatic featured listings. Wider-market search follows the listings; the duplicate lower-page profile was removed. Desktop/mobile visual checks at 1440, 390 and 320 pixels passed without overflow.
 
 - Production: https://bradhazen.com/; Pages project `hazen`, main branch. Preview hostname https://hazen-ci5.pages.dev/ stays noindex. HTTP/www redirect to HTTPS apex with path/query preserved. Domain activation authorized October 29.

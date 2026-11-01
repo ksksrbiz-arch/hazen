@@ -302,3 +302,7 @@ PR #26 and deployment `ae54ce76-8d79-4e14-a4d0-7fb9b1cb75a0` verified on bradhaz
 ## November 1 — Homepage profile and listing flow
 
 Moved Brad’s introduction directly below the hero in a bordered portrait card with direct contact, inquiry and biography links. A listing jump link leads into the automatic featured gallery; wider search follows it. Removed the duplicate lower profile and replaced the introductory band. Existing biography and portrait reused. Validation: 139 Node tests, format/build/routes/ICM; desktop/mobile screenshots at 1440, 390 and 320 pixels. No provider, CRM or article publication changes.
+
+## November 1 — Profile experience clarification
+
+User-confirmed profile copy now explicitly states over 22 years as a Clark County review engineer and over 22 years of land surveying experience on the homepage and About cards.
